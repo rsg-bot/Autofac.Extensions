@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFrameworks>netstandard1.3;net451;netstandard2.0;net461</TargetFrameworks>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Autofac.Abstractions\Rocket.Surgery.Extensions.Autofac.Abstractions.csproj" />
+        <PackageReference Include="Rocket.Surgery.Builders" Version="$(RSG_Conventions_Version)" />
+        <PackageReference Include="Rocket.Surgery.Conventions" Version="$(RSG_Conventions_Version)" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="$(Microsoft_Extensions_DependencyInjection_Version)" />
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.0" />
+        <PackageReference Condition="'$(TargetFramework)'=='netstandard1.3' or '$(TargetFramework)'=='net451'" Include="NETStandard.Library" Version="1.6.1" />
+        <PackageReference Condition="'$(TargetFramework)'=='netstandard2.0' or '$(TargetFramework)'=='net461'" Include="NETStandard.Library" Version="2.0.0" />
+    </ItemGroup>
+</Project>
