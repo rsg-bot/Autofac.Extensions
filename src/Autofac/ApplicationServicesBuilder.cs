@@ -10,12 +10,27 @@ using Rocket.Surgery.Conventions.Scanners;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
-    public class ServicesBuilder : Builder, IServicesBuilder, IServiceConventionContext
+    /// <summary>
+    /// Class ApplicationServicesBuilder.
+    /// </summary>
+    /// <seealso cref="Builder" />
+    /// <seealso cref="Microsoft.Extensions.Configuration.IConfigurationBuilder" />
+    /// TODO Edit XML Comment Template for ApplicationServicesBuilder
+    public class ApplicationServicesBuilder : Builder, IServicesBuilder, IServiceConventionContext
     {
         private readonly IConventionScanner _scanner;
         private readonly ServiceConventionItem _core;
         private readonly ServiceConventionItem _system;
         private readonly ServiceConventionItem _application;
+
+        /// <summary>
+        /// Tag for applicaiton scoped container
+        /// </summary>
+        public static string ApplicationTag = "__Application__";
+        /// <summary>
+        /// Tag for system scoped container
+        /// </summary>
+        public static string SystemTag = "__System__";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationServicesBuilder" /> class.
@@ -26,7 +41,7 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// <param name="services">The services.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="environment"></param>
-        public ServicesBuilder(
+        public ApplicationServicesBuilder(
             IAssemblyProvider assemblyProvider,
             IAssemblyCandidateFinder assemblyCandidateFinder,
             IConventionScanner scanner,
@@ -52,26 +67,38 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// <param name="containerBuilder"></param>
         /// <param name="logger"></param>
         /// <returns></returns>
-        public IContainer Build(ContainerBuilder containerBuilder, ILogger logger)
+        public (IContainer container, ILifetimeScope application, ILifetimeScope system) Build(ContainerBuilder containerBuilder, ILogger logger)
         {
             new ServiceConventionComposer(_scanner, logger).Register(this);
 
             _core.Collection.Apply(containerBuilder);
+
             containerBuilder.Populate(Services);
 
-            _system.Collection.Apply(containerBuilder);
-            containerBuilder.Populate(_application.Services);
+            var container = containerBuilder.Build();
 
-            return containerBuilder.Build();
+            var system = container.BeginLifetimeScope(SystemTag, s =>
+            {
+                _system.Collection.Apply(s);
+                CustomRegistration.Register(s, _system.Services, SystemTag);
+            });
+
+            var application = container.BeginLifetimeScope(ApplicationTag, a =>
+            {
+                _application.Collection.Apply(a);
+                CustomRegistration.Register(a, _application.Services, ApplicationTag);
+            });
+
+            return (container, system, application);
         }
 
+        public IServiceCollection Services => _core.Services;
         public IServiceConventionContext Container(ContainerBuilderDelegate builder)
         {
             _core.Container(builder);
             return this;
         }
 
-        public IServiceCollection Services => _core.Services;
         public IConfiguration Configuration { get; }
         public IServicesEnvironment Environment { get; }
         public IAssemblyProvider AssemblyProvider { get; }

@@ -12,7 +12,5 @@ namespace Rocket.Surgery.Extensions.Autofac
         IAssemblyCandidateFinder AssemblyCandidateFinder { get; }
         IServiceConventionItem System { get; }
         IServiceConventionItem Application { get; }
-        IServiceConventionContext AddDelegate(ServiceConventionDelegate @delegate);
-        IServiceConventionContext AddConvention(IServiceConvention @delegate);
     }
 }

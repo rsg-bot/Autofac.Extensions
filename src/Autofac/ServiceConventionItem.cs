@@ -2,24 +2,31 @@
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
-    internal class ServiceConventionItem : IServiceConventionItem
+    internal class ServiceConventionItem : IServiceConventionItem, IServicesBuilderConventionItem
     {
-        private readonly IServiceConventionContext _context;
+        private readonly IServicesBuilder _context;
 
-        public ServiceConventionItem(IServiceConventionContext context)
+        public ServiceConventionItem(IServicesBuilder context, IServiceCollection services = default)
         {
             _context = context;
+            Services = services ?? new ServiceCollection();
         }
 
         public IServiceConventionContext Container(ContainerBuilderDelegate builder)
         {
             Collection.Add(builder);
-            return _context;
+            return (IServiceConventionContext)_context;
 
         }
 
         public ContainerBuilderCollection Collection { get; } = new ContainerBuilderCollection();
 
-        public IServiceCollection Services { get; } = new ServiceCollection();
+        IServicesBuilder IServicesBuilderConventionItem.Container(ContainerBuilderDelegate builder)
+        {
+            Collection.Add(builder);
+            return _context;
+        }
+
+        public IServiceCollection Services { get; }
     }
 }

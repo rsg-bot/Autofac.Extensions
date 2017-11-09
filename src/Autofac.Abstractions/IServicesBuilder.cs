@@ -6,5 +6,11 @@ namespace Rocket.Surgery.Extensions.Autofac
     /// Class IServicesBuilder.
     /// </summary>
     /// TODO Edit XML Comment Template for IServicesBuilder
-    public interface IServicesBuilder : IBuilder, IServiceConventionContext { }
+    public interface IServicesBuilder : IBuilder
+    {
+        IServicesBuilderConventionItem System { get; }
+        IServicesBuilderConventionItem Application { get; }
+        IServicesBuilder AddDelegate(ServiceConventionDelegate @delegate);
+        IServicesBuilder AddConvention(IServiceConvention @delegate);
+    }
 }

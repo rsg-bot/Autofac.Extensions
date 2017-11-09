@@ -7,4 +7,10 @@ namespace Rocket.Surgery.Extensions.Autofac
         IServiceConventionContext Container(ContainerBuilderDelegate builder);
         IServiceCollection Services { get; }
     }
+
+    public interface IServicesBuilderConventionItem
+    {
+        IServicesBuilder Container(ContainerBuilderDelegate builder);
+        IServiceCollection Services { get; }
+    }
 }
