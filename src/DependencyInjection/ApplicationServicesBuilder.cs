@@ -1,22 +1,33 @@
 ﻿using System;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Rocket.Surgery.Builders;
 using Rocket.Surgery.Conventions;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Conventions.Scanners;
 
-namespace Rocket.Surgery.Extensions.Autofac
+namespace Rocket.Surgery.Extensions.DependencyInjection
 {
-    public class ServicesBuilder : Builder, IServicesBuilder, IServiceConventionContext
+    /// <summary>
+    /// Class ApplicationServicesBuilder.
+    /// </summary>
+    /// <seealso cref="Builder" />
+    /// <seealso cref="Microsoft.Extensions.Configuration.IConfigurationBuilder" />
+    /// TODO Edit XML Comment Template for ApplicationServicesBuilder
+    public class ApplicationServicesBuilder : Builder, IServicesBuilder, IServiceConventionContext
     {
         private readonly IConventionScanner _scanner;
-        private readonly ServiceConventionItem _core;
-        private readonly ServiceConventionItem _system;
-        private readonly ServiceConventionItem _application;
+
+        /// <summary>
+        /// Tag for applicaiton scoped container
+        /// </summary>
+        public static string ApplicationTag = "__Application__";
+        /// <summary>
+        /// Tag for system scoped container
+        /// </summary>
+        public static string SystemTag = "__System__";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationServicesBuilder" /> class.
@@ -27,7 +38,7 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// <param name="services">The services.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="environment"></param>
-        public ServicesBuilder(
+        public ApplicationServicesBuilder(
             IAssemblyProvider assemblyProvider,
             IAssemblyCandidateFinder assemblyCandidateFinder,
             IConventionScanner scanner,
@@ -42,9 +53,9 @@ namespace Rocket.Surgery.Extensions.Autofac
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
 
-            _core = new ServiceConventionItem(this, services);
-            _application = new ServiceConventionItem(this);
-            _system = new ServiceConventionItem(this);
+            Services = services;
+            Application = new ServiceCollection();
+            System = new ServiceCollection();
         }
 
         /// <summary>
@@ -53,36 +64,29 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// <param name="containerBuilder"></param>
         /// <param name="logger"></param>
         /// <returns></returns>
-        public IContainer Build(ContainerBuilder containerBuilder, ILogger logger)
+        public (IServiceProvider Application, IServiceProvider System) Build(ILogger logger)
         {
             Composer.Register<IServiceConventionContext, IServiceConvention, ServiceConventionDelegate>(_scanner, logger, this);
 
-            _core.Collection.Apply(containerBuilder);
-            containerBuilder.Populate(Services);
 
-            _application.Collection.Apply(containerBuilder);
-            containerBuilder.Populate(_application.Services);
+            var applicationServices = new ServiceCollection();
+            foreach (var s in Services) applicationServices.Add(s);
+            foreach (var s in Application) applicationServices.Add(s);
+            var application = applicationServices.BuildServiceProvider();
 
-            return containerBuilder.Build();
+            foreach (var s in System) Services.Add(s);
+            var system = Services.BuildServiceProvider();
+
+            return (application, system);
         }
 
-        public IServiceConventionContext Container(ContainerBuilderDelegate builder)
-        {
-            _core.Container(builder);
-            return this;
-        }
-
-        public IServiceCollection Services => _core.Services;
         public IConfiguration Configuration { get; }
         public IServicesEnvironment Environment { get; }
         public IAssemblyProvider AssemblyProvider { get; }
         public IAssemblyCandidateFinder AssemblyCandidateFinder { get; }
-
-        IServiceConventionItem IServiceConventionContext.System => _system;
-        public IServicesBuilderConventionItem System => _system;
-
-        IServiceConventionItem IServiceConventionContext.Application => _application;
-        public IServicesBuilderConventionItem Application => _application;
+        public IServiceCollection Application { get; }
+        public IServiceCollection Services { get; }
+        public IServiceCollection System { get; }
 
         public IServicesBuilder AddDelegate(ServiceConventionDelegate @delegate)
         {

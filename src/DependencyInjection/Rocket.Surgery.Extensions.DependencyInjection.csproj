@@ -8,4 +8,7 @@
         <PackageReference Include="Rocket.Surgery.Conventions" Version="$(RSG_Conventions_Version)" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="$(Microsoft_Extensions_DependencyInjection_Version)" />
     </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3' or '$(TargetFramework)'=='net451'">
+        <PackageReference Include="System.ValueTuple" Version="4.3.0" />
+    </ItemGroup>
 </Project>

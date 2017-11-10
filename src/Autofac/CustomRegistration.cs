@@ -7,20 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
-    /// <summary>
-    /// Extension methods for registering ASP.NET Core dependencies with Autofac.
-    /// </summary>
     public static class CustomRegistration
     {
-        /// <summary>Configures the lifecycle on a service registration.</summary>
-        /// <typeparam name="TActivatorData">The activator data type.</typeparam>
-        /// <typeparam name="TRegistrationStyle">The object registration style.</typeparam>
-        /// <param name="registrationBuilder">The registration being built.</param>
-        /// <param name="lifecycleKind">The lifecycle specified on the service registration.</param>
-        /// <returns>
-        /// The <paramref name="registrationBuilder" />, configured with the proper lifetime scope,
-        /// and available for additional configuration.
-        /// </returns>
         private static IRegistrationBuilder<object, TActivatorData, TRegistrationStyle> ConfigureLifecycle<TActivatorData, TRegistrationStyle>(this IRegistrationBuilder<object, TActivatorData, TRegistrationStyle> registrationBuilder, ServiceLifetime lifecycleKind, string tag)
         {
             switch (lifecycleKind)
@@ -38,15 +26,6 @@ namespace Rocket.Surgery.Extensions.Autofac
             return registrationBuilder;
         }
 
-        /// <summary>
-        /// Populates the Autofac containerBuilder builder with the set of registered service descriptors.
-        /// </summary>
-        /// <param name="builder">
-        /// The <see cref="T:Autofac.ContainerBuilder" /> into which the registrations should be made.
-        /// </param>
-        /// <param name="descriptors">
-        /// The set of service descriptors to register in the containerBuilder.
-        /// </param>
         public static void Register(ContainerBuilder builder, IEnumerable<ServiceDescriptor> descriptors, string tag)
         {
             foreach (var descriptor1 in descriptors)

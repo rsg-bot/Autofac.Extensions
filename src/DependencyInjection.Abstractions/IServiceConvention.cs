@@ -1,6 +1,6 @@
 ﻿using Rocket.Surgery.Conventions;
 
-namespace Rocket.Surgery.Extensions.Autofac
+namespace Rocket.Surgery.Extensions.DependencyInjection
 {
     /// <summary>
     /// Interface IServiceConvention

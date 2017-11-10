@@ -1,4 +1,4 @@
-﻿namespace Rocket.Surgery.Extensions.Autofac
+﻿namespace Rocket.Surgery.Extensions.DependencyInjection
 {
     public interface IServicesEnvironment
     {

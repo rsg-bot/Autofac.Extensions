@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Rocket.Surgery.Builders;
+using Rocket.Surgery.Conventions;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Conventions.Scanners;
 
@@ -67,9 +68,9 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// <param name="containerBuilder"></param>
         /// <param name="logger"></param>
         /// <returns></returns>
-        public (IContainer container, ILifetimeScope application, ILifetimeScope system) Build(ContainerBuilder containerBuilder, ILogger logger)
+        public (IContainer Container, ILifetimeScope Application, ILifetimeScope System) Build(ContainerBuilder containerBuilder, ILogger logger)
         {
-            new ServiceConventionComposer(_scanner, logger).Register(this);
+            Composer.Register<IServiceConventionContext, IServiceConvention, ServiceConventionDelegate>(_scanner, logger, this);
 
             _core.Collection.Apply(containerBuilder);
 
@@ -89,7 +90,7 @@ namespace Rocket.Surgery.Extensions.Autofac
                 CustomRegistration.Register(a, _application.Services, ApplicationTag);
             });
 
-            return (container, system, application);
+            return (container, application, system);
         }
 
         public IServiceCollection Services => _core.Services;
@@ -117,11 +118,11 @@ namespace Rocket.Surgery.Extensions.Autofac
         }
         IServiceConventionContext IServiceConventionContext.AddDelegate(ServiceConventionDelegate @delegate) => (IServiceConventionContext)AddDelegate(@delegate);
 
-        public IServicesBuilder AddConvention(IServiceConvention @delegate)
+        public IServicesBuilder AddConvention(IServiceConvention convention)
         {
-            _scanner.AddConvention(@delegate);
+            _scanner.AddConvention(convention);
             return this;
         }
-        IServiceConventionContext IServiceConventionContext.AddConvention(IServiceConvention @delegate) => (IServiceConventionContext)AddConvention(@delegate);
+        IServiceConventionContext IServiceConventionContext.AddConvention(IServiceConvention convention) => (IServiceConventionContext)AddConvention(convention);
     }
 }
