@@ -96,9 +96,6 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
                 context.Services.AddSingleton(A.Fake<Abc>());
                 context.Services.AddSingleton(A.Fake<Abc2>());
                 context.System.AddSingleton(A.Fake<Abc3>());
-
-                context.AddConvention(A.Fake<IServiceConvention>());
-                context.AddDelegate(delegate {  });
             }
         }
 

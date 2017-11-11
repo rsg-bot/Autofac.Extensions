@@ -93,13 +93,11 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
             _scanner.AddDelegate(@delegate);
             return this;
         }
-        IServiceConventionContext IServiceConventionContext.AddDelegate(ServiceConventionDelegate @delegate) => (IServiceConventionContext)AddDelegate(@delegate);
 
         public IServicesBuilder AddConvention(IServiceConvention convention)
         {
             _scanner.AddConvention(convention);
             return this;
         }
-        IServiceConventionContext IServiceConventionContext.AddConvention(IServiceConvention convention) => (IServiceConventionContext)AddConvention(convention);
     }
 }

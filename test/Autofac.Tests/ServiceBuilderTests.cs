@@ -101,9 +101,6 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
                 context.Services.AddSingleton(A.Fake<Abc2>());
                 context.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<Abc3>()));
                 context.Application.ConfigureContainer(c => { });
-
-                context.AddConvention(A.Fake<IAutofacConvention>());
-                context.AddDelegate(delegate {  });
             }
         }
 

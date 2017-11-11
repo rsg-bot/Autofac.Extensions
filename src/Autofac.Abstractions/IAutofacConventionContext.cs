@@ -13,7 +13,5 @@ namespace Rocket.Surgery.Extensions.Autofac
         IAssemblyCandidateFinder AssemblyCandidateFinder { get; }
         IServiceAndContainerWrapper System { get; }
         IServiceAndContainerWrapper Application { get; }
-        IAutofacConventionContext AddDelegate(AutofacConventionDelegate @delegate);
-        IAutofacConventionContext AddConvention(IAutofacConvention convention);
     }
 }

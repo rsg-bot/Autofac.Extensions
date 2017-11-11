@@ -1,10 +1,8 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Rocket.Surgery.Builders;
 using Rocket.Surgery.Conventions;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Conventions.Scanners;
@@ -12,97 +10,6 @@ using Rocket.Surgery.Extensions.DependencyInjection;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
-    public class AutofacBuilderBase : Builder, IAutofacBuilder, IAutofacConventionContext, IServiceConventionContext
-    {
-        internal readonly IConventionScanner _scanner;
-        internal readonly ServiceAndContainerWrapper _core;
-        internal readonly ServiceAndContainerWrapper _system;
-        internal readonly ServiceAndContainerWrapper _application;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ApplicationAutofacBuilder" /> class.
-        /// </summary>
-        /// <param name="assemblyProvider">The assembly provider.</param>
-        /// <param name="assemblyCandidateFinder">The assembly candidate finder.</param>
-        /// <param name="scanner"></param>
-        /// <param name="services">The services.</param>
-        /// <param name="configuration">The configuration.</param>
-        /// <param name="environment"></param>
-        protected AutofacBuilderBase(
-            IAssemblyProvider assemblyProvider,
-            IAssemblyCandidateFinder assemblyCandidateFinder,
-            IConventionScanner scanner,
-            IServiceCollection services,
-            IConfiguration configuration,
-            IServicesEnvironment environment)
-        {
-            _scanner = scanner ?? throw new ArgumentNullException(nameof(scanner));
-
-            AssemblyProvider = assemblyProvider ?? throw new ArgumentNullException(nameof(assemblyProvider));
-            AssemblyCandidateFinder = assemblyCandidateFinder ?? throw new ArgumentNullException(nameof(AssemblyCandidateFinder));
-            Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-            Environment = environment ?? throw new ArgumentNullException(nameof(environment));
-
-            _core = new ServiceAndContainerWrapper(this, services);
-            _application = new ServiceAndContainerWrapper(this);
-            _system = new ServiceAndContainerWrapper(this);
-        }
-
-        public IAutofacBuilder ConfigureContainer(ContainerBuilderDelegate builder)
-        {
-            _core.ConfigureContainer(builder);
-            return this;
-        }
-
-        public IServiceCollection Services => _core.Services;
-        public IConfiguration Configuration { get; }
-        public IServicesEnvironment Environment { get; }
-        public IAssemblyProvider AssemblyProvider { get; }
-        public IAssemblyCandidateFinder AssemblyCandidateFinder { get; }
-        public IServiceBuilderAndContainerWrapper System => _system;
-        public IServiceBuilderAndContainerWrapper Application => _application;
-
-        public IAutofacBuilder AddDelegate(AutofacConventionDelegate @delegate)
-        {
-            _scanner.AddDelegate(@delegate);
-            return this;
-        }
-
-        public IAutofacBuilder AddConvention(IAutofacConvention convention)
-        {
-            _scanner.AddConvention(convention);
-            return this;
-        }
-
-        // IAutofacConventionContext
-        IServiceAndContainerWrapper IAutofacConventionContext.System => _system;
-        IServiceAndContainerWrapper IAutofacConventionContext.Application => _application;
-        IAutofacConventionContext IAutofacConventionContext.AddDelegate(AutofacConventionDelegate @delegate) => (IAutofacConventionContext)AddDelegate(@delegate);
-        IAutofacConventionContext IAutofacConventionContext.AddConvention(IAutofacConvention convention) => (IAutofacConventionContext)AddConvention(convention);
-        IAutofacConventionContext IServiceAndContainerWrapper.ConfigureContainer(ContainerBuilderDelegate builder)
-        {
-            ConfigureContainer(builder);
-            return this;
-        }
-
-        // IServiceConventionContext
-        IServiceCollection IServiceConventionContext.System => _system.Services;
-
-        IServiceCollection IServiceConventionContext.Application => _application.Services;
-
-        IServiceConventionContext IServiceConventionContext.AddDelegate(ServiceConventionDelegate @delegate)
-        {
-            _scanner.AddDelegate(@delegate);
-            return this;
-        }
-
-        IServiceConventionContext IServiceConventionContext.AddConvention(IServiceConvention convention)
-        {
-            _scanner.AddConvention(convention);
-            return this;
-        }
-    }
-
     public class AutofacBuilder : AutofacBuilderBase
     {
         public AutofacBuilder(
