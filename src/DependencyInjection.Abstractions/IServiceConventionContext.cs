@@ -15,6 +15,6 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
         IServiceCollection System { get; }
         IServiceCollection Application { get; }
         IServiceConventionContext AddDelegate(ServiceConventionDelegate @delegate);
-        IServiceConventionContext AddConvention(IServiceConvention @delegate);
+        IServiceConventionContext AddConvention(IServiceConvention convention);
     }
 }

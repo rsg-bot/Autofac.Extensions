@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Autofac;
 using FakeItEasy;
 using FluentAssertions;
@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Conventions.Scanners;
+using Rocket.Surgery.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Rocket.Surgery.Extensions.Autofac.Tests
@@ -21,7 +22,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
             var configuration = A.Fake<IConfiguration>();
-            var servicesBuilder = new ApplicationServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            var servicesBuilder = new ApplicationAutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
 
             servicesBuilder.AssemblyProvider.Should().BeSameAs(assemblyProvider);
             servicesBuilder.AssemblyCandidateFinder.Should().NotBeNull();
@@ -30,11 +31,11 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             servicesBuilder.Application.Should().NotBeNull();
             servicesBuilder.System.Should().NotBeNull();
             servicesBuilder.Environment.Should().NotBeNull();
-            Action a = () => { servicesBuilder.AddConvention(A.Fake<IServiceConvention>()); };
+            Action a = () => { servicesBuilder.AddConvention(A.Fake<IAutofacConvention>()); };
             a.Should().NotThrow();
             a = () => { servicesBuilder.AddDelegate(delegate { }); };
             a.Should().NotThrow();
-            a = () => { servicesBuilder.Container(delegate { }); };
+            a = () => { servicesBuilder.ConfigureContainer(delegate { }); };
             a.Should().NotThrow();
         }
 
@@ -46,7 +47,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ApplicationServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            var servicesBuilder = new ApplicationAutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
 
             var value = new object();
             servicesBuilder[string.Empty] = value;
@@ -61,7 +62,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ApplicationServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            var servicesBuilder = new ApplicationAutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
 
             servicesBuilder[string.Empty].Should().BeNull();
         }
@@ -74,9 +75,9 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ApplicationServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            var servicesBuilder = new ApplicationAutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
 
-            var Convention = A.Fake<IServiceConvention>();
+            var Convention = A.Fake<IAutofacConvention>();
 
             servicesBuilder.AddConvention(Convention);
 
@@ -91,10 +92,10 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ApplicationServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
-            servicesBuilder.Container(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc>()));
+            var servicesBuilder = new ApplicationAutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc>()));
             servicesBuilder.Services.AddSingleton(A.Fake<ServiceBuilderTests.Abc2>());
-            servicesBuilder.System.Container(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc3>()));
+            servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc3>()));
 
             var items = servicesBuilder.Build(new ContainerBuilder(), A.Fake<ILogger>());
             items.Container.ResolveOptional<ServiceBuilderTests.Abc>().Should().NotBeNull();
@@ -111,11 +112,11 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ApplicationServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
-            servicesBuilder.Application.Container(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc>()));
+            var servicesBuilder = new ApplicationAutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            servicesBuilder.Application.ConfigureContainer(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc>()));
             servicesBuilder.Application.Services.AddSingleton(A.Fake<ServiceBuilderTests.Abc2>());
-            servicesBuilder.System.Container(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc3>()));
-            servicesBuilder.Container(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc4>()));
+            servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc3>()));
+            servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc4>()));
 
             var items = servicesBuilder.Build(new ContainerBuilder(), A.Fake<ILogger>());
             items.Application.ResolveOptional<ServiceBuilderTests.Abc>().Should().NotBeNull();
@@ -132,11 +133,11 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ApplicationServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
-            servicesBuilder.System.Container(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc>()));
+            var servicesBuilder = new ApplicationAutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc>()));
             servicesBuilder.System.Services.AddSingleton(A.Fake<ServiceBuilderTests.Abc2>());
-            servicesBuilder.Application.Container(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc3>()));
-            servicesBuilder.Container(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc4>()));
+            servicesBuilder.Application.ConfigureContainer(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc3>()));
+            servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc4>()));
 
             var items = servicesBuilder.Build(new ContainerBuilder(), A.Fake<ILogger>());
             items.System.ResolveOptional<ServiceBuilderTests.Abc>().Should().NotBeNull();
@@ -153,10 +154,10 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ApplicationServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
-            servicesBuilder.Container(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc>()));
+            var servicesBuilder = new ApplicationAutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc>()));
             servicesBuilder.Services.AddSingleton(A.Fake<ServiceBuilderTests.Abc2>());
-            servicesBuilder.System.Container(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc3>()));
+            servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc3>()));
 
             var items = servicesBuilder.Build(new ContainerBuilder(), A.Fake<ILogger>());
 
@@ -175,11 +176,11 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ApplicationServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
-            servicesBuilder.Application.Container(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc>()));
+            var servicesBuilder = new ApplicationAutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            servicesBuilder.Application.ConfigureContainer(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc>()));
             servicesBuilder.Application.Services.AddSingleton(A.Fake<ServiceBuilderTests.Abc2>());
-            servicesBuilder.System.Container(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc3>()));
-            servicesBuilder.Container(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc4>()));
+            servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc3>()));
+            servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc4>()));
 
             var items = servicesBuilder.Build(new ContainerBuilder(), A.Fake<ILogger>());
             var sp = items.Application.Resolve<IServiceProvider>();
@@ -197,11 +198,11 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ApplicationServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
-            servicesBuilder.System.Container(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc>()));
+            var servicesBuilder = new ApplicationAutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc>()));
             servicesBuilder.System.Services.AddSingleton(A.Fake<ServiceBuilderTests.Abc2>());
-            servicesBuilder.Application.Container(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc3>()));
-            servicesBuilder.Container(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc4>()));
+            servicesBuilder.Application.ConfigureContainer(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc3>()));
+            servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<ServiceBuilderTests.Abc4>()));
 
             var items = servicesBuilder.Build(new ContainerBuilder(), A.Fake<ILogger>());
             var sp = items.System.Resolve<IServiceProvider>();
@@ -219,7 +220,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = new AggregateConventionScanner(assemblyCandidateFinder);
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ApplicationServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            var servicesBuilder = new ApplicationAutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
 
             A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<string[]>._))
                 .Returns(assemblyProvider.GetAssemblies());
