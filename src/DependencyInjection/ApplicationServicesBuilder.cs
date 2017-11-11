@@ -61,13 +61,12 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
         /// <summary>
         /// Builds the root container, and returns the lifetime scopes for the application and system containers
         /// </summary>
-        /// <param name="containerBuilder"></param>
         /// <param name="logger"></param>
         /// <returns></returns>
         public (IServiceProvider Application, IServiceProvider System) Build(ILogger logger)
         {
-            Composer.Register<IServiceConventionContext, IServiceConvention, ServiceConventionDelegate>(_scanner, logger, this);
-
+            new ConventionComposer(_scanner, logger)
+                .Register(this, typeof(IServiceConvention), typeof(ServiceConventionDelegate));
 
             var applicationServices = new ServiceCollection();
             foreach (var s in Services) applicationServices.Add(s);

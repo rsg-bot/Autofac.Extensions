@@ -29,7 +29,13 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// <returns></returns>
         public IContainer Build(ContainerBuilder containerBuilder, ILogger logger)
         {
-            Composer.Register<IAutofacConventionContext, IAutofacConvention, AutofacConventionDelegate>(_scanner, logger, this);
+            new ConventionComposer(_scanner, logger)
+                .Register(
+                this,
+                typeof(IServiceConvention),
+                typeof(IAutofacConvention),
+                typeof(ServiceConventionDelegate),
+                typeof(AutofacConventionDelegate));
 
             _core.Collection.Apply(containerBuilder);
             containerBuilder.Populate(Services);

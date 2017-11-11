@@ -231,5 +231,27 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             items.Container.ResolveOptional<ServiceBuilderTests.Abc3>().Should().BeNull();
             items.Container.ResolveOptional<ServiceBuilderTests.Abc4>().Should().BeNull();
         }
+
+        [Fact]
+        public void ConstructTheContainerAndRegisterWithSystem_UsingConvention_IncludingOtherBits()
+        {
+            var assemblyProvider = new TestAssemblyProvider();
+            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
+            var configuration = A.Fake<IConfiguration>();
+            var scanner = new AggregateConventionScanner(assemblyCandidateFinder);
+            var serviceCollection = new ServiceCollection();
+            var servicesBuilder = new ApplicationAutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+
+            A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<string[]>._))
+                .Returns(assemblyProvider.GetAssemblies());
+
+            var items = servicesBuilder.Build(new ContainerBuilder(), A.Fake<ILogger>());
+            items.Container.ResolveOptional<ServiceBuilderTests.Abc>().Should().NotBeNull();
+            items.Container.ResolveOptional<ServiceBuilderTests.Abc2>().Should().NotBeNull();
+            items.Container.ResolveOptional<ServiceBuilderTests.Abc3>().Should().BeNull();
+            items.Container.ResolveOptional<ServiceBuilderTests.Abc4>().Should().BeNull();
+            items.Container.ResolveOptional<ServiceBuilderTests.OtherAbc3>().Should().NotBeNull();
+            items.Container.ResolveOptional<ServiceBuilderTests.OtherAbc3>().Should().NotBeNull();
+        }
     }
 }

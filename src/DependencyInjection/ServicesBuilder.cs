@@ -52,13 +52,14 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
         /// <returns></returns>
         public IServiceProvider Build(ILogger logger)
         {
-            Composer.Register<IServiceConventionContext, IServiceConvention, ServiceConventionDelegate>(_scanner, logger, this);
+            new ConventionComposer(_scanner, logger)
+                .Register(this, typeof(IServiceConvention), typeof(ServiceConventionDelegate));
 
             foreach (var s in Application) Services.Add(s);
 
             return Services.BuildServiceProvider();
         }
-        
+
         public IConfiguration Configuration { get; }
         public IServicesEnvironment Environment { get; }
         public IAssemblyProvider AssemblyProvider { get; }

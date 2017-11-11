@@ -7,7 +7,7 @@
     </PropertyGroup>
     <PropertyGroup>
         <RSG_Build_Version>1.1.0</RSG_Build_Version>
-        <RSG_Conventions_Version>0.2.2</RSG_Conventions_Version>
+        <RSG_Conventions_Version>0.3.0</RSG_Conventions_Version>
         <Microsoft_Extensions_Configuration_Version>2.0.0</Microsoft_Extensions_Configuration_Version>
         <Microsoft_Extensions_DependencyInjection_Version>2.0.0</Microsoft_Extensions_DependencyInjection_Version>
         <Microsoft_Extensions_Hosting_Version>2.0.0</Microsoft_Extensions_Hosting_Version>
