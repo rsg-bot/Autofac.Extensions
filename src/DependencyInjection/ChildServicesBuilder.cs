@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Rocket.Surgery.Builders;
 using Rocket.Surgery.Conventions.Reflection;
+using Rocket.Surgery.Hosting;
 
 namespace Rocket.Surgery.Extensions.DependencyInjection
 {
@@ -16,7 +17,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
 
         public IConfiguration Configuration => Builder.Configuration;
 
-        public IServicesEnvironment Environment => Builder.Environment;
+        public IHostingEnvironment Environment => Builder.Environment;
 
         public IAssemblyProvider AssemblyProvider => Builder.AssemblyProvider;
 

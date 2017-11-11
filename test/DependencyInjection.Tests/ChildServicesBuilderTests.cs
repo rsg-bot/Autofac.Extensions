@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Conventions.Scanners;
+using Rocket.Surgery.Hosting;
 using Xunit;
 
 namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
@@ -40,7 +41,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
             var configuration = A.Fake<IConfiguration>();
-            var servicesBuilder = new ChildBuilder(new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>()));
+            var servicesBuilder = new ChildBuilder(new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>()));
 
             servicesBuilder.AssemblyProvider.Should().BeSameAs(assemblyProvider);
             servicesBuilder.AssemblyCandidateFinder.Should().NotBeNull();
@@ -63,7 +64,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ChildBuilder(new ApplicationServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>()));
+            var servicesBuilder = new ChildBuilder(new ApplicationServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>()));
 
             var value = new object();
             servicesBuilder[string.Empty] = value;
@@ -78,7 +79,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ChildBuilder(new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>()));
+            var servicesBuilder = new ChildBuilder(new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>()));
 
             servicesBuilder[string.Empty].Should().BeNull();
         }
@@ -91,7 +92,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var parent = new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            var parent = new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
             var servicesBuilder = new ChildBuilder(parent);
 
             servicesBuilder[string.Empty].Should().BeNull();

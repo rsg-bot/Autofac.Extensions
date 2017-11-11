@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Rocket.Surgery.Builders;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Extensions.DependencyInjection;
+using Rocket.Surgery.Hosting;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
@@ -16,7 +17,7 @@ namespace Rocket.Surgery.Extensions.Autofac
         }
 
         public IConfiguration Configuration => Builder.Configuration;
-        public IServicesEnvironment Environment => Builder.Environment;
+        public IHostingEnvironment Environment => Builder.Environment;
         public IAssemblyProvider AssemblyProvider => Builder.AssemblyProvider;
         public IAssemblyCandidateFinder AssemblyCandidateFinder => Builder.AssemblyCandidateFinder;
         public IServiceBuilderAndContainerWrapper System => Builder.System;

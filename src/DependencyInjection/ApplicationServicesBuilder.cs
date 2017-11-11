@@ -7,6 +7,7 @@ using Rocket.Surgery.Builders;
 using Rocket.Surgery.Conventions;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Conventions.Scanners;
+using Rocket.Surgery.Hosting;
 
 namespace Rocket.Surgery.Extensions.DependencyInjection
 {
@@ -44,7 +45,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
             IConventionScanner scanner,
             IServiceCollection services,
             IConfiguration configuration,
-            IServicesEnvironment environment)
+            IHostingEnvironment environment)
         {
             _scanner = scanner ?? throw new ArgumentNullException(nameof(scanner));
 
@@ -80,7 +81,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
         }
 
         public IConfiguration Configuration { get; }
-        public IServicesEnvironment Environment { get; }
+        public IHostingEnvironment Environment { get; }
         public IAssemblyProvider AssemblyProvider { get; }
         public IAssemblyCandidateFinder AssemblyCandidateFinder { get; }
         public IServiceCollection Application { get; }

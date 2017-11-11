@@ -8,6 +8,7 @@ using Rocket.Surgery.Conventions;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Conventions.Scanners;
 using Rocket.Surgery.Extensions.DependencyInjection.Tests;
+using Rocket.Surgery.Hosting;
 using Xunit;
 
 [assembly: Convention(typeof(ServiceBuilderTests.AbcConvention))]
@@ -24,7 +25,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
             var configuration = A.Fake<IConfiguration>();
-            var servicesBuilder = new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            var servicesBuilder = new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
 
             servicesBuilder.AssemblyProvider.Should().BeSameAs(assemblyProvider);
             servicesBuilder.AssemblyCandidateFinder.Should().NotBeNull();
@@ -47,7 +48,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            var servicesBuilder = new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
 
             var value = new object();
             servicesBuilder[string.Empty] = value;
@@ -62,7 +63,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            var servicesBuilder = new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
 
             servicesBuilder[string.Empty].Should().BeNull();
         }
@@ -75,7 +76,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            var servicesBuilder = new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
 
             var Convention = A.Fake<IServiceConvention>();
 
@@ -107,7 +108,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            var servicesBuilder = new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
             servicesBuilder.Services.AddSingleton(A.Fake<Abc>());
             servicesBuilder.Services.AddSingleton(A.Fake<Abc2>());
             servicesBuilder.System.AddSingleton(A.Fake<Abc3>());
@@ -127,7 +128,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            var servicesBuilder = new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
             servicesBuilder.Application.AddSingleton(A.Fake<Abc>());
             servicesBuilder.Application.AddSingleton(A.Fake<Abc2>());
             servicesBuilder.System.AddSingleton(A.Fake<Abc3>());
@@ -148,7 +149,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            var servicesBuilder = new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
             servicesBuilder.System.AddSingleton(A.Fake<Abc>());
             servicesBuilder.System.AddSingleton(A.Fake<Abc2>());
             servicesBuilder.Application.AddSingleton(A.Fake<Abc3>());
@@ -169,7 +170,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = new AggregateConventionScanner(assemblyCandidateFinder);
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IServicesEnvironment>());
+            var servicesBuilder = new ServicesBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
 
             A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<string[]>._))
                 .Returns(assemblyProvider.GetAssemblies());

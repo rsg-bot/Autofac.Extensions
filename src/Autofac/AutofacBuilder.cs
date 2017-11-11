@@ -7,6 +7,7 @@ using Rocket.Surgery.Conventions;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Conventions.Scanners;
 using Rocket.Surgery.Extensions.DependencyInjection;
+using Rocket.Surgery.Hosting;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
@@ -18,7 +19,7 @@ namespace Rocket.Surgery.Extensions.Autofac
             IConventionScanner scanner,
             IServiceCollection services,
             IConfiguration configuration,
-            IServicesEnvironment environment) :
+            IHostingEnvironment environment) :
             base(assemblyProvider, assemblyCandidateFinder, scanner, services, configuration, environment){}
 
         /// <summary>
