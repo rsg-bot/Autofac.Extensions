@@ -19,16 +19,16 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationServicesBuilder" /> class.
         /// </summary>
+        /// <param name="scanner"></param>
         /// <param name="assemblyProvider">The assembly provider.</param>
         /// <param name="assemblyCandidateFinder">The assembly candidate finder.</param>
-        /// <param name="scanner"></param>
         /// <param name="services">The services.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="environment"></param>
         public ServicesBuilder(
+            IConventionScanner scanner,
             IAssemblyProvider assemblyProvider,
             IAssemblyCandidateFinder assemblyCandidateFinder,
-            IConventionScanner scanner,
             IServiceCollection services,
             IConfiguration configuration,
             IHostingEnvironment environment)

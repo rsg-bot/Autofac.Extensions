@@ -28,7 +28,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
             var configuration = A.Fake<IConfiguration>();
-            var servicesBuilder = new AutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var servicesBuilder = new AutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
 
             servicesBuilder.AssemblyProvider.Should().BeSameAs(assemblyProvider);
             servicesBuilder.AssemblyCandidateFinder.Should().NotBeNull();
@@ -53,7 +53,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new AutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var servicesBuilder = new AutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
 
             var value = new object();
             servicesBuilder[string.Empty] = value;
@@ -68,7 +68,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new AutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var servicesBuilder = new AutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
 
             servicesBuilder[string.Empty].Should().BeNull();
         }
@@ -81,7 +81,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new AutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var servicesBuilder = new AutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
 
             var Convention = A.Fake<IAutofacConvention>();
 
@@ -125,7 +125,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new AutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var servicesBuilder = new AutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
             servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<Abc>()));
             servicesBuilder.Services.AddSingleton(A.Fake<Abc2>());
             servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<Abc3>()));
@@ -145,7 +145,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new AutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var servicesBuilder = new AutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
             servicesBuilder.Application.ConfigureContainer(c => c.RegisterInstance(A.Fake<Abc>()));
             servicesBuilder.Application.Services.AddSingleton(A.Fake<Abc2>());
             servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<Abc3>()));
@@ -166,7 +166,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new AutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var servicesBuilder = new AutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
             servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<Abc>()));
             servicesBuilder.System.Services.AddSingleton(A.Fake<Abc2>());
             servicesBuilder.Application.ConfigureContainer(c => c.RegisterInstance(A.Fake<Abc3>()));
@@ -187,7 +187,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new AutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var servicesBuilder = new AutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
             servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<Abc>()));
             servicesBuilder.Services.AddSingleton(A.Fake<Abc2>());
             servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<Abc3>()));
@@ -209,7 +209,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new AutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var servicesBuilder = new AutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
             servicesBuilder.Application.ConfigureContainer(c => c.RegisterInstance(A.Fake<Abc>()));
             servicesBuilder.Application.Services.AddSingleton(A.Fake<Abc2>());
             servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<Abc3>()));
@@ -231,7 +231,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new AutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var servicesBuilder = new AutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
             servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<Abc>()));
             servicesBuilder.System.Services.AddSingleton(A.Fake<Abc2>());
             servicesBuilder.Application.ConfigureContainer(c => c.RegisterInstance(A.Fake<Abc3>()));
@@ -253,7 +253,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = new AggregateConventionScanner(assemblyCandidateFinder);
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new AutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var servicesBuilder = new AutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
 
             A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<string[]>._))
                 .Returns(assemblyProvider.GetAssemblies());
@@ -273,7 +273,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var configuration = A.Fake<IConfiguration>();
             var scanner = new AggregateConventionScanner(assemblyCandidateFinder);
             var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new AutofacBuilder(assemblyProvider, assemblyCandidateFinder, scanner, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var servicesBuilder = new AutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
 
             A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<string[]>._))
                 .Returns(assemblyProvider.GetAssemblies());

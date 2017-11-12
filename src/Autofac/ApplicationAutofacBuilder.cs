@@ -32,13 +32,13 @@ namespace Rocket.Surgery.Extensions.Autofac
 
 
         public ApplicationAutofacBuilder(
+            IConventionScanner scanner,
             IAssemblyProvider assemblyProvider,
             IAssemblyCandidateFinder assemblyCandidateFinder,
-            IConventionScanner scanner,
             IServiceCollection services,
             IConfiguration configuration,
             IHostingEnvironment environment) :
-            base(assemblyProvider, assemblyCandidateFinder, scanner, services, configuration, environment)
+            base(scanner, assemblyProvider, assemblyCandidateFinder, services, configuration, environment)
         { }
 
         /// <summary>

@@ -14,13 +14,13 @@ namespace Rocket.Surgery.Extensions.Autofac
     public class AutofacBuilder : AutofacBuilderBase
     {
         public AutofacBuilder(
+            IConventionScanner scanner,
             IAssemblyProvider assemblyProvider,
             IAssemblyCandidateFinder assemblyCandidateFinder,
-            IConventionScanner scanner,
             IServiceCollection services,
             IConfiguration configuration,
             IHostingEnvironment environment) :
-            base(assemblyProvider, assemblyCandidateFinder, scanner, services, configuration, environment){}
+            base(scanner, assemblyProvider, assemblyCandidateFinder, services, configuration, environment){}
 
         /// <summary>
         /// Builds the root container, and returns the lifetime scopes for the application and system containers
