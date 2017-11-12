@@ -1,0 +1,24 @@
+language: csharp
+sudo: required
+dist: trusty
+mono: latest
+dotnet: 2.0.0
+os:
+- linux
+git:
+  depth: 1
+cache:
+  directories:
+  - tools
+  - "$HOME/.nuget/packages"
+before_cache:
+- rm -f tools/packages.config
+script:
+- git fetch --unshallow
+- git fetch origin '+refs/heads/*:refs/heads/*'
+- git branch -r
+- chmod 755 ./build.sh
+- "./build.sh --verbosity Diagnostic"
+notifications:
+  slack:
+    secure: Z24fYETrjRte58nvVgmtK8h3CnkssLmU4AreTEPKhoXLo9KMzaox24h0KG1QP6ceFiEzxwOd3G///Dd3pGi0usN8sa2K4zyZ00KpfVd6RpV8B2lT320DOxWpAgm5qsLtwC8j7Bxyr9MHBwk53RcWuRxy+MbS2rHMsR+fQEMw5Mz98ho/H9wu00Y7HOq1QSiSRiQhPj3ZUmIW0/5In2Zp2PFKWtdOGlnHPnyjGBfiIjE/SQQPdwqhe1xStHHhGcfbxEkG+/5pc2kW1YbBdfDrcfuNMB5N34fRp9nNtic4H5l+YVB9EvvMpYy/OtL9+dyMldnI9ib5lM9330FR6UobPYsHKywIZDlpTu9nt64RP+ZRPhZY7HSPzSvNzlOjbTBM4AJXh6lEgEu56iDlJZaXT32iFT+O/hB/cHHfcsN777eBuDEf9CNBvEOdCutkt67BT1CTfROEAUTuvlamdqKCMFbw5aM6cEhbqem86F/lLi8DRm722sNQ6H+R+hSJkUpo1Gos5otPISFL2G+G1rvLon4wFMOwVsjEM284EbXd/pJuxbgNm8lMsNkAm0IccbwNGcDD8BkwX7lJkmNt9TU3/HGNyJWK/6vRo2E6D8yB20yaNKkYICGnvWEAMOdM43fckRSDaVxCOnVDWo/WqzOh23bSGUQYK9L+DJqIKol8Zl4=
