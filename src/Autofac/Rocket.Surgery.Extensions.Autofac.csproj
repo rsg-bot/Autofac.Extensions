@@ -11,9 +11,9 @@
         <PackageReference Include="System.ValueTuple" Version="$(ValueTuple_Version)" />
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0' or '$(TargetFramework)'=='net461'">
-        <PackageReference Include="NETStandard.Library" Version="2.0.0" NoWarn="true" />
+        <PackageReference Include="NETStandard.Library" Version="2.0.0" NoWarn="true" PrivateAssets="All" />
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3' or '$(TargetFramework)'=='net451'">
-        <PackageReference Include="NETStandard.Library" Version="1.6.1" NoWarn="true" />
+        <PackageReference Include="NETStandard.Library" Version="1.6.1" NoWarn="true" PrivateAssets="All" />
     </ItemGroup>
 </Project>
