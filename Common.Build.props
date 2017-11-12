@@ -12,6 +12,7 @@
         <Microsoft_Extensions_Configuration_Version>2.0.0</Microsoft_Extensions_Configuration_Version>
         <Microsoft_Extensions_DependencyInjection_Version>2.0.0</Microsoft_Extensions_DependencyInjection_Version>
         <Microsoft_Extensions_Hosting_Version>2.0.0</Microsoft_Extensions_Hosting_Version>
+        <ValueTuple_Version>4.4.0</ValueTuple_Version>
         <SourceLink_Version>2.4.0</SourceLink_Version>
         <Microsoft_NET_Test_Sdk_Version>15.5.0-preview-20171031-01</Microsoft_NET_Test_Sdk_Version>
         <xunit_Version>2.3.1</xunit_Version>
