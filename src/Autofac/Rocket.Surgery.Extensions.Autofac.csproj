@@ -4,7 +4,7 @@
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\Autofac.Abstractions\Rocket.Surgery.Extensions.Autofac.Abstractions.csproj" />
-        <PackageReference Include="Rocket.Surgery.Builders" Version="$(RSG_Conventions_Version)" />
+        <PackageReference Include="Rocket.Surgery.Builders" Version="$(RSG_Builders_Version)" />
         <PackageReference Include="Rocket.Surgery.Conventions" Version="$(RSG_Conventions_Version)" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="$(Microsoft_Extensions_DependencyInjection_Version)" />
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.0" />

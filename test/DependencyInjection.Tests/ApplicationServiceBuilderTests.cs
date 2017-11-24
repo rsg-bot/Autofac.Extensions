@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
@@ -156,7 +157,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             var serviceCollection = new ServiceCollection();
             var servicesBuilder = new ApplicationServicesBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
 
-            A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<string[]>._))
+            A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<IEnumerable<string>>._))
                 .Returns(assemblyProvider.GetAssemblies());
 
             var items = servicesBuilder.Build(A.Fake<ILogger>());

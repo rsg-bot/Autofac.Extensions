@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Autofac;
 using FakeItEasy;
 using FluentAssertions;
@@ -255,7 +256,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var serviceCollection = new ServiceCollection();
             var servicesBuilder = new AutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
 
-            A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<string[]>._))
+            A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<IEnumerable<string>>._))
                 .Returns(assemblyProvider.GetAssemblies());
 
             var items = servicesBuilder.Build(new ContainerBuilder(), A.Fake<ILogger>());
@@ -275,7 +276,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var serviceCollection = new ServiceCollection();
             var servicesBuilder = new AutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
 
-            A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<string[]>._))
+            A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<IEnumerable<string>>._))
                 .Returns(assemblyProvider.GetAssemblies());
 
             var items = servicesBuilder.Build(new ContainerBuilder(), A.Fake<ILogger>());
