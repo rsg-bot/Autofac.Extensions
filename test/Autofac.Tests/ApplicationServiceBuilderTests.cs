@@ -255,5 +255,60 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             items.Container.ResolveOptional<ServiceBuilderTests.OtherAbc3>().Should().NotBeNull();
             items.Container.ResolveOptional<ServiceBuilderTests.OtherAbc3>().Should().NotBeNull();
         }
+
+        [Fact]
+        public void SendsNotificationThrough_OnBuild_Observable_ForMicrosoftExtensions()
+        {
+            var assemblyProvider = new TestAssemblyProvider();
+            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
+            var configuration = A.Fake<IConfiguration>();
+            var scanner = new AggregateConventionScanner(assemblyCandidateFinder);
+            var serviceCollection = new ServiceCollection();
+            var servicesBuilder = new ApplicationAutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var observer = A.Fake<IObserver<IServiceProvider>>();
+            var observerApplication = A.Fake<IObserver<IServiceProvider>>();
+            var observerSystem = A.Fake<IObserver<IServiceProvider>>();
+            ((IServiceConventionContext)servicesBuilder).OnBuild.Subscribe(observer);
+            ((IServiceConventionContext)servicesBuilder).Application.OnBuild.Subscribe(observerApplication);
+            ((IServiceConventionContext)servicesBuilder).OnBuild.Subscribe(observerSystem);
+
+            A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<IEnumerable<string>>._))
+                .Returns(assemblyProvider.GetAssemblies());
+
+            var items = servicesBuilder.Build(new ContainerBuilder(), A.Fake<ILogger>());
+
+            A.CallTo(() => observer.OnNext(A<IServiceProvider>.Ignored)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => observerApplication.OnNext(A<IServiceProvider>.Ignored)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => observerSystem.OnNext(A<IServiceProvider>.Ignored)).MustHaveHappened(Repeated.Exactly.Once);
+        }
+
+        [Fact]
+        public void SendsNotificationThrough_OnBuild_Observable_ForAutofac()
+        {
+            var assemblyProvider = new TestAssemblyProvider();
+            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
+            var configuration = A.Fake<IConfiguration>();
+            var scanner = new AggregateConventionScanner(assemblyCandidateFinder);
+            var serviceCollection = new ServiceCollection();
+            var servicesBuilder = new ApplicationAutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var observer = A.Fake<IObserver<ILifetimeScope>>();
+            var observerContainer = A.Fake<IObserver<IContainer>>();
+            var observerApplication = A.Fake<IObserver<ILifetimeScope>>();
+            var observerSystem = A.Fake<IObserver<ILifetimeScope>>();
+            servicesBuilder.OnContainerBuild.Subscribe(observerContainer);
+            servicesBuilder.OnBuild.Subscribe(observer);
+            servicesBuilder.Application.OnBuild.Subscribe(observerApplication);
+            servicesBuilder.System.OnBuild.Subscribe(observerSystem);
+
+            A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<IEnumerable<string>>._))
+                .Returns(assemblyProvider.GetAssemblies());
+
+            var items = servicesBuilder.Build(new ContainerBuilder(), A.Fake<ILogger>());
+
+            A.CallTo(() => observer.OnNext(items.Container)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => observerApplication.OnNext(items.Application)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => observerSystem.OnNext(items.System)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => observerContainer.OnNext(items.Container)).MustHaveHappened(Repeated.Exactly.Once);
+        }
     }
 }

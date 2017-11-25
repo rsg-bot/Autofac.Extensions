@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Rocket.Surgery.Builders;
 using Rocket.Surgery.Conventions.Reflection;
@@ -25,9 +26,10 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
 
         public IServiceCollection Services => Builder.Services;
 
-        public IServiceCollection System => Builder.System;
+        public IServiceWrapper System => Builder.System;
 
-        public IServiceCollection Application => Builder.Application;
+        public IServiceWrapper Application => Builder.Application;
+        public IObservable<IServiceProvider> OnBuild => Builder.OnBuild;
 
         public IServicesBuilder AddDelegate(ServiceConventionDelegate @delegate) => Builder.AddDelegate(@delegate);
 

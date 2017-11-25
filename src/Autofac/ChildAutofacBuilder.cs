@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Autofac;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Rocket.Surgery.Builders;
 using Rocket.Surgery.Conventions.Reflection;
@@ -24,10 +26,13 @@ namespace Rocket.Surgery.Extensions.Autofac
         public IServiceBuilderAndContainerWrapper Application => Builder.Application;
         public IAutofacBuilder AddDelegate(AutofacConventionDelegate @delegate) => Builder.AddDelegate(@delegate);
         public IAutofacBuilder AddConvention(IAutofacConvention convention) => Builder.AddConvention(convention);
+        public IObservable<IContainer> OnContainerBuild => Builder.OnContainerBuild;
+
         public IAutofacBuilder ConfigureContainer(ContainerBuilderDelegate builder)
         {
             return Builder.ConfigureContainer(builder);
         }
         public IServiceCollection Services => Builder.Services;
+        public IObservable<ILifetimeScope> OnBuild => Builder.OnBuild;
     }
 }

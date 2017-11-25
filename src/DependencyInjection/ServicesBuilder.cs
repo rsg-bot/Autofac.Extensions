@@ -8,6 +8,7 @@ using Rocket.Surgery.Builders;
 using Rocket.Surgery.Conventions;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Conventions.Scanners;
+using Rocket.Surgery.Extensions.DependencyInjection.Internals;
 using Rocket.Surgery.Hosting;
 
 namespace Rocket.Surgery.Extensions.DependencyInjection
@@ -15,6 +16,9 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
     public class ServicesBuilder : Builder, IServicesBuilder, IServiceConventionContext
     {
         private readonly IConventionScanner _scanner;
+        private readonly ServiceProviderObservable _onBuild;
+        private readonly ServiceWrapper _application;
+        private readonly ServiceWrapper _system;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationServicesBuilder" /> class.
@@ -40,15 +44,15 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
 
-            Services= services;
-            Application = new ServiceCollection();
-            System = new ServiceCollection();
+            Services = services;
+            _onBuild = new ServiceProviderObservable();
+            _application = new ServiceWrapper();
+            _system = new ServiceWrapper();
         }
 
         /// <summary>
         /// Builds the root container, and returns the lifetime scopes for the application and system containers
         /// </summary>
-        /// <param name="containerBuilder"></param>
         /// <param name="logger"></param>
         /// <returns></returns>
         public IServiceProvider Build(ILogger logger)
@@ -56,18 +60,25 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
             new ConventionComposer(_scanner, logger)
                 .Register(this, typeof(IServiceConvention), typeof(ServiceConventionDelegate));
 
-            foreach (var s in Application) Services.Add(s);
+            foreach (var s in Application.Services) Services.Add(s);
 
-            return Services.BuildServiceProvider();
+            var result = Services.BuildServiceProvider();
+            _onBuild.Send(result);
+            _application.OnBuild.Send(result);
+            return result;
         }
 
         public IConfiguration Configuration { get; }
         public IHostingEnvironment Environment { get; }
         public IAssemblyProvider AssemblyProvider { get; }
         public IAssemblyCandidateFinder AssemblyCandidateFinder { get; }
-        public IServiceCollection Application { get; }
+
+        public IServiceWrapper Application => _application;
+        public IServiceWrapper System => _system;
+
         public IServiceCollection Services { get; }
-        public IServiceCollection System { get; }
+        public IObservable<IServiceProvider> OnBuild => _onBuild;
+
 
         public IServicesBuilder AddDelegate(ServiceConventionDelegate @delegate)
         {

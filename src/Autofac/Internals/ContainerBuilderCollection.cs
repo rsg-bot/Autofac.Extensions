@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Autofac;
 
-namespace Rocket.Surgery.Extensions.Autofac
+namespace Rocket.Surgery.Extensions.Autofac.Internals
 {
     /// <summary>
     /// A collection that houses container builder delegates for being applied later

@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +21,7 @@ namespace Rocket.Surgery.Extensions.Autofac
             IServiceCollection services,
             IConfiguration configuration,
             IHostingEnvironment environment) :
-            base(scanner, assemblyProvider, assemblyCandidateFinder, services, configuration, environment){}
+            base(scanner, assemblyProvider, assemblyCandidateFinder, services, configuration, environment){ }
 
         /// <summary>
         /// Builds the root container, and returns the lifetime scopes for the application and system containers
@@ -44,7 +45,17 @@ namespace Rocket.Surgery.Extensions.Autofac
             _application.Collection.Apply(containerBuilder);
             containerBuilder.Populate(_application.Services);
 
-            return containerBuilder.Build();
+            var result = containerBuilder.Build();
+            var sp = new AutofacServiceProvider(result);
+            _application.LifetimeScopeOnBuild.Send(result);
+            _application.ServiceProviderOnBuild.Send(sp);
+
+            _core.LifetimeScopeOnBuild.Send(result);
+            _core.ServiceProviderOnBuild.Send(sp);
+
+            _containerObservable.Send(result);
+
+            return result;
         }
     }
 }

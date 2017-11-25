@@ -67,12 +67,20 @@ namespace Rocket.Surgery.Extensions.Autofac
                 _system.Collection.Apply(s);
                 CustomRegistration.Register(s, _system.Services, SystemTag);
             });
+            _system.LifetimeScopeOnBuild.Send(system);
+            _system.ServiceProviderOnBuild.Send(new AutofacServiceProvider(system));
 
             var application = container.BeginLifetimeScope(ApplicationTag, a =>
             {
                 _application.Collection.Apply(a);
                 CustomRegistration.Register(a, _application.Services, ApplicationTag);
             });
+            _application.LifetimeScopeOnBuild.Send(application);
+            _application.ServiceProviderOnBuild.Send(new AutofacServiceProvider(application));
+
+            _core.LifetimeScopeOnBuild.Send(container);
+            _core.ServiceProviderOnBuild.Send(new AutofacServiceProvider(container));
+            _containerObservable.Send(container);
 
             return (container, application, system);
         }

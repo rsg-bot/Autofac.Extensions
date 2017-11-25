@@ -93,7 +93,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             var servicesBuilder = new ApplicationServicesBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
             servicesBuilder.Services.AddSingleton(A.Fake<ServiceBuilderTests.Abc>());
             servicesBuilder.Services.AddSingleton(A.Fake<ServiceBuilderTests.Abc2>());
-            servicesBuilder.System.AddSingleton(A.Fake<ServiceBuilderTests.Abc3>());
+            servicesBuilder.System.Services.AddSingleton(A.Fake<ServiceBuilderTests.Abc3>());
 
             var items = servicesBuilder.Build(A.Fake<ILogger>());
 
@@ -113,9 +113,9 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
             var servicesBuilder = new ApplicationServicesBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
-            servicesBuilder.Application.AddSingleton(A.Fake<ServiceBuilderTests.Abc>());
-            servicesBuilder.Application.AddSingleton(A.Fake<ServiceBuilderTests.Abc2>());
-            servicesBuilder.System.AddSingleton(A.Fake<ServiceBuilderTests.Abc3>());
+            servicesBuilder.Application.Services.AddSingleton(A.Fake<ServiceBuilderTests.Abc>());
+            servicesBuilder.Application.Services.AddSingleton(A.Fake<ServiceBuilderTests.Abc2>());
+            servicesBuilder.System.Services.AddSingleton(A.Fake<ServiceBuilderTests.Abc3>());
             servicesBuilder.Services.AddSingleton(A.Fake<ServiceBuilderTests.Abc4>());
 
             var items = servicesBuilder.Build(A.Fake<ILogger>());
@@ -134,9 +134,9 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             var scanner = A.Fake<IConventionScanner>();
             var serviceCollection = new ServiceCollection();
             var servicesBuilder = new ApplicationServicesBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
-            servicesBuilder.System.AddSingleton(A.Fake<ServiceBuilderTests.Abc>());
-            servicesBuilder.System.AddSingleton(A.Fake<ServiceBuilderTests.Abc2>());
-            servicesBuilder.Application.AddSingleton(A.Fake<ServiceBuilderTests.Abc3>());
+            servicesBuilder.System.Services.AddSingleton(A.Fake<ServiceBuilderTests.Abc>());
+            servicesBuilder.System.Services.AddSingleton(A.Fake<ServiceBuilderTests.Abc2>());
+            servicesBuilder.Application.Services.AddSingleton(A.Fake<ServiceBuilderTests.Abc3>());
             servicesBuilder.Services.AddSingleton(A.Fake<ServiceBuilderTests.Abc4>());
 
             var items = servicesBuilder.Build(A.Fake<ILogger>());
@@ -165,6 +165,32 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             items.Application.GetService<ServiceBuilderTests.Abc2>().Should().NotBeNull();
             items.Application.GetService<ServiceBuilderTests.Abc3>().Should().BeNull();
             items.Application.GetService<ServiceBuilderTests.Abc4>().Should().BeNull();
+        }
+
+        [Fact]
+        public void SendsNotificationThrough_OnBuild_Observable()
+        {
+            var assemblyProvider = new TestAssemblyProvider();
+            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
+            var configuration = A.Fake<IConfiguration>();
+            var scanner = new AggregateConventionScanner(assemblyCandidateFinder);
+            var serviceCollection = new ServiceCollection();
+            var servicesBuilder = new ApplicationServicesBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var observer = A.Fake<IObserver<IServiceProvider>>();
+            var observerApplication = A.Fake<IObserver<IServiceProvider>>();
+            var observerSystem = A.Fake<IObserver<IServiceProvider>>();
+            servicesBuilder.OnBuild.Subscribe(observer);
+            servicesBuilder.Application.OnBuild.Subscribe(observerApplication);
+            servicesBuilder.System.OnBuild.Subscribe(observerSystem);
+
+            A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<IEnumerable<string>>._))
+                .Returns(assemblyProvider.GetAssemblies());
+
+            var items = servicesBuilder.Build(A.Fake<ILogger>());
+
+            A.CallTo(() => observer.OnNext(items.Application)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => observerApplication.OnNext(items.Application)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => observerSystem.OnNext(items.System)).MustHaveHappened(Repeated.Exactly.Once);
         }
     }
 }

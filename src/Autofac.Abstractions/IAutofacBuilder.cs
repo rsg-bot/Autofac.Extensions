@@ -1,3 +1,5 @@
+using System;
+using Autofac;
 using Microsoft.Extensions.Configuration;
 using Rocket.Surgery.Builders;
 using Rocket.Surgery.Conventions.Reflection;
@@ -20,5 +22,6 @@ namespace Rocket.Surgery.Extensions.Autofac
         IServiceBuilderAndContainerWrapper Application { get; }
         IAutofacBuilder AddDelegate(AutofacConventionDelegate @delegate);
         IAutofacBuilder AddConvention(IAutofacConvention convention);
+        IObservable<IContainer> OnContainerBuild { get; }
     }
 }

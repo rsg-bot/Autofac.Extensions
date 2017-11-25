@@ -114,7 +114,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             public void Register(IServiceConventionContext context)
             {
                 context.Services.AddSingleton(A.Fake<OtherAbc3>());
-                context.System.AddSingleton(A.Fake<OtherAbc4>());
+                context.System.Services.AddSingleton(A.Fake<OtherAbc4>());
             }
         }
 
@@ -286,6 +286,61 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             items.ResolveOptional<Abc4>().Should().BeNull();
             items.ResolveOptional<OtherAbc3>().Should().NotBeNull();
             items.ResolveOptional<OtherAbc3>().Should().NotBeNull();
+        }
+
+        [Fact]
+        public void SendsNotificationThrough_OnBuild_Observable_ForMicrosoftExtensions()
+        {
+            var assemblyProvider = new TestAssemblyProvider();
+            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
+            var configuration = A.Fake<IConfiguration>();
+            var scanner = new AggregateConventionScanner(assemblyCandidateFinder);
+            var serviceCollection = new ServiceCollection();
+            var servicesBuilder = new AutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var observer = A.Fake<IObserver<IServiceProvider>>();
+            var observerApplication = A.Fake<IObserver<IServiceProvider>>();
+            var observerSystem = A.Fake<IObserver<IServiceProvider>>();
+            ((IServiceConventionContext)servicesBuilder).OnBuild.Subscribe(observer);
+            ((IServiceConventionContext)servicesBuilder).Application.OnBuild.Subscribe(observerApplication);
+            ((IServiceConventionContext)servicesBuilder).OnBuild.Subscribe(observerSystem);
+
+            A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<IEnumerable<string>>._))
+                .Returns(assemblyProvider.GetAssemblies());
+
+            var items = servicesBuilder.Build(new ContainerBuilder(), A.Fake<ILogger>());
+
+            A.CallTo(() => observer.OnNext(A<IServiceProvider>.Ignored)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => observerApplication.OnNext(A<IServiceProvider>.Ignored)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => observerSystem.OnNext(A<IServiceProvider>.Ignored)).MustHaveHappened(Repeated.Exactly.Once);
+        }
+
+        [Fact]
+        public void SendsNotificationThrough_OnBuild_Observable_ForAutofac()
+        {
+            var assemblyProvider = new TestAssemblyProvider();
+            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
+            var configuration = A.Fake<IConfiguration>();
+            var scanner = new AggregateConventionScanner(assemblyCandidateFinder);
+            var serviceCollection = new ServiceCollection();
+            var servicesBuilder = new AutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var observer = A.Fake<IObserver<ILifetimeScope>>();
+            var observerContainer = A.Fake<IObserver<IContainer>>();
+            var observerApplication = A.Fake<IObserver<ILifetimeScope>>();
+            var observerSystem = A.Fake<IObserver<ILifetimeScope>>();
+            servicesBuilder.OnContainerBuild.Subscribe(observerContainer);
+            servicesBuilder.OnBuild.Subscribe(observer);
+            servicesBuilder.Application.OnBuild.Subscribe(observerApplication);
+            servicesBuilder.System.OnBuild.Subscribe(observerSystem);
+
+            A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<IEnumerable<string>>._))
+                .Returns(assemblyProvider.GetAssemblies());
+
+            var container = servicesBuilder.Build(new ContainerBuilder(), A.Fake<ILogger>());
+
+            A.CallTo(() => observer.OnNext(container)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => observerApplication.OnNext(container)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => observerSystem.OnNext(A<IContainer>._)).MustHaveHappened(Repeated.Never);
+            A.CallTo(() => observerContainer.OnNext(container)).MustHaveHappened(Repeated.Exactly.Once);
         }
     }
 }

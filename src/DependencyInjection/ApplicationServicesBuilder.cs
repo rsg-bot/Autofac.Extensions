@@ -7,6 +7,7 @@ using Rocket.Surgery.Builders;
 using Rocket.Surgery.Conventions;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Conventions.Scanners;
+using Rocket.Surgery.Extensions.DependencyInjection.Internals;
 using Rocket.Surgery.Hosting;
 
 namespace Rocket.Surgery.Extensions.DependencyInjection
@@ -20,6 +21,9 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
     public class ApplicationServicesBuilder : Builder, IServicesBuilder, IServiceConventionContext
     {
         private readonly IConventionScanner _scanner;
+        private readonly ServiceProviderObservable _onBuild;
+        private readonly ServiceWrapper _application;
+        private readonly ServiceWrapper _system;
 
         /// <summary>
         /// Tag for applicaiton scoped container
@@ -55,8 +59,9 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
 
             Services = services;
-            Application = new ServiceCollection();
-            System = new ServiceCollection();
+            _onBuild = new ServiceProviderObservable();
+            _application = new ServiceWrapper();
+            _system = new ServiceWrapper();
         }
 
         /// <summary>
@@ -71,11 +76,14 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
 
             var applicationServices = new ServiceCollection();
             foreach (var s in Services) applicationServices.Add(s);
-            foreach (var s in Application) applicationServices.Add(s);
+            foreach (var s in Application.Services) applicationServices.Add(s);
             var application = applicationServices.BuildServiceProvider();
+            _onBuild.Send(application);
+            _application.OnBuild.Send(application);
 
-            foreach (var s in System) Services.Add(s);
+            foreach (var s in System.Services) Services.Add(s);
             var system = Services.BuildServiceProvider();
+            _system.OnBuild.Send(system);
 
             return (application, system);
         }
@@ -84,9 +92,11 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
         public IHostingEnvironment Environment { get; }
         public IAssemblyProvider AssemblyProvider { get; }
         public IAssemblyCandidateFinder AssemblyCandidateFinder { get; }
-        public IServiceCollection Application { get; }
+        public IServiceWrapper Application => _application;
+        public IServiceWrapper System => _system;
+
         public IServiceCollection Services { get; }
-        public IServiceCollection System { get; }
+        public IObservable<IServiceProvider> OnBuild => _onBuild;
 
         public IServicesBuilder AddDelegate(ServiceConventionDelegate @delegate)
         {

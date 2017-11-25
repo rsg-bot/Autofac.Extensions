@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
@@ -12,18 +10,6 @@ using Xunit;
 
 namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
 {
-    class TestAssemblyProvider : IAssemblyProvider
-    {
-        public IEnumerable<Assembly> GetAssemblies()
-        {
-            return new[]
-            {
-                typeof(ServicesBuilder).GetTypeInfo().Assembly,
-                typeof(TestAssemblyProvider).GetTypeInfo().Assembly
-            };
-        }
-    }
-
     public class ChildServicesBuilderTests
     {
         class ChildBuilder : ChildServicesBuilder
