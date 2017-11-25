@@ -5,13 +5,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Conventions.Scanners;
+using Rocket.Surgery.Extensions.Testing;
 using Rocket.Surgery.Hosting;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
 {
-    public class ChildServicesBuilderTests
+    public class ChildServicesBuilderTests : AutoTestBase
     {
+        public ChildServicesBuilderTests(ITestOutputHelper outputHelper) : base(outputHelper) { }
+
         class ChildBuilder : ChildServicesBuilder
         {
             public ChildBuilder(IServicesBuilder parent) : base(parent)
@@ -22,20 +26,18 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
         [Fact]
         public void Constructs()
         {
-            var assemblyProvider = new TestAssemblyProvider();
-            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
-            var scanner = A.Fake<IConventionScanner>();
-            var serviceCollection = new ServiceCollection();
-            var configuration = A.Fake<IConfiguration>();
-            var servicesBuilder = new ChildBuilder(new ServicesBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>()));
+            var assemblytProvider = AutoFake.Provide<IAssemblyProvider>(new TestAssemblyProvider());
+            var services = AutoFake.Provide<IServiceCollection>(new ServiceCollection());
+            var servicesBuilder = new ChildBuilder(AutoFake.Resolve<ServicesBuilder>());
 
-            servicesBuilder.AssemblyProvider.Should().BeSameAs(assemblyProvider);
+            servicesBuilder.AssemblyProvider.Should().BeSameAs(assemblytProvider);
             servicesBuilder.AssemblyCandidateFinder.Should().NotBeNull();
-            servicesBuilder.Services.Should().BeSameAs(serviceCollection);
-            servicesBuilder.Configuration.Should().BeSameAs(configuration);
+            servicesBuilder.Services.Should().BeSameAs(services);
+            servicesBuilder.Configuration.Should().NotBeNull();
             servicesBuilder.Application.Should().NotBeNull();
             servicesBuilder.System.Should().NotBeNull();
             servicesBuilder.Environment.Should().NotBeNull();
+
             Action a = () => { servicesBuilder.AddConvention(A.Fake<IServiceConvention>()); };
             a.Should().NotThrow();
             a = () => { servicesBuilder.AddDelegate(delegate {  }); };
@@ -45,12 +47,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
         [Fact]
         public void StoresAndReturnsItems()
         {
-            var assemblyProvider = new TestAssemblyProvider();
-            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
-            var configuration = A.Fake<IConfiguration>();
-            var scanner = A.Fake<IConventionScanner>();
-            var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ChildBuilder(new ApplicationServicesBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>()));
+            var servicesBuilder = new ChildBuilder(AutoFake.Resolve<ApplicationServicesBuilder>());
 
             var value = new object();
             servicesBuilder[string.Empty] = value;
@@ -60,12 +57,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
         [Fact]
         public void IgnoreNonExistentItems()
         {
-            var assemblyProvider = new TestAssemblyProvider();
-            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
-            var configuration = A.Fake<IConfiguration>();
-            var scanner = A.Fake<IConventionScanner>();
-            var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ChildBuilder(new ServicesBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>()));
+            var servicesBuilder = new ChildBuilder(AutoFake.Resolve<ApplicationServicesBuilder>());
 
             servicesBuilder[string.Empty].Should().BeNull();
         }
@@ -73,12 +65,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
         [Fact]
         public void Nests()
         {
-            var assemblyProvider = new TestAssemblyProvider();
-            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
-            var configuration = A.Fake<IConfiguration>();
-            var scanner = A.Fake<IConventionScanner>();
-            var serviceCollection = new ServiceCollection();
-            var parent = new ServicesBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var parent = AutoFake.Resolve<ServicesBuilder>();
             var servicesBuilder = new ChildBuilder(parent);
 
             servicesBuilder[string.Empty].Should().BeNull();

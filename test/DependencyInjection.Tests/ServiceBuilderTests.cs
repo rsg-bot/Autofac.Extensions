@@ -9,32 +9,34 @@ using Rocket.Surgery.Conventions;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Conventions.Scanners;
 using Rocket.Surgery.Extensions.DependencyInjection.Tests;
+using Rocket.Surgery.Extensions.Testing;
 using Rocket.Surgery.Hosting;
 using Xunit;
+using Xunit.Abstractions;
 
 [assembly: Convention(typeof(ServiceBuilderTests.AbcConvention))]
 
 namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
 {
-    public class ServiceBuilderTests
+    public class ServiceBuilderTests : AutoTestBase
     {
+        public ServiceBuilderTests(ITestOutputHelper outputHelper) : base(outputHelper){}
+
         [Fact]
         public void Constructs()
         {
-            var assemblyProvider = new TestAssemblyProvider();
-            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
-            var scanner = A.Fake<IConventionScanner>();
-            var serviceCollection = new ServiceCollection();
-            var configuration = A.Fake<IConfiguration>();
-            var servicesBuilder = new ServicesBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var assemblyProvider = AutoFake.Provide<IAssemblyProvider>(new TestAssemblyProvider());
+            var services = AutoFake.Provide<IServiceCollection>(new ServiceCollection());
+            var servicesBuilder = AutoFake.Resolve<ServicesBuilder>();
 
             servicesBuilder.AssemblyProvider.Should().BeSameAs(assemblyProvider);
             servicesBuilder.AssemblyCandidateFinder.Should().NotBeNull();
-            servicesBuilder.Services.Should().BeSameAs(serviceCollection);
-            servicesBuilder.Configuration.Should().BeSameAs(configuration);
+            servicesBuilder.Services.Should().BeSameAs(services);
+            servicesBuilder.Configuration.Should().NotBeNull();
             servicesBuilder.Application.Should().NotBeNull();
             servicesBuilder.System.Should().NotBeNull();
             servicesBuilder.Environment.Should().NotBeNull();
+
             Action a = () => { servicesBuilder.AddConvention(A.Fake<IServiceConvention>()); };
             a.Should().NotThrow();
             a = () => { servicesBuilder.AddDelegate(delegate { }); };
@@ -44,12 +46,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
         [Fact]
         public void StoresAndReturnsItems()
         {
-            var assemblyProvider = new TestAssemblyProvider();
-            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
-            var configuration = A.Fake<IConfiguration>();
-            var scanner = A.Fake<IConventionScanner>();
-            var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ServicesBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var servicesBuilder = AutoFake.Resolve<ServicesBuilder>();
 
             var value = new object();
             servicesBuilder[string.Empty] = value;
@@ -59,12 +56,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
         [Fact]
         public void IgnoreNonExistentItems()
         {
-            var assemblyProvider = new TestAssemblyProvider();
-            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
-            var configuration = A.Fake<IConfiguration>();
-            var scanner = A.Fake<IConventionScanner>();
-            var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ServicesBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var servicesBuilder = AutoFake.Resolve<ServicesBuilder>();
 
             servicesBuilder[string.Empty].Should().BeNull();
         }
@@ -72,126 +64,112 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
         [Fact]
         public void AddConventions()
         {
-            var assemblyProvider = new TestAssemblyProvider();
-            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
-            var configuration = A.Fake<IConfiguration>();
-            var scanner = A.Fake<IConventionScanner>();
-            var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ServicesBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var servicesBuilder = AutoFake.Resolve<ServicesBuilder>();
 
-            var Convention = A.Fake<IServiceConvention>();
+            var convention = A.Fake<IServiceConvention>();
 
-            servicesBuilder.AddConvention(Convention);
+            servicesBuilder.AddConvention(convention);
 
-            A.CallTo(() => scanner.AddConvention(Convention)).MustHaveHappened();
+            A.CallTo(() => AutoFake.Resolve<IConventionScanner>().AddConvention(convention)).MustHaveHappened();
         }
 
-        public interface Abc { }
-        public interface Abc2 { }
-        public interface Abc3 { }
-        public interface Abc4 { }
+        public interface IAbc { }
+        public interface IAbc2 { }
+        public interface IAbc3 { }
+        public interface IAbc4 { }
 
         public class AbcConvention : IServiceConvention
         {
             public void Register(IServiceConventionContext context)
             {
-                context.Services.AddSingleton(A.Fake<Abc>());
-                context.Services.AddSingleton(A.Fake<Abc2>());
-                context.System.Services.AddSingleton(A.Fake<Abc3>());
+                context.Services.AddSingleton(A.Fake<IAbc>());
+                context.Services.AddSingleton(A.Fake<IAbc2>());
+                context.System.Services.AddSingleton(A.Fake<IAbc3>());
             }
         }
 
         [Fact]
         public void ConstructTheContainerAndRegisterWithCore_ServiceProvider()
         {
-            var assemblyProvider = new TestAssemblyProvider();
-            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
-            var configuration = A.Fake<IConfiguration>();
-            var scanner = A.Fake<IConventionScanner>();
-            var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ServicesBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
-            servicesBuilder.Services.AddSingleton(A.Fake<Abc>());
-            servicesBuilder.Services.AddSingleton(A.Fake<Abc2>());
-            servicesBuilder.System.Services.AddSingleton(A.Fake<Abc3>());
+            AutoFake.Provide<IAssemblyProvider>(new TestAssemblyProvider());
+            AutoFake.Provide<IServiceCollection>(new ServiceCollection()); ;
+            var servicesBuilder = AutoFake.Resolve<ServicesBuilder>();
+            servicesBuilder.Services.AddSingleton(A.Fake<IAbc>());
+            servicesBuilder.Services.AddSingleton(A.Fake<IAbc2>());
+            servicesBuilder.System.Services.AddSingleton(A.Fake<IAbc3>());
 
-            var sp = servicesBuilder.Build(A.Fake<ILogger>());
-            sp.GetService<Abc>().Should().NotBeNull();
-            sp.GetService<Abc2>().Should().NotBeNull();
-            sp.GetService<Abc3>().Should().BeNull();
-            sp.GetService<Abc4>().Should().BeNull();
+            var sp = servicesBuilder.Build(Logger);
+            sp.GetService<IAbc>().Should().NotBeNull();
+            sp.GetService<IAbc2>().Should().NotBeNull();
+            sp.GetService<IAbc3>().Should().BeNull();
+            sp.GetService<IAbc4>().Should().BeNull();
         }
 
         [Fact]
         public void ConstructTheContainerAndRegisterWithApplication_ServiceProvider()
         {
-            var assemblyProvider = new TestAssemblyProvider();
-            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
-            var configuration = A.Fake<IConfiguration>();
-            var scanner = A.Fake<IConventionScanner>();
-            var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ServicesBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
-            servicesBuilder.Application.Services.AddSingleton(A.Fake<Abc>());
-            servicesBuilder.Application.Services.AddSingleton(A.Fake<Abc2>());
-            servicesBuilder.System.Services.AddSingleton(A.Fake<Abc3>());
-            servicesBuilder.Services.AddSingleton(A.Fake<Abc4>());
+            AutoFake.Provide<IAssemblyProvider>(new TestAssemblyProvider());
+            AutoFake.Provide<IServiceCollection>(new ServiceCollection());
+            var servicesBuilder = AutoFake.Resolve<ServicesBuilder>();
+            servicesBuilder.Application.Services.AddSingleton(A.Fake<IAbc>());
+            servicesBuilder.Application.Services.AddSingleton(A.Fake<IAbc2>());
+            servicesBuilder.System.Services.AddSingleton(A.Fake<IAbc3>());
+            servicesBuilder.Services.AddSingleton(A.Fake<IAbc4>());
 
-            var sp = servicesBuilder.Build(A.Fake<ILogger>());
-            sp.GetService<Abc>().Should().NotBeNull();
-            sp.GetService<Abc2>().Should().NotBeNull();
-            sp.GetService<Abc3>().Should().BeNull();
-            sp.GetService<Abc4>().Should().NotBeNull();
+            var sp = servicesBuilder.Build(Logger);
+            sp.GetService<IAbc>().Should().NotBeNull();
+            sp.GetService<IAbc2>().Should().NotBeNull();
+            sp.GetService<IAbc3>().Should().BeNull();
+            sp.GetService<IAbc4>().Should().NotBeNull();
         }
 
         [Fact]
         public void ConstructTheContainerAndRegisterWithSystem_ServiceProvider()
         {
-            var assemblyProvider = new TestAssemblyProvider();
-            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
-            var configuration = A.Fake<IConfiguration>();
-            var scanner = A.Fake<IConventionScanner>();
-            var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ServicesBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
-            servicesBuilder.System.Services.AddSingleton(A.Fake<Abc>());
-            servicesBuilder.System.Services.AddSingleton(A.Fake<Abc2>());
-            servicesBuilder.Application.Services.AddSingleton(A.Fake<Abc3>());
-            servicesBuilder.Services.AddSingleton(A.Fake<Abc4>());
+            AutoFake.Provide<IAssemblyProvider>(new TestAssemblyProvider());
+            AutoFake.Provide<IServiceCollection>(new ServiceCollection());
+            var servicesBuilder = AutoFake.Resolve<ServicesBuilder>();
+            servicesBuilder.System.Services.AddSingleton(A.Fake<IAbc>());
+            servicesBuilder.System.Services.AddSingleton(A.Fake<IAbc2>());
+            servicesBuilder.Application.Services.AddSingleton(A.Fake<IAbc3>());
+            servicesBuilder.Services.AddSingleton(A.Fake<IAbc4>());
 
-            var sp = servicesBuilder.Build(A.Fake<ILogger>());
-            sp.GetService<Abc>().Should().BeNull();
-            sp.GetService<Abc2>().Should().BeNull();
-            sp.GetService<Abc3>().Should().NotBeNull();
-            sp.GetService<Abc4>().Should().NotBeNull();
+            var sp = servicesBuilder.Build(Logger);
+            sp.GetService<IAbc>().Should().BeNull();
+            sp.GetService<IAbc2>().Should().BeNull();
+            sp.GetService<IAbc3>().Should().NotBeNull();
+            sp.GetService<IAbc4>().Should().NotBeNull();
         }
 
         [Fact]
         public void ConstructTheContainerAndRegisterWithSystem_UsingConvention()
         {
-            var assemblyProvider = new TestAssemblyProvider();
-            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
-            var configuration = A.Fake<IConfiguration>();
-            var scanner = new AggregateConventionScanner(assemblyCandidateFinder);
-            var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ServicesBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var assemblyProvider = AutoFake.Provide<IAssemblyProvider>(new TestAssemblyProvider());
+            AutoFake.Provide<IConventionScanner>(AutoFake.Resolve<AggregateConventionScanner>());
+            AutoFake.Provide<IServiceCollection>(new ServiceCollection());
+            var servicesBuilder = AutoFake.Resolve<ServicesBuilder>();
 
-            A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<IEnumerable<string>>._))
+            A.CallTo(() => AutoFake.Resolve<IAssemblyCandidateFinder>().GetCandidateAssemblies(A<IEnumerable<string>>._))
                 .Returns(assemblyProvider.GetAssemblies());
 
-            var items = servicesBuilder.Build(A.Fake<ILogger>());
-            items.GetService<Abc>().Should().NotBeNull();
-            items.GetService<Abc2>().Should().NotBeNull();
-            items.GetService<Abc3>().Should().BeNull();
-            items.GetService<Abc4>().Should().BeNull();
+            var items = servicesBuilder.Build(Logger);
+            items.GetService<IAbc>().Should().NotBeNull();
+            items.GetService<IAbc2>().Should().NotBeNull();
+            items.GetService<IAbc3>().Should().BeNull();
+            items.GetService<IAbc4>().Should().BeNull();
         }
 
         [Fact]
         public void SendsNotificationThrough_OnBuild_Observable()
         {
-            var assemblyProvider = new TestAssemblyProvider();
-            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
-            var configuration = A.Fake<IConfiguration>();
-            var scanner = new AggregateConventionScanner(assemblyCandidateFinder);
-            var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ServicesBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>());
+            var assemblyProvider = AutoFake.Provide<IAssemblyProvider>(new TestAssemblyProvider());
+            AutoFake.Provide<IConventionScanner>(AutoFake.Resolve<AggregateConventionScanner>());
+            AutoFake.Provide<IServiceCollection>(new ServiceCollection());
+            var servicesBuilder = AutoFake.Resolve<ServicesBuilder>();
+
+            A.CallTo(() => AutoFake.Resolve<IAssemblyCandidateFinder>().GetCandidateAssemblies(A<IEnumerable<string>>._))
+                .Returns(assemblyProvider.GetAssemblies());
+
             var observer = A.Fake<IObserver<IServiceProvider>>();
             var observerApplication = A.Fake<IObserver<IServiceProvider>>();
             var observerSystem = A.Fake<IObserver<IServiceProvider>>();
@@ -199,10 +177,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             servicesBuilder.Application.OnBuild.Subscribe(observerApplication);
             servicesBuilder.System.OnBuild.Subscribe(observerSystem);
 
-            A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<IEnumerable<string>>._))
-                .Returns(assemblyProvider.GetAssemblies());
-
-            var serviceProvider = servicesBuilder.Build(A.Fake<ILogger>());
+            var serviceProvider = servicesBuilder.Build(Logger);
 
             A.CallTo(() => observer.OnNext(serviceProvider)).MustHaveHappened(Repeated.Exactly.Once);
             A.CallTo(() => observerApplication.OnNext(serviceProvider)).MustHaveHappened(Repeated.Exactly.Once);
