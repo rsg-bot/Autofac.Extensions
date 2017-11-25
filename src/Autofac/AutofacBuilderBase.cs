@@ -11,7 +11,7 @@ using Rocket.Surgery.Hosting;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
-    public class AutofacBuilderBase : Builder, IAutofacBuilder, IAutofacConventionContext, IServiceConventionContext
+    public class AutofacBuilderBase : Builder, IAutofacBuilder, IServicesBuilder, IAutofacConventionContext, IServiceConventionContext
     {
         internal readonly IConventionScanner _scanner;
         internal readonly ServiceAndContainerWrapper _core;
@@ -62,6 +62,7 @@ namespace Rocket.Surgery.Extensions.Autofac
         public IHostingEnvironment Environment { get; }
         public IAssemblyProvider AssemblyProvider { get; }
         public IAssemblyCandidateFinder AssemblyCandidateFinder { get; }
+
         public IServiceBuilderAndContainerWrapper System => _system;
         public IServiceBuilderAndContainerWrapper Application => _application;
         public IObservable<ILifetimeScope> OnBuild => _core.LifetimeScopeOnBuild;
@@ -93,5 +94,21 @@ namespace Rocket.Surgery.Extensions.Autofac
         IServiceWrapper IServiceConventionContext.System => _system;
 
         IServiceWrapper IServiceConventionContext.Application => _application;
+
+        IServiceWrapper IServicesBuilder.System => _system;
+
+        IServiceWrapper IServicesBuilder.Application => _application;
+
+        IServicesBuilder IServicesBuilder.AddDelegate(ServiceConventionDelegate @delegate)
+        {
+            _scanner.AddDelegate(@delegate);
+            return this;
+        }
+
+        IServicesBuilder IServicesBuilder.AddConvention(IServiceConvention convention)
+        {
+            _scanner.AddConvention(convention);
+            return this;
+        }
     }
 }
