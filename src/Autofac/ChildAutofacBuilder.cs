@@ -22,15 +22,15 @@ namespace Rocket.Surgery.Extensions.Autofac
         public IHostingEnvironment Environment => Builder.Environment;
         public IAssemblyProvider AssemblyProvider => Builder.AssemblyProvider;
         public IAssemblyCandidateFinder AssemblyCandidateFinder => Builder.AssemblyCandidateFinder;
-        public IServiceBuilderAndContainerWrapper System => Builder.System;
-        public IServiceBuilderAndContainerWrapper Application => Builder.Application;
+        public IAutofacContextWrapper System => Builder.System;
+        public IAutofacContextWrapper Application => Builder.Application;
         public IAutofacBuilder AddDelegate(AutofacConventionDelegate @delegate) => Builder.AddDelegate(@delegate);
         public IAutofacBuilder AddConvention(IAutofacConvention convention) => Builder.AddConvention(convention);
         public IObservable<IContainer> OnContainerBuild => Builder.OnContainerBuild;
 
-        public IAutofacBuilder ConfigureContainer(ContainerBuilderDelegate builder)
+        public void ConfigureContainer(ContainerBuilderDelegate builder)
         {
-            return Builder.ConfigureContainer(builder);
+            Builder.ConfigureContainer(builder);
         }
         public IServiceCollection Services => Builder.Services;
         public IObservable<ILifetimeScope> OnBuild => Builder.OnBuild;

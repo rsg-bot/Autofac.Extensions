@@ -12,14 +12,8 @@ namespace Rocket.Surgery.Extensions.Autofac
     /// Class IAutofacBuilder.
     /// </summary>
     /// TODO Edit XML Comment Template for IAutofacBuilder
-    public interface IAutofacBuilder : IBuilder, IServiceBuilderAndContainerWrapper
+    public interface IAutofacBuilder : IBuilder, IAutofacConventionContext
     {
-        IConfiguration Configuration { get; }
-        IHostingEnvironment Environment { get; }
-        IAssemblyProvider AssemblyProvider { get; }
-        IAssemblyCandidateFinder AssemblyCandidateFinder { get; }
-        IServiceBuilderAndContainerWrapper System { get; }
-        IServiceBuilderAndContainerWrapper Application { get; }
         IAutofacBuilder AddDelegate(AutofacConventionDelegate @delegate);
         IAutofacBuilder AddConvention(IAutofacConvention convention);
         IObservable<IContainer> OnContainerBuild { get; }

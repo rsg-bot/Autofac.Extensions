@@ -5,7 +5,7 @@ using Rocket.Surgery.Extensions.DependencyInjection;
 
 namespace Rocket.Surgery.Extensions.Autofac.Internals
 {
-    internal class ServiceAndContainerWrapper : IServiceAndContainerWrapper, IServiceBuilderAndContainerWrapper, IServiceWrapper
+    internal class ServiceAndContainerWrapper : IAutofacContextWrapper, IServiceWrapper
     {
         private readonly IAutofacBuilder _context;
 
@@ -26,18 +26,16 @@ namespace Rocket.Surgery.Extensions.Autofac.Internals
 
         public ContainerBuilderCollection Collection { get; } = new ContainerBuilderCollection();
 
-        IAutofacBuilder IServiceBuilderAndContainerWrapper.ConfigureContainer(ContainerBuilderDelegate builder)
+        void IAutofacContextWrapper.ConfigureContainer(ContainerBuilderDelegate builder)
         {
             Collection.Add(builder);
-            return _context;
         }
 
         public IServiceCollection Services { get; }
         public LifetimeScopeObservable LifetimeScopeOnBuild { get; }
         public ServiceProviderObservable ServiceProviderOnBuild { get; }
-
-        IObservable<ILifetimeScope> IServiceAndContainerWrapper.OnBuild => LifetimeScopeOnBuild;
-        IObservable<ILifetimeScope> IServiceBuilderAndContainerWrapper.OnBuild => LifetimeScopeOnBuild;
+        
+        IObservable<ILifetimeScope> IAutofacContextWrapper.OnBuild => LifetimeScopeOnBuild;
         IObservable<IServiceProvider> IServiceWrapper.OnBuild => ServiceProviderOnBuild;
 
         IServiceCollection IServiceWrapper.Services => Services;

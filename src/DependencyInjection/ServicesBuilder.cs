@@ -13,7 +13,7 @@ using Rocket.Surgery.Hosting;
 
 namespace Rocket.Surgery.Extensions.DependencyInjection
 {
-    public class ServicesBuilder : Builder, IServicesBuilder, IServiceConventionContext
+    public class ServicesBuilder : Builder, IServicesBuilder
     {
         private readonly IConventionScanner _scanner;
         private readonly ServiceProviderObservable _onBuild;

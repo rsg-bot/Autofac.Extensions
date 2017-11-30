@@ -11,7 +11,7 @@ using Rocket.Surgery.Hosting;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
-    public class AutofacBuilderBase : Builder, IAutofacBuilder, IServicesBuilder, IAutofacConventionContext, IServiceConventionContext
+    public class AutofacBuilderBase : Builder, IAutofacBuilder, IServicesBuilder
     {
         internal readonly IConventionScanner _scanner;
         internal readonly ServiceAndContainerWrapper _core;
@@ -49,10 +49,9 @@ namespace Rocket.Surgery.Extensions.Autofac
             _containerObservable = new ContainerObservable();
         }
 
-        public IAutofacBuilder ConfigureContainer(ContainerBuilderDelegate builder)
+        public void ConfigureContainer(ContainerBuilderDelegate builder)
         {
             _core.ConfigureContainer(builder);
-            return this;
         }
 
         public IServiceCollection Services => _core.Services;
@@ -63,8 +62,8 @@ namespace Rocket.Surgery.Extensions.Autofac
         public IAssemblyProvider AssemblyProvider { get; }
         public IAssemblyCandidateFinder AssemblyCandidateFinder { get; }
 
-        public IServiceBuilderAndContainerWrapper System => _system;
-        public IServiceBuilderAndContainerWrapper Application => _application;
+        public IAutofacContextWrapper System => _system;
+        public IAutofacContextWrapper Application => _application;
         public IObservable<ILifetimeScope> OnBuild => _core.LifetimeScopeOnBuild;
         IObservable<IServiceProvider> IServiceWrapper.OnBuild => _core.ServiceProviderOnBuild;
         public IObservable<IContainer> OnContainerBuild => _containerObservable;
@@ -81,23 +80,10 @@ namespace Rocket.Surgery.Extensions.Autofac
             return this;
         }
 
-        // IAutofacConventionContext
-        IServiceAndContainerWrapper IAutofacConventionContext.System => _system;
-        IServiceAndContainerWrapper IAutofacConventionContext.Application => _application;
-        IAutofacConventionContext IServiceAndContainerWrapper.ConfigureContainer(ContainerBuilderDelegate builder)
-        {
-            ConfigureContainer(builder);
-            return this;
-        }
-
         // IServiceConventionContext
         IServiceWrapper IServiceConventionContext.System => _system;
 
         IServiceWrapper IServiceConventionContext.Application => _application;
-
-        IServiceWrapper IServicesBuilder.System => _system;
-
-        IServiceWrapper IServicesBuilder.Application => _application;
 
         IServicesBuilder IServicesBuilder.AddDelegate(ServiceConventionDelegate @delegate)
         {

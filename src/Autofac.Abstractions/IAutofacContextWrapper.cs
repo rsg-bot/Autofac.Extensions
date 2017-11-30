@@ -4,9 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
-    public interface IServiceBuilderAndContainerWrapper
+    public interface IAutofacContextWrapper
     {
-        IAutofacBuilder ConfigureContainer(ContainerBuilderDelegate builder);
+        void ConfigureContainer(ContainerBuilderDelegate builder);
         IServiceCollection Services { get; }
         IObservable<ILifetimeScope> OnBuild { get; }
     }

@@ -11,14 +11,8 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
     /// Class IServicesBuilder.
     /// </summary>
     /// TODO Edit XML Comment Template for IServicesBuilder
-    public interface IServicesBuilder : IBuilder, IServiceWrapper
+    public interface IServicesBuilder : IBuilder, IServiceConventionContext
     {
-        IConfiguration Configuration { get; }
-        IHostingEnvironment Environment { get; }
-        IAssemblyProvider AssemblyProvider { get; }
-        IAssemblyCandidateFinder AssemblyCandidateFinder { get; }
-        IServiceWrapper System { get; }
-        IServiceWrapper Application { get; }
         IServicesBuilder AddDelegate(ServiceConventionDelegate @delegate);
         IServicesBuilder AddConvention(IServiceConvention convention);
     }

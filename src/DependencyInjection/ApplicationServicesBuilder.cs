@@ -18,7 +18,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
     /// <seealso cref="Builder" />
     /// <seealso cref="Microsoft.Extensions.Configuration.IConfigurationBuilder" />
     /// TODO Edit XML Comment Template for ApplicationServicesBuilder
-    public class ApplicationServicesBuilder : Builder, IServicesBuilder, IServiceConventionContext
+    public class ApplicationServicesBuilder : Builder, IServicesBuilder
     {
         private readonly IConventionScanner _scanner;
         private readonly ServiceProviderObservable _onBuild;

@@ -8,13 +8,13 @@ using Rocket.Surgery.Hosting;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
-    public interface IAutofacConventionContext : IConventionContext, IServiceAndContainerWrapper
+    public interface IAutofacConventionContext : IConventionContext, IAutofacContextWrapper
     {
         IConfiguration Configuration { get; }
         IHostingEnvironment Environment { get; }
         IAssemblyProvider AssemblyProvider { get; }
         IAssemblyCandidateFinder AssemblyCandidateFinder { get; }
-        IServiceAndContainerWrapper System { get; }
-        IServiceAndContainerWrapper Application { get; }
+        IAutofacContextWrapper System { get; }
+        IAutofacContextWrapper Application { get; }
     }
 }
