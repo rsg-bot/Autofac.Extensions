@@ -2,6 +2,7 @@
 using Autofac;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Rocket.Surgery.Builders;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Conventions.Scanners;
@@ -13,6 +14,7 @@ namespace Rocket.Surgery.Extensions.Autofac
 {
     public class AutofacBuilderBase : Builder, IAutofacBuilder, IServicesBuilder
     {
+        public ILogger Logger { get; }
         internal readonly IConventionScanner _scanner;
         internal readonly ServiceAndContainerWrapper _core;
         internal readonly ServiceAndContainerWrapper _system;
@@ -28,13 +30,15 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// <param name="services">The services.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="environment"></param>
+        /// <param name="logger">The logger</param>
         protected AutofacBuilderBase(
             IConventionScanner scanner,
             IAssemblyProvider assemblyProvider,
             IAssemblyCandidateFinder assemblyCandidateFinder,
             IServiceCollection services,
             IConfiguration configuration,
-            IHostingEnvironment environment)
+            IHostingEnvironment environment,
+            ILogger logger)
         {
             _scanner = scanner ?? throw new ArgumentNullException(nameof(scanner));
 
@@ -42,6 +46,7 @@ namespace Rocket.Surgery.Extensions.Autofac
             AssemblyCandidateFinder = assemblyCandidateFinder ?? throw new ArgumentNullException(nameof(AssemblyCandidateFinder));
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             _core = new ServiceAndContainerWrapper(this, services);
             _application = new ServiceAndContainerWrapper(this);

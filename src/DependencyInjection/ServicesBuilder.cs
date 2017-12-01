@@ -29,13 +29,15 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
         /// <param name="services">The services.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="environment"></param>
+        /// <param name="logger">The logger</param>
         public ServicesBuilder(
             IConventionScanner scanner,
             IAssemblyProvider assemblyProvider,
             IAssemblyCandidateFinder assemblyCandidateFinder,
             IServiceCollection services,
             IConfiguration configuration,
-            IHostingEnvironment environment)
+            IHostingEnvironment environment,
+            ILogger logger)
         {
             _scanner = scanner ?? throw new ArgumentNullException(nameof(scanner));
 
@@ -44,7 +46,8 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
 
-            Services = services;
+            Services = services ?? throw new ArgumentNullException(nameof(services));
+            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _onBuild = new ServiceProviderObservable();
             _application = new ServiceWrapper();
             _system = new ServiceWrapper();
@@ -55,9 +58,9 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
         /// </summary>
         /// <param name="logger"></param>
         /// <returns></returns>
-        public IServiceProvider Build(ILogger logger)
+        public IServiceProvider Build()
         {
-            new ConventionComposer(_scanner, logger)
+            new ConventionComposer(_scanner)
                 .Register(this, typeof(IServiceConvention), typeof(ServiceConventionDelegate));
 
             foreach (var s in Application.Services) Services.Add(s);
@@ -77,6 +80,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
         public IServiceWrapper System => _system;
 
         public IServiceCollection Services { get; }
+        public ILogger Logger { get; }
         public IObservable<IServiceProvider> OnBuild => _onBuild;
 
 

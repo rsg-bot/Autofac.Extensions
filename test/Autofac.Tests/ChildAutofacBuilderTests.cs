@@ -38,13 +38,6 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             servicesBuilder.Application.Should().NotBeNull();
             servicesBuilder.System.Should().NotBeNull();
             servicesBuilder.Environment.Should().NotBeNull();
-
-            Action a = () => { servicesBuilder.AddConvention(A.Fake<IAutofacConvention>()); };
-            a.Should().NotThrow();
-            a = () => { servicesBuilder.AddDelegate(delegate {  }); };
-            a.Should().NotThrow();
-            a = () => { servicesBuilder.ConfigureContainer(delegate {  }); };
-            a.Should().NotThrow();
         }
 
         [Fact]
@@ -60,12 +53,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
         [Fact]
         public void IgnoreNonExistentItems()
         {
-            var assemblyProvider = new TestAssemblyProvider();
-            var assemblyCandidateFinder = A.Fake<IAssemblyCandidateFinder>();
-            var configuration = A.Fake<IConfiguration>();
-            var scanner = A.Fake<IConventionScanner>();
-            var serviceCollection = new ServiceCollection();
-            var servicesBuilder = new ChildAutofacBuilder(new AutofacBuilder(scanner, assemblyProvider, assemblyCandidateFinder, serviceCollection, configuration, A.Fake<IHostingEnvironment>()));
+            var servicesBuilder = new ChildAutofacBuilder(AutoFake.Resolve<AutofacBuilder>());
 
             servicesBuilder[string.Empty].Should().BeNull();
         }

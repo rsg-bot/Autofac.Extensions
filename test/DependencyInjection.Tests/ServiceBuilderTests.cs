@@ -98,7 +98,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             servicesBuilder.Services.AddSingleton(A.Fake<IAbc2>());
             servicesBuilder.System.Services.AddSingleton(A.Fake<IAbc3>());
 
-            var sp = servicesBuilder.Build(Logger);
+            var sp = servicesBuilder.Build();
             sp.GetService<IAbc>().Should().NotBeNull();
             sp.GetService<IAbc2>().Should().NotBeNull();
             sp.GetService<IAbc3>().Should().BeNull();
@@ -116,7 +116,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             servicesBuilder.System.Services.AddSingleton(A.Fake<IAbc3>());
             servicesBuilder.Services.AddSingleton(A.Fake<IAbc4>());
 
-            var sp = servicesBuilder.Build(Logger);
+            var sp = servicesBuilder.Build();
             sp.GetService<IAbc>().Should().NotBeNull();
             sp.GetService<IAbc2>().Should().NotBeNull();
             sp.GetService<IAbc3>().Should().BeNull();
@@ -134,7 +134,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             servicesBuilder.Application.Services.AddSingleton(A.Fake<IAbc3>());
             servicesBuilder.Services.AddSingleton(A.Fake<IAbc4>());
 
-            var sp = servicesBuilder.Build(Logger);
+            var sp = servicesBuilder.Build();
             sp.GetService<IAbc>().Should().BeNull();
             sp.GetService<IAbc2>().Should().BeNull();
             sp.GetService<IAbc3>().Should().NotBeNull();
@@ -152,7 +152,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             A.CallTo(() => AutoFake.Resolve<IAssemblyCandidateFinder>().GetCandidateAssemblies(A<IEnumerable<string>>._))
                 .Returns(assemblyProvider.GetAssemblies());
 
-            var items = servicesBuilder.Build(Logger);
+            var items = servicesBuilder.Build();
             items.GetService<IAbc>().Should().NotBeNull();
             items.GetService<IAbc2>().Should().NotBeNull();
             items.GetService<IAbc3>().Should().BeNull();
@@ -177,7 +177,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             servicesBuilder.Application.OnBuild.Subscribe(observerApplication);
             servicesBuilder.System.OnBuild.Subscribe(observerSystem);
 
-            var serviceProvider = servicesBuilder.Build(Logger);
+            var serviceProvider = servicesBuilder.Build();
 
             A.CallTo(() => observer.OnNext(serviceProvider)).MustHaveHappened(Repeated.Exactly.Once);
             A.CallTo(() => observerApplication.OnNext(serviceProvider)).MustHaveHappened(Repeated.Exactly.Once);

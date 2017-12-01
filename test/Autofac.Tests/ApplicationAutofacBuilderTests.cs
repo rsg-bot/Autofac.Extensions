@@ -87,7 +87,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             servicesBuilder.Services.AddSingleton(A.Fake<AutofacBuilderTests.IAbc2>());
             servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<AutofacBuilderTests.IAbc3>()));
 
-            var items = servicesBuilder.Build(new ContainerBuilder(), Logger);
+            var items = servicesBuilder.Build(new ContainerBuilder());
             items.Container.ResolveOptional<AutofacBuilderTests.IAbc>().Should().NotBeNull();
             items.Container.ResolveOptional<AutofacBuilderTests.IAbc2>().Should().NotBeNull();
             items.Container.ResolveOptional<AutofacBuilderTests.IAbc3>().Should().BeNull();
@@ -106,7 +106,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<AutofacBuilderTests.IAbc3>()));
             servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<AutofacBuilderTests.IAbc4>()));
 
-            var items = servicesBuilder.Build(new ContainerBuilder(), Logger);
+            var items = servicesBuilder.Build(new ContainerBuilder());
             items.Application.ResolveOptional<AutofacBuilderTests.IAbc>().Should().NotBeNull();
             items.Application.ResolveOptional<AutofacBuilderTests.IAbc2>().Should().NotBeNull();
             items.Application.ResolveOptional<AutofacBuilderTests.IAbc3>().Should().BeNull();
@@ -125,7 +125,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             servicesBuilder.Application.ConfigureContainer(c => c.RegisterInstance(A.Fake<AutofacBuilderTests.IAbc3>()));
             servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<AutofacBuilderTests.IAbc4>()));
 
-            var items = servicesBuilder.Build(new ContainerBuilder(), Logger);
+            var items = servicesBuilder.Build(new ContainerBuilder());
             items.System.ResolveOptional<AutofacBuilderTests.IAbc>().Should().NotBeNull();
             items.System.ResolveOptional<AutofacBuilderTests.IAbc2>().Should().NotBeNull();
             items.System.ResolveOptional<AutofacBuilderTests.IAbc3>().Should().BeNull();
@@ -143,7 +143,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             servicesBuilder.Services.AddSingleton(A.Fake<AutofacBuilderTests.IAbc2>());
             servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<AutofacBuilderTests.IAbc3>()));
 
-            var items = servicesBuilder.Build(new ContainerBuilder(), Logger);
+            var items = servicesBuilder.Build(new ContainerBuilder());
 
             var sp = items.Container.Resolve<IServiceProvider>();
             sp.GetService<AutofacBuilderTests.IAbc>().Should().NotBeNull();
@@ -164,7 +164,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<AutofacBuilderTests.IAbc3>()));
             servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<AutofacBuilderTests.IAbc4>()));
 
-            var items = servicesBuilder.Build(new ContainerBuilder(), Logger);
+            var items = servicesBuilder.Build(new ContainerBuilder());
             var sp = items.Application.Resolve<IServiceProvider>();
             sp.GetService<AutofacBuilderTests.IAbc>().Should().NotBeNull();
             sp.GetService<AutofacBuilderTests.IAbc2>().Should().NotBeNull();
@@ -184,7 +184,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             servicesBuilder.Application.ConfigureContainer(c => c.RegisterInstance(A.Fake<AutofacBuilderTests.IAbc3>()));
             servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<AutofacBuilderTests.IAbc4>()));
 
-            var items = servicesBuilder.Build(new ContainerBuilder(), Logger);
+            var items = servicesBuilder.Build(new ContainerBuilder());
             var sp = items.System.Resolve<IServiceProvider>();
             sp.GetService<AutofacBuilderTests.IAbc>().Should().NotBeNull();
             sp.GetService<AutofacBuilderTests.IAbc2>().Should().NotBeNull();
@@ -203,7 +203,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             A.CallTo(() => AutoFake.Resolve<IAssemblyCandidateFinder>().GetCandidateAssemblies(A<IEnumerable<string>>._))
                 .Returns(assemblyProvider.GetAssemblies());
 
-            var items = servicesBuilder.Build(new ContainerBuilder(), Logger);
+            var items = servicesBuilder.Build(new ContainerBuilder());
             items.Container.ResolveOptional<AutofacBuilderTests.IAbc>().Should().NotBeNull();
             items.Container.ResolveOptional<AutofacBuilderTests.IAbc2>().Should().NotBeNull();
             items.Container.ResolveOptional<AutofacBuilderTests.IAbc3>().Should().BeNull();
@@ -221,7 +221,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             A.CallTo(() => AutoFake.Resolve<IAssemblyCandidateFinder>().GetCandidateAssemblies(A<IEnumerable<string>>._))
                 .Returns(assemblyProvider.GetAssemblies());
 
-            var items = servicesBuilder.Build(new ContainerBuilder(), Logger);
+            var items = servicesBuilder.Build(new ContainerBuilder());
             items.Container.ResolveOptional<AutofacBuilderTests.IAbc>().Should().NotBeNull();
             items.Container.ResolveOptional<AutofacBuilderTests.IAbc2>().Should().NotBeNull();
             items.Container.ResolveOptional<AutofacBuilderTests.IAbc3>().Should().BeNull();
@@ -247,7 +247,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             ((IServiceConventionContext)servicesBuilder).Application.OnBuild.Subscribe(observerApplication);
             ((IServiceConventionContext)servicesBuilder).OnBuild.Subscribe(observerSystem);
 
-            var items = servicesBuilder.Build(new ContainerBuilder(), Logger);
+            var items = servicesBuilder.Build(new ContainerBuilder());
 
             A.CallTo(() => observer.OnNext(A<IServiceProvider>.Ignored)).MustHaveHappened(Repeated.Exactly.Once);
             A.CallTo(() => observerApplication.OnNext(A<IServiceProvider>.Ignored)).MustHaveHappened(Repeated.Exactly.Once);
@@ -273,7 +273,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             servicesBuilder.Application.OnBuild.Subscribe(observerApplication);
             servicesBuilder.System.OnBuild.Subscribe(observerSystem);
 
-            var items = servicesBuilder.Build(new ContainerBuilder(), Logger);
+            var items = servicesBuilder.Build(new ContainerBuilder());
 
             A.CallTo(() => observer.OnNext(items.Container)).MustHaveHappened(Repeated.Exactly.Once);
             A.CallTo(() => observerApplication.OnNext(items.Application)).MustHaveHappened(Repeated.Exactly.Once);

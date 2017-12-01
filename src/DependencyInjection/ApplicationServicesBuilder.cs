@@ -43,13 +43,15 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
         /// <param name="services">The services.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="environment"></param>
+        /// <param name="logger">The logger</param>
         public ApplicationServicesBuilder(
             IConventionScanner scanner,
             IAssemblyProvider assemblyProvider,
             IAssemblyCandidateFinder assemblyCandidateFinder,
             IServiceCollection services,
             IConfiguration configuration,
-            IHostingEnvironment environment)
+            IHostingEnvironment environment,
+            ILogger logger)
         {
             _scanner = scanner ?? throw new ArgumentNullException(nameof(scanner));
 
@@ -59,6 +61,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
 
             Services = services;
+            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _onBuild = new ServiceProviderObservable();
             _application = new ServiceWrapper();
             _system = new ServiceWrapper();
@@ -69,9 +72,9 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
         /// </summary>
         /// <param name="logger"></param>
         /// <returns></returns>
-        public (IServiceProvider Application, IServiceProvider System) Build(ILogger logger)
+        public (IServiceProvider Application, IServiceProvider System) Build()
         {
-            new ConventionComposer(_scanner, logger)
+            new ConventionComposer(_scanner)
                 .Register(this, typeof(IServiceConvention), typeof(ServiceConventionDelegate));
 
             var applicationServices = new ServiceCollection();
@@ -96,6 +99,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
         public IServiceWrapper System => _system;
 
         public IServiceCollection Services { get; }
+        public ILogger Logger { get; }
         public IObservable<IServiceProvider> OnBuild => _onBuild;
 
         public IServicesBuilder AddDelegate(ServiceConventionDelegate @delegate)

@@ -37,11 +37,6 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             servicesBuilder.Application.Should().NotBeNull();
             servicesBuilder.System.Should().NotBeNull();
             servicesBuilder.Environment.Should().NotBeNull();
-
-            Action a = () => { servicesBuilder.AddConvention(A.Fake<IServiceConvention>()); };
-            a.Should().NotThrow();
-            a = () => { servicesBuilder.AddDelegate(delegate {  }); };
-            a.Should().NotThrow();
         }
 
         [Fact]

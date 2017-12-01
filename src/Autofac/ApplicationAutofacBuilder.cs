@@ -37,19 +37,19 @@ namespace Rocket.Surgery.Extensions.Autofac
             IAssemblyCandidateFinder assemblyCandidateFinder,
             IServiceCollection services,
             IConfiguration configuration,
-            IHostingEnvironment environment) :
-            base(scanner, assemblyProvider, assemblyCandidateFinder, services, configuration, environment)
+            IHostingEnvironment environment,
+            ILogger logger) :
+            base(scanner, assemblyProvider, assemblyCandidateFinder, services, configuration, environment, logger)
         { }
 
         /// <summary>
         /// Builds the root container, and returns the lifetime scopes for the application and system containers
         /// </summary>
         /// <param name="containerBuilder"></param>
-        /// <param name="logger"></param>
         /// <returns></returns>
-        public (IContainer Container, ILifetimeScope Application, ILifetimeScope System) Build(ContainerBuilder containerBuilder, ILogger logger)
+        public (IContainer Container, ILifetimeScope Application, ILifetimeScope System) Build(ContainerBuilder containerBuilder)
         {
-            new ConventionComposer(_scanner, logger)
+            new ConventionComposer(_scanner)
                 .Register(
                     this,
                     typeof(IServiceConvention),
