@@ -51,7 +51,7 @@ namespace Rocket.Surgery.Extensions.Autofac
             _core = new ServiceAndContainerWrapper(this, services);
             _application = new ServiceAndContainerWrapper(this);
             _system = new ServiceAndContainerWrapper(this);
-            _containerObservable = new ContainerObservable();
+            _containerObservable = new ContainerObservable(Logger);
         }
 
         public void ConfigureContainer(ContainerBuilderDelegate builder)

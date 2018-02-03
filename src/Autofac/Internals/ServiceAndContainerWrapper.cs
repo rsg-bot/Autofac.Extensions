@@ -13,8 +13,8 @@ namespace Rocket.Surgery.Extensions.Autofac.Internals
         {
             _context = context;
             Services = services ?? new ServiceCollection();
-            LifetimeScopeOnBuild = new LifetimeScopeObservable();
-            ServiceProviderOnBuild = new ServiceProviderObservable();
+            LifetimeScopeOnBuild = new LifetimeScopeObservable(context.Logger);
+            ServiceProviderOnBuild = new ServiceProviderObservable(context.Logger);
         }
 
         public IAutofacConventionContext ConfigureContainer(ContainerBuilderDelegate builder)

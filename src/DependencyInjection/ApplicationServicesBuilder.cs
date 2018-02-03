@@ -62,9 +62,9 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
 
             Services = services;
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _onBuild = new ServiceProviderObservable();
-            _application = new ServiceWrapper();
-            _system = new ServiceWrapper();
+            _onBuild = new ServiceProviderObservable(Logger);
+            _application = new ServiceWrapper(Logger);
+            _system = new ServiceWrapper(Logger);
         }
 
         /// <summary>

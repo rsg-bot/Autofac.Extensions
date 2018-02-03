@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace Rocket.Surgery.Extensions.DependencyInjection.Internals
 {
     class ServiceProviderObservable : IObservable<IServiceProvider>
     {
-
+        private readonly ILogger _logger;
         private readonly List<IObserver<IServiceProvider>> _observers = new List<IObserver<IServiceProvider>>();
+
+        public ServiceProviderObservable(ILogger logger)
+        {
+            _logger = logger;
+        }
 
         public IDisposable Subscribe(IObserver<IServiceProvider> observer)
         {
@@ -26,8 +32,9 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Internals
                     observer.OnNext(value);
                     observer.OnCompleted();
                 }
-                catch
+                catch (Exception e)
                 {
+                    _logger.LogError(0, e, "Failed to execute observer");
                 }
             }
         }

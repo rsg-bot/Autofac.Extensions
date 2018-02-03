@@ -1,14 +1,15 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Rocket.Surgery.Extensions.DependencyInjection.Internals
 {
     internal class ServiceWrapper : IServiceWrapper
     {
-        public ServiceWrapper(IServiceCollection services = default)
+        public ServiceWrapper(ILogger logger, IServiceCollection services = default)
         {
             Services = services ?? new ServiceCollection();
-            OnBuild = new ServiceProviderObservable();
+            OnBuild = new ServiceProviderObservable(logger);
         }
 
         public IServiceCollection Services { get; }
