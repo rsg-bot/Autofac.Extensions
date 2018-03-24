@@ -49,7 +49,7 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// <returns></returns>
         public (IContainer Container, ILifetimeScope Application, ILifetimeScope System) Build(ContainerBuilder containerBuilder)
         {
-            new ConventionComposer(_scanner)
+            new ConventionComposer(Scanner)
                 .Register(
                     this,
                     typeof(IServiceConvention),

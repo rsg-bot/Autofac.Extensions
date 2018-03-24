@@ -40,9 +40,9 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             servicesBuilder.System.Should().NotBeNull();
             servicesBuilder.Environment.Should().NotBeNull();
 
-            Action a = () => { servicesBuilder.AddConvention(A.Fake<IAutofacConvention>()); };
+            Action a = () => { servicesBuilder.PrependConvention(A.Fake<IAutofacConvention>()); };
             a.Should().NotThrow();
-            a = () => { servicesBuilder.AddDelegate(delegate { }); };
+            a = () => { servicesBuilder.PrependDelegate(delegate { }); };
             a.Should().NotThrow();
             a = () => { servicesBuilder.ConfigureContainer(delegate { }); };
             a.Should().NotThrow();
@@ -73,9 +73,9 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
 
             var convention = A.Fake<IAutofacConvention>();
 
-            servicesBuilder.AddConvention(convention);
+            servicesBuilder.PrependConvention(convention);
 
-            A.CallTo(() => AutoFake.Resolve<IConventionScanner>().AddConvention(convention)).MustHaveHappened();
+            A.CallTo(() => AutoFake.Resolve<IConventionScanner>().PrependConvention(convention)).MustHaveHappened();
         }
 
         public interface IAbc { }

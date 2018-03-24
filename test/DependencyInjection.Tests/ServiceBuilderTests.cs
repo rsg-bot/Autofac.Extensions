@@ -37,9 +37,9 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
             servicesBuilder.System.Should().NotBeNull();
             servicesBuilder.Environment.Should().NotBeNull();
 
-            Action a = () => { servicesBuilder.AddConvention(A.Fake<IServiceConvention>()); };
+            Action a = () => { servicesBuilder.PrependConvention(A.Fake<IServiceConvention>()); };
             a.Should().NotThrow();
-            a = () => { servicesBuilder.AddDelegate(delegate { }); };
+            a = () => { servicesBuilder.PrependDelegate(delegate { }); };
             a.Should().NotThrow();
         }
 
@@ -68,9 +68,9 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
 
             var convention = A.Fake<IServiceConvention>();
 
-            servicesBuilder.AddConvention(convention);
+            servicesBuilder.PrependConvention(convention);
 
-            A.CallTo(() => AutoFake.Resolve<IConventionScanner>().AddConvention(convention)).MustHaveHappened();
+            A.CallTo(() => AutoFake.Resolve<IConventionScanner>().PrependConvention(convention)).MustHaveHappened();
         }
 
         public interface IAbc { }
