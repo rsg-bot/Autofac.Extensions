@@ -13,6 +13,8 @@
         <Microsoft_Extensions_Configuration_Version>2.0.0</Microsoft_Extensions_Configuration_Version>
         <Microsoft_Extensions_DependencyInjection_Version>2.0.0</Microsoft_Extensions_DependencyInjection_Version>
         <Microsoft_Extensions_Hosting_Version>2.0.0</Microsoft_Extensions_Hosting_Version>
+		<Autofac_Version>4.8.0</Autofac_Version>
+        <Autofac_Extensions_Version>4.2.2</Autofac_Extensions_Version>
         <Scrutor_Version>2.2.2</Scrutor_Version>
         <ValueTuple_Version>4.4.0</ValueTuple_Version>
         <SourceLink_Version>2.8.1</SourceLink_Version>
