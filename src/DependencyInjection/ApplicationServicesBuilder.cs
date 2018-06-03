@@ -2,13 +2,13 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Rocket.Surgery.Builders;
 using Rocket.Surgery.Conventions;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Conventions.Scanners;
 using Rocket.Surgery.Extensions.DependencyInjection.Internals;
-using Rocket.Surgery.Hosting;
 
 namespace Rocket.Surgery.Extensions.DependencyInjection
 {
@@ -60,9 +60,14 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
             _onBuild = new ServiceProviderObservable(Logger);
             _application = new ServiceWrapper(Logger);
             _system = new ServiceWrapper(Logger);
+            ServiceProviderOptions = new ServiceProviderOptions()
+            {
+                ValidateScopes = environment.IsDevelopment(),
+            };
         }
 
         protected override IServicesBuilder GetBuilder() => this;
+        public ServiceProviderOptions ServiceProviderOptions { get; }
 
         /// <summary>
         /// Builds the root container, and returns the lifetime scopes for the application and system containers
@@ -77,12 +82,12 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
             var applicationServices = new ServiceCollection();
             foreach (var s in Services) applicationServices.Add(s);
             foreach (var s in Application.Services) applicationServices.Add(s);
-            var application = applicationServices.BuildServiceProvider();
+            var application = applicationServices.BuildServiceProvider(ServiceProviderOptions);
             _onBuild.Send(application);
             _application.OnBuild.Send(application);
 
             foreach (var s in System.Services) Services.Add(s);
-            var system = Services.BuildServiceProvider();
+            var system = Services.BuildServiceProvider(ServiceProviderOptions);
             _system.OnBuild.Send(system);
 
             return (application, system);

@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Rocket.Surgery.Conventions;
 using Rocket.Surgery.Conventions.Reflection;
-using Rocket.Surgery.Hosting;
 
 namespace Rocket.Surgery.Extensions.DependencyInjection
 {

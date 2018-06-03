@@ -5,7 +5,6 @@ using Rocket.Surgery.Builders;
 using Rocket.Surgery.Conventions;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Extensions.DependencyInjection;
-using Rocket.Surgery.Hosting;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {

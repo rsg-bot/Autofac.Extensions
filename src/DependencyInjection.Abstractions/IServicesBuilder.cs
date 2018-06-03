@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Rocket.Surgery.Builders;
 using Rocket.Surgery.Conventions;
 using Rocket.Surgery.Conventions.Reflection;
-using Rocket.Surgery.Hosting;
 
 namespace Rocket.Surgery.Extensions.DependencyInjection
 {

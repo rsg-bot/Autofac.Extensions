@@ -3,13 +3,13 @@ using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Rocket.Surgery.Builders;
 using Rocket.Surgery.Conventions;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Conventions.Scanners;
 using Rocket.Surgery.Extensions.DependencyInjection.Internals;
-using Rocket.Surgery.Hosting;
 
 namespace Rocket.Surgery.Extensions.DependencyInjection
 {
@@ -29,6 +29,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
         /// <param name="configuration">The configuration.</param>
         /// <param name="environment"></param>
         /// <param name="logger">The logger</param>
+        /// <param name="options">The service provider options</param>
         public ServicesBuilder(
             IConventionScanner scanner,
             IAssemblyProvider assemblyProvider,
@@ -46,9 +47,14 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
             _onBuild = new ServiceProviderObservable(Logger);
             _application = new ServiceWrapper(Logger);
             _system = new ServiceWrapper(Logger);
+            ServiceProviderOptions = new ServiceProviderOptions()
+            {
+                ValidateScopes = environment.IsDevelopment(),
+            };
         }
 
         protected override IServicesBuilder GetBuilder() => this;
+        public ServiceProviderOptions ServiceProviderOptions { get; }
 
         /// <summary>
         /// Builds the root container, and returns the lifetime scopes for the application and system containers
@@ -62,7 +68,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
 
             foreach (var s in Application.Services) Services.Add(s);
 
-            var result = Services.BuildServiceProvider();
+            var result = Services.BuildServiceProvider(ServiceProviderOptions);
             _onBuild.Send(result);
             _application.OnBuild.Send(result);
             return result;

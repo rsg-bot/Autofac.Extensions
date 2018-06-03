@@ -5,6 +5,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Rocket.Surgery.Conventions;
 using Rocket.Surgery.Conventions.Reflection;
@@ -12,7 +13,6 @@ using Rocket.Surgery.Conventions.Scanners;
 using Rocket.Surgery.Extensions.Autofac.Tests;
 using Rocket.Surgery.Extensions.DependencyInjection;
 using Rocket.Surgery.Extensions.Testing;
-using Rocket.Surgery.Hosting;
 using Xunit;
 using Xunit.Abstractions;
 

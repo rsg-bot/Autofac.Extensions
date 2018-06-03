@@ -1,10 +1,10 @@
 ﻿using System;
 using Autofac;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Rocket.Surgery.Conventions;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Extensions.DependencyInjection;
-using Rocket.Surgery.Hosting;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
