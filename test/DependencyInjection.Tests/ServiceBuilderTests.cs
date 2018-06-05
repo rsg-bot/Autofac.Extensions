@@ -46,6 +46,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
         [Fact]
         public void StoresAndReturnsItems()
         {
+            AutoFake.Provide<IDictionary<object, object>>(new Dictionary<object, object>());
             var servicesBuilder = AutoFake.Resolve<ServicesBuilder>();
 
             var value = new object();
@@ -56,6 +57,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
         [Fact]
         public void IgnoreNonExistentItems()
         {
+            AutoFake.Provide<IDictionary<object, object>>(new Dictionary<object, object>());
             var servicesBuilder = AutoFake.Resolve<ServicesBuilder>();
 
             servicesBuilder[string.Empty].Should().BeNull();

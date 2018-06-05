@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -50,7 +51,9 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
             IServiceCollection services,
             IConfiguration configuration,
             IHostingEnvironment environment,
-            ILogger logger) : base(scanner, assemblyProvider, assemblyCandidateFinder)
+            ILogger logger,
+            IDictionary<object, object> properties)
+            : base(scanner, assemblyProvider, assemblyCandidateFinder, properties)
         {
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));

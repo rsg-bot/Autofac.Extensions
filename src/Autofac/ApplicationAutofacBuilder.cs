@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
@@ -38,8 +39,9 @@ namespace Rocket.Surgery.Extensions.Autofac
             IServiceCollection services,
             IConfiguration configuration,
             IHostingEnvironment environment,
-            ILogger logger) :
-            base(scanner, assemblyProvider, assemblyCandidateFinder, services, configuration, environment, logger)
+            ILogger logger,
+            IDictionary<object, object> properties) :
+            base(scanner, assemblyProvider, assemblyCandidateFinder, services, configuration, environment, logger, properties)
         { }
 
         /// <summary>

@@ -13,9 +13,7 @@ namespace Rocket.Surgery.Extensions.Autofac
     public abstract class ChildAutofacBuilder : Builder<IAutofacConventionContext>, IAutofacConventionContext
     {
 
-        protected ChildAutofacBuilder(IAutofacBuilder parent) : base(parent)
-        {
-        }
+        protected ChildAutofacBuilder(IAutofacBuilder parent) : base(parent, ((IBuilder)parent).Properties) { }
 
         public IConfiguration Configuration => Parent.Configuration;
         public IHostingEnvironment Environment => Parent.Environment;

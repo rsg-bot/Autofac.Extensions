@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Autofac;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,7 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// <param name="configuration">The configuration.</param>
         /// <param name="environment"></param>
         /// <param name="logger">The logger</param>
+        /// <param name="properties">The properties</param>
         protected AutofacBuilderBase(
             IConventionScanner scanner,
             IAssemblyProvider assemblyProvider,
@@ -37,7 +39,9 @@ namespace Rocket.Surgery.Extensions.Autofac
             IServiceCollection services,
             IConfiguration configuration,
             IHostingEnvironment environment,
-            ILogger logger) : base(scanner, assemblyProvider, assemblyCandidateFinder)
+            ILogger logger,
+            IDictionary<object, object> properties)
+            : base(scanner, assemblyProvider, assemblyCandidateFinder, properties)
         {
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));

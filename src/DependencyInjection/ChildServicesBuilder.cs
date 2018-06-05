@@ -11,9 +11,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
 {
     public abstract class ChildServicesBuilder : Builder<IServiceConventionContext>, IServiceConventionContext
     {
-        protected ChildServicesBuilder(IServicesBuilder parent) : base(parent)
-        {
-        }
+        protected ChildServicesBuilder(IServicesBuilder parent) : base(parent, ((IBuilder)parent).Properties) { }
 
         public IConfiguration Configuration => Parent.Configuration;
 

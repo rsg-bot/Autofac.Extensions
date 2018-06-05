@@ -51,6 +51,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
         [Fact]
         public void StoresAndReturnsItems()
         {
+            AutoFake.Provide<IDictionary<object, object>>(new Dictionary<object, object>());
             var servicesBuilder = AutoFake.Resolve<AutofacBuilder>();
 
             var value = new object();
@@ -61,6 +62,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
         [Fact]
         public void IgnoreNonExistentItems()
         {
+            AutoFake.Provide<IDictionary<object, object>>(new Dictionary<object, object>());
             var servicesBuilder = AutoFake.Resolve<AutofacBuilder>();
 
             servicesBuilder[string.Empty].Should().BeNull();
