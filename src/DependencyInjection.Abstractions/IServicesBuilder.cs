@@ -11,5 +11,11 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
     /// Class IServicesBuilder.
     /// </summary>
     /// TODO Edit XML Comment Template for IServicesBuilder
-    public interface IServicesBuilder : IConventionBuilder<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>, IServiceConventionContext { }
+    public interface IServicesBuilder : IConventionBuilder<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>, IServiceConventionContext
+    {
+        /// <summary>
+        /// Build the service provider from this container
+        /// </summary>
+        IServiceProvider Build();
+    }
 }

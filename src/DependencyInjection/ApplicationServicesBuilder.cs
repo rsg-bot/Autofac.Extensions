@@ -72,6 +72,11 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
         protected override IServicesBuilder GetBuilder() => this;
         public ServiceProviderOptions ServiceProviderOptions { get; }
 
+        IServiceProvider IServicesBuilder.Build()
+        {
+            return Build().System;
+        }
+
         /// <summary>
         /// Builds the root container, and returns the lifetime scopes for the application and system containers
         /// </summary>

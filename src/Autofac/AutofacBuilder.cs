@@ -13,9 +13,11 @@ using Rocket.Surgery.Extensions.DependencyInjection;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
-    public class AutofacBuilder : AutofacBuilderBase
+    public class AutofacBuilder : AutofacBuilderBase, IServicesBuilder
     {
+
         public AutofacBuilder(
+            ContainerBuilder containerBuilder,
             IConventionScanner scanner,
             IAssemblyProvider assemblyProvider,
             IAssemblyCandidateFinder assemblyCandidateFinder,
@@ -24,7 +26,9 @@ namespace Rocket.Surgery.Extensions.Autofac
             IHostingEnvironment environment,
             ILogger logger,
             IDictionary<object, object> properties) :
-            base(scanner, assemblyProvider, assemblyCandidateFinder, services, configuration, environment, logger, properties){ }
+            base(containerBuilder, scanner, assemblyProvider, assemblyCandidateFinder, services, configuration, environment, logger, properties)
+        {
+        }
 
         /// <summary>
         /// Builds the root container, and returns the lifetime scopes for the application and system containers
@@ -32,7 +36,7 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// <param name="containerBuilder"></param>
         /// <param name="logger"></param>
         /// <returns></returns>
-        public IContainer Build(ContainerBuilder containerBuilder)
+        public IContainer Build()
         {
             new ConventionComposer(Scanner)
                 .Register(
@@ -42,13 +46,13 @@ namespace Rocket.Surgery.Extensions.Autofac
                 typeof(ServiceConventionDelegate),
                 typeof(AutofacConventionDelegate));
 
-            _core.Collection.Apply(containerBuilder);
-            containerBuilder.Populate(Services);
+            _core.Collection.Apply(_containerBuilder);
+            _containerBuilder.Populate(Services);
 
-            _application.Collection.Apply(containerBuilder);
-            containerBuilder.Populate(_application.Services);
+            _application.Collection.Apply(_containerBuilder);
+            _containerBuilder.Populate(_application.Services);
 
-            var result = containerBuilder.Build();
+            var result = _containerBuilder.Build();
             var sp = new AutofacServiceProvider(result);
             _application.LifetimeScopeOnBuild.Send(result);
             _application.ServiceProviderOnBuild.Send(sp);
@@ -59,6 +63,11 @@ namespace Rocket.Surgery.Extensions.Autofac
             _containerObservable.Send(result);
 
             return result;
+        }
+
+        IServiceProvider IServicesBuilder.Build()
+        {
+            return new AutofacServiceProvider(Build());
         }
     }
 }

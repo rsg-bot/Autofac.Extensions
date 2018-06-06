@@ -14,16 +14,18 @@ using Rocket.Surgery.Extensions.DependencyInjection;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
-    public class AutofacBuilderBase : ConventionBuilder<IAutofacBuilder, IAutofacConvention, AutofacConventionDelegate>, IAutofacBuilder, IServicesBuilder
+    public abstract class AutofacBuilderBase : ConventionBuilder<IAutofacBuilder, IAutofacConvention, AutofacConventionDelegate>, IAutofacBuilder, IServicesBuilder
     {
         internal readonly ServiceAndContainerWrapper _core;
         internal readonly ServiceAndContainerWrapper _system;
         internal readonly ServiceAndContainerWrapper _application;
         internal readonly ContainerObservable _containerObservable;
+        protected readonly ContainerBuilder _containerBuilder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationAutofacBuilder" /> class.
         /// </summary>
+        /// <param name="containerBuilder"></param>
         /// <param name="scanner"></param>
         /// <param name="assemblyProvider">The assembly provider.</param>
         /// <param name="assemblyCandidateFinder">The assembly candidate finder.</param>
@@ -33,6 +35,7 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// <param name="logger">The logger</param>
         /// <param name="properties">The properties</param>
         protected AutofacBuilderBase(
+            ContainerBuilder containerBuilder,
             IConventionScanner scanner,
             IAssemblyProvider assemblyProvider,
             IAssemblyCandidateFinder assemblyCandidateFinder,
@@ -43,6 +46,7 @@ namespace Rocket.Surgery.Extensions.Autofac
             IDictionary<object, object> properties)
             : base(scanner, assemblyProvider, assemblyCandidateFinder, properties)
         {
+            _containerBuilder = containerBuilder ?? throw new ArgumentNullException(nameof(containerBuilder));
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -54,6 +58,7 @@ namespace Rocket.Surgery.Extensions.Autofac
         }
 
         protected override IAutofacBuilder GetBuilder() => this;
+        IServiceProvider IServicesBuilder.Build() => throw new NotSupportedException();
 
         public void ConfigureContainer(ContainerBuilderDelegate builder)
         {

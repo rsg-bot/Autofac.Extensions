@@ -20,7 +20,7 @@ namespace Rocket.Surgery.Extensions.Autofac
     /// <seealso cref="Builder" />
     /// <seealso cref="Microsoft.Extensions.Configuration.IConfigurationBuilder" />
     /// TODO Edit XML Comment Template for ApplicationAutofacBuilder
-    public class ApplicationAutofacBuilder : AutofacBuilderBase
+    public class ApplicationAutofacBuilder : AutofacBuilderBase, IServicesBuilder
     {
         /// <summary>
         /// Tag for applicaiton scoped container
@@ -31,8 +31,8 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// </summary>
         public static string SystemTag = "__System__";
 
-
         public ApplicationAutofacBuilder(
+            ContainerBuilder containerBuilder,
             IConventionScanner scanner,
             IAssemblyProvider assemblyProvider,
             IAssemblyCandidateFinder assemblyCandidateFinder,
@@ -41,7 +41,7 @@ namespace Rocket.Surgery.Extensions.Autofac
             IHostingEnvironment environment,
             ILogger logger,
             IDictionary<object, object> properties) :
-            base(scanner, assemblyProvider, assemblyCandidateFinder, services, configuration, environment, logger, properties)
+            base(containerBuilder, scanner, assemblyProvider, assemblyCandidateFinder, services, configuration, environment, logger, properties)
         { }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// </summary>
         /// <param name="containerBuilder"></param>
         /// <returns></returns>
-        public (IContainer Container, ILifetimeScope Application, ILifetimeScope System) Build(ContainerBuilder containerBuilder)
+        public (IContainer Container, ILifetimeScope Application, ILifetimeScope System) Build()
         {
             new ConventionComposer(Scanner)
                 .Register(
@@ -59,10 +59,10 @@ namespace Rocket.Surgery.Extensions.Autofac
                     typeof(ServiceConventionDelegate),
                     typeof(AutofacConventionDelegate));
 
-            _core.Collection.Apply(containerBuilder);
-            containerBuilder.Populate(Services);
+            _core.Collection.Apply(_containerBuilder);
+            _containerBuilder.Populate(Services);
 
-            var container = containerBuilder.Build();
+            var container = _containerBuilder.Build();
 
             var system = container.BeginLifetimeScope(SystemTag, s =>
             {
@@ -85,6 +85,11 @@ namespace Rocket.Surgery.Extensions.Autofac
             _containerObservable.Send(container);
 
             return (container, application, system);
+        }
+
+        IServiceProvider IServicesBuilder.Build()
+        {
+            return new AutofacServiceProvider(Build().System);
         }
     }
 }
