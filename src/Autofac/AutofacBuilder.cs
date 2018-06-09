@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
@@ -24,20 +25,14 @@ namespace Rocket.Surgery.Extensions.Autofac
             IServiceCollection services,
             IConfiguration configuration,
             IHostingEnvironment environment,
-            ILogger logger,
+            DiagnosticSource diagnosticSource,
             IDictionary<object, object> properties) :
-            base(containerBuilder, scanner, assemblyProvider, assemblyCandidateFinder, services, configuration, environment, logger, properties)
+            base(containerBuilder, scanner, assemblyProvider, assemblyCandidateFinder, services, configuration, environment, diagnosticSource, properties)
         {
         }
 
-        /// <summary>
-        /// Builds the root container, and returns the lifetime scopes for the application and system containers
-        /// </summary>
-        /// <param name="containerBuilder"></param>
-        /// <param name="logger"></param>
-        /// <returns></returns>
         public IContainer Build()
-        {
+         {
             new ConventionComposer(Scanner)
                 .Register(
                 this,

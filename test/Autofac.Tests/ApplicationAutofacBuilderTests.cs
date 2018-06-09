@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Autofac;
 using FakeItEasy;
 using FluentAssertions;
@@ -18,7 +19,10 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
 {
     public class ApplicationAutofacBuilderTests : AutoTestBase
     {
-        public ApplicationAutofacBuilderTests(ITestOutputHelper outputHelper) : base(outputHelper){}
+        public ApplicationAutofacBuilderTests(ITestOutputHelper outputHelper) : base(outputHelper)
+        {
+            AutoFake.Provide<DiagnosticSource>(new DiagnosticListener("Test"));
+        }
 
         [Fact]
         public void Constructs()

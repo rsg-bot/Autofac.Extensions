@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
@@ -15,7 +16,10 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
 {
     public class ChildServicesBuilderTests : AutoTestBase
     {
-        public ChildServicesBuilderTests(ITestOutputHelper outputHelper) : base(outputHelper) { }
+        public ChildServicesBuilderTests(ITestOutputHelper outputHelper) : base(outputHelper)
+        {
+            AutoFake.Provide<DiagnosticSource>(new DiagnosticListener("Test"));
+        }
 
         class ChildBuilder : ChildServicesBuilder
         {

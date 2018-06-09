@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -21,6 +22,7 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
     /// TODO Edit XML Comment Template for ApplicationServicesBuilder
     public class ApplicationServicesBuilder : ConventionBuilder<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>, IServicesBuilder
     {
+        private readonly DiagnosticSource _diagnosticSource;
         private readonly ServiceProviderObservable _onBuild;
         private readonly ServiceWrapper _application;
         private readonly ServiceWrapper _system;
@@ -34,16 +36,6 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
         /// </summary>
         public static string SystemTag = "__System__";
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ApplicationServicesBuilder" /> class.
-        /// </summary>
-        /// <param name="scanner"></param>
-        /// <param name="assemblyProvider">The assembly provider.</param>
-        /// <param name="assemblyCandidateFinder">The assembly candidate finder.</param>
-        /// <param name="services">The services.</param>
-        /// <param name="configuration">The configuration.</param>
-        /// <param name="environment"></param>
-        /// <param name="logger">The logger</param>
         public ApplicationServicesBuilder(
             IConventionScanner scanner,
             IAssemblyProvider assemblyProvider,
@@ -51,15 +43,16 @@ namespace Rocket.Surgery.Extensions.DependencyInjection
             IServiceCollection services,
             IConfiguration configuration,
             IHostingEnvironment environment,
-            ILogger logger,
+            DiagnosticSource diagnosticSource,
             IDictionary<object, object> properties)
             : base(scanner, assemblyProvider, assemblyCandidateFinder, properties)
         {
+            _diagnosticSource = diagnosticSource ?? throw new ArgumentNullException(nameof(diagnosticSource));
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
 
             Services = services;
-            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            Logger = new DiagnosticLogger(diagnosticSource);
             _onBuild = new ServiceProviderObservable(Logger);
             _application = new ServiceWrapper(Logger);
             _system = new ServiceWrapper(Logger);

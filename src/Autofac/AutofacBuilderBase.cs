@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Autofac;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +22,7 @@ namespace Rocket.Surgery.Extensions.Autofac
         internal readonly ServiceAndContainerWrapper _application;
         internal readonly ContainerObservable _containerObservable;
         protected readonly ContainerBuilder _containerBuilder;
+        protected readonly DiagnosticSource _diagnosticSource;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationAutofacBuilder" /> class.
@@ -32,7 +34,7 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// <param name="services">The services.</param>
         /// <param name="configuration">The configuration.</param>
         /// <param name="environment"></param>
-        /// <param name="logger">The logger</param>
+        /// <param name="diagnosticSource">The diagnostic source</param>
         /// <param name="properties">The properties</param>
         protected AutofacBuilderBase(
             ContainerBuilder containerBuilder,
@@ -42,14 +44,15 @@ namespace Rocket.Surgery.Extensions.Autofac
             IServiceCollection services,
             IConfiguration configuration,
             IHostingEnvironment environment,
-            ILogger logger,
+            DiagnosticSource diagnosticSource,
             IDictionary<object, object> properties)
             : base(scanner, assemblyProvider, assemblyCandidateFinder, properties)
         {
             _containerBuilder = containerBuilder ?? throw new ArgumentNullException(nameof(containerBuilder));
+            _diagnosticSource = diagnosticSource ?? throw new ArgumentNullException(nameof(diagnosticSource));
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            Logger = new DiagnosticLogger(diagnosticSource);
 
             _core = new ServiceAndContainerWrapper(this, services);
             _application = new ServiceAndContainerWrapper(this);
