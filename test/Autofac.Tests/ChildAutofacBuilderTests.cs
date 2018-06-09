@@ -20,7 +20,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
 
         class ChildAutofacBuilder : Autofac.ChildAutofacBuilder
         {
-            public ChildAutofacBuilder(IAutofacBuilder parent) : base(parent)
+            public ChildAutofacBuilder(AutofacBuilderBase parent) : base(parent)
             {
             }
         }

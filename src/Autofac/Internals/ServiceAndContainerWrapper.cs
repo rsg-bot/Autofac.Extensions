@@ -7,9 +7,9 @@ namespace Rocket.Surgery.Extensions.Autofac.Internals
 {
     internal class ServiceAndContainerWrapper : IAutofacContextWrapper, IServiceWrapper
     {
-        private readonly IAutofacBuilder _context;
+        private readonly IAutofacConventionContext _context;
 
-        public ServiceAndContainerWrapper(IAutofacBuilder context, IServiceCollection services = default)
+        public ServiceAndContainerWrapper(IAutofacConventionContext context, IServiceCollection services = default)
         {
             _context = context;
             Services = services ?? new ServiceCollection();
@@ -34,7 +34,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Internals
         public IServiceCollection Services { get; }
         public LifetimeScopeObservable LifetimeScopeOnBuild { get; }
         public ServiceProviderObservable ServiceProviderOnBuild { get; }
-        
+
         IObservable<ILifetimeScope> IAutofacContextWrapper.OnBuild => LifetimeScopeOnBuild;
         IObservable<IServiceProvider> IServiceWrapper.OnBuild => ServiceProviderOnBuild;
 

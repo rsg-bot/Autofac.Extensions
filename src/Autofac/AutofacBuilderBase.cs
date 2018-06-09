@@ -14,7 +14,7 @@ using Rocket.Surgery.Extensions.DependencyInjection;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
-    public abstract class AutofacBuilderBase : ConventionBuilder<IAutofacBuilder, IAutofacConvention, AutofacConventionDelegate>, IAutofacBuilder, IServicesBuilder
+    public abstract class AutofacBuilderBase : ConventionBuilder<IAutofacBuilder, IAutofacConvention, AutofacConventionDelegate>, IAutofacBuilder, IServicesBuilder, IAutofacConventionContext
     {
         internal readonly ServiceAndContainerWrapper _core;
         internal readonly ServiceAndContainerWrapper _system;

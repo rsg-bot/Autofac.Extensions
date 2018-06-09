@@ -10,10 +10,10 @@ using Rocket.Surgery.Extensions.DependencyInjection;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
-    public abstract class ChildAutofacBuilder : Builder<IAutofacConventionContext>, IAutofacConventionContext
+    public abstract class ChildAutofacBuilder : Builder<AutofacBuilderBase>, IAutofacConventionContext
     {
 
-        protected ChildAutofacBuilder(IAutofacBuilder parent) : base(parent, ((IBuilder)parent).Properties) { }
+        protected ChildAutofacBuilder(AutofacBuilderBase parent) : base(parent, ((IBuilder)parent).Properties) { }
 
         public IConfiguration Configuration => Parent.Configuration;
         public IHostingEnvironment Environment => Parent.Environment;
