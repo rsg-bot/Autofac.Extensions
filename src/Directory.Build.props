@@ -6,8 +6,8 @@
         <RootNamespace>$(MSBuildProjectName.Replace('.Abstractions', ''))</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Rocket.Surgery.Build.Metadata" PrivateAssets="All" />
-        <PackageReference Include="SourceLink.Create.CommandLine" PrivateAssets="All" />
-		<PackageReference Include="SourceLink.Copy.PdbFiles" PrivateAssets="All" />
+        <PackageReference Include="Rocket.Surgery.Build.Metadata" />
+        <PackageReference Include="SourceLink.Create.CommandLine" />
+		<PackageReference Include="SourceLink.Copy.PdbFiles" />
     </ItemGroup>
 </Project>
