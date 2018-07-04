@@ -1,17 +1,17 @@
 <Project>
     <ItemGroup>
-		<PackageReference Include="Rocket.Surgery.Extensions.Testing" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" />
-        <PackageReference Include="xunit.runner.visualstudio" />
-        <PackageReference Include="xunit" />
-        <PackageReference Include="FluentAssertions" />
-        <PackageReference Include="FakeItEasy" />
-        <PackageReference Include="FakeItEasy.Analyzer.CSharp" />
         <PackageReference Include="Autofac.Extras.FakeItEasy" />
         <PackageReference Include="Bogus" />
-        <PackageReference Include="XunitXml.TestLogger" />
         <PackageReference Include="coverlet.msbuild" />
+        <PackageReference Include="FakeItEasy" />
+        <PackageReference Include="FakeItEasy.Analyzer.CSharp" />
+        <PackageReference Include="FluentAssertions" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="Rocket.Surgery.Extensions.Testing" />
         <PackageReference Include="Rocket.Surgery.Reactive.Extensions" />
+        <PackageReference Include="xunit" />
+        <PackageReference Include="xunit.runner.visualstudio" />
+        <PackageReference Include="XunitXml.TestLogger" />
     </ItemGroup>
     <ItemGroup>
         <Content Include="xunit.runner.json">

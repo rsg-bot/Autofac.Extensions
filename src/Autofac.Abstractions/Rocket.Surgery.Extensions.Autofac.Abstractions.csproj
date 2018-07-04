@@ -4,11 +4,10 @@
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="../DependencyInjection.Abstractions/Rocket.Surgery.Extensions.DependencyInjection.Abstractions.csproj" />
-        <PackageReference Include="Rocket.Surgery.Builders.Abstractions" />
-        <PackageReference Include="Rocket.Surgery.Conventions.Abstractions" />
+        <PackageReference Include="Autofac" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
-        <PackageReference Include="Autofac" />
-
+        <PackageReference Include="Rocket.Surgery.Builders.Abstractions" />
+        <PackageReference Include="Rocket.Surgery.Conventions.Abstractions" />
     </ItemGroup>
 </Project>
