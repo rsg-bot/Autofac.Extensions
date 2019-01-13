@@ -185,9 +185,9 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
 
             var serviceProvider = servicesBuilder.Build();
 
-            A.CallTo(() => observer.OnNext(serviceProvider)).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => observerApplication.OnNext(serviceProvider)).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => observerSystem.OnNext(A<IServiceProvider>._)).MustHaveHappened(Repeated.Never);
+            A.CallTo(() => observer.OnNext(serviceProvider)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => observerApplication.OnNext(serviceProvider)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => observerSystem.OnNext(A<IServiceProvider>._)).MustNotHaveHappened();
         }
     }
 }

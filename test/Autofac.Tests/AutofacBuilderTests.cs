@@ -291,9 +291,9 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
 
             var items = servicesBuilder.Build();
 
-            A.CallTo(() => observer.OnNext(A<IServiceProvider>.Ignored)).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => observerApplication.OnNext(A<IServiceProvider>.Ignored)).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => observerSystem.OnNext(A<IServiceProvider>.Ignored)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => observer.OnNext(A<IServiceProvider>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => observerApplication.OnNext(A<IServiceProvider>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => observerSystem.OnNext(A<IServiceProvider>.Ignored)).MustHaveHappenedOnceExactly();
         }
 
         [Fact]
@@ -318,10 +318,10 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
 
             var container = servicesBuilder.Build();
 
-            A.CallTo(() => observer.OnNext(container)).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => observerApplication.OnNext(container)).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => observerSystem.OnNext(A<IContainer>._)).MustHaveHappened(Repeated.Never);
-            A.CallTo(() => observerContainer.OnNext(container)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => observer.OnNext(container)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => observerApplication.OnNext(container)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => observerSystem.OnNext(A<IContainer>._)).MustNotHaveHappened();
+            A.CallTo(() => observerContainer.OnNext(container)).MustHaveHappenedOnceExactly();
         }
     }
 }

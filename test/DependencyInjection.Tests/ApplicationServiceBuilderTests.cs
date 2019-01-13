@@ -172,9 +172,9 @@ namespace Rocket.Surgery.Extensions.DependencyInjection.Tests
 
             var items = servicesBuilder.Build();
 
-            A.CallTo(() => observer.OnNext(items.Application)).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => observerApplication.OnNext(items.Application)).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => observerSystem.OnNext(items.System)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => observer.OnNext(items.Application)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => observerApplication.OnNext(items.Application)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => observerSystem.OnNext(items.System)).MustHaveHappenedOnceExactly();
         }
     }
 }
