@@ -10,7 +10,7 @@ using Rocket.Surgery.Extensions.DependencyInjection;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
-    public abstract class ChildAutofacBuilder : Builder<AutofacBuilder>, IAutofacConventionContext
+    public abstract class ChildAutofacBuilder : Builder<AutofacBuilder>, IAutofacConventionContext, IServiceConventionContext
     {
 
         protected ChildAutofacBuilder(AutofacBuilder parent) : base(parent, ((IBuilder)parent).Properties) { }
@@ -25,7 +25,9 @@ namespace Rocket.Surgery.Extensions.Autofac
             Parent.ConfigureContainer(builder);
         }
         public IServiceCollection Services => Parent.Services;
-        public IObservable<ILifetimeScope> OnBuild => Parent.OnBuild;
         public ILogger Logger => Parent.Logger;
+
+        public IObservable<IServiceProvider> OnBuild => Parent.OnBuild;
+        public IObservable<IContainer> OnContainerBuild => Parent.OnContainerBuild;
     }
 }

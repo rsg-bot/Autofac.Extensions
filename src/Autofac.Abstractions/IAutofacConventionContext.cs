@@ -17,6 +17,6 @@ namespace Rocket.Surgery.Extensions.Autofac
         IAssemblyCandidateFinder AssemblyCandidateFinder { get; }
         void ConfigureContainer(ContainerBuilderDelegate builder);
         IServiceCollection Services { get; }
-        IObservable<ILifetimeScope> OnBuild { get; }
+        IObservable<IContainer> OnContainerBuild { get; }
     }
 }

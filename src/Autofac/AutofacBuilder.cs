@@ -15,17 +15,15 @@ using Rocket.Surgery.Extensions.DependencyInjection;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
-    public abstract class AutofacBuilder : ConventionBuilder<IAutofacBuilder, IAutofacConvention, AutofacConventionDelegate>, IAutofacBuilder, IServicesBuilder, IAutofacConventionContext
+    public class AutofacBuilder : ConventionBuilder<IAutofacBuilder, IAutofacConvention, AutofacConventionDelegate>, IAutofacBuilder, IServicesBuilder, IAutofacConventionContext
     {
         private readonly GenericObservableObservable<IContainer> _containerObservable;
-        private readonly ContainerBuilder _containerBuilder;
-        private readonly DiagnosticSource _diagnosticSource;
-        private readonly GenericObservableObservable<ILifetimeScope> _lifetimeScopeOnBuild;
         private readonly GenericObservableObservable<IServiceProvider> _serviceProviderOnBuild;
+        private readonly ContainerBuilder _containerBuilder;
         private readonly ContainerBuilderCollection _collection = new ContainerBuilderCollection();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ApplicationAutofacBuilder" /> class.
+        /// Initializes a new instance of the <see cref="AutofacBuilder" /> class.
         /// </summary>
         /// <param name="containerBuilder"></param>
         /// <param name="scanner"></param>
@@ -49,18 +47,14 @@ namespace Rocket.Surgery.Extensions.Autofac
             : base(scanner, assemblyProvider, assemblyCandidateFinder, properties)
         {
             _containerBuilder = containerBuilder ?? throw new ArgumentNullException(nameof(containerBuilder));
-            _diagnosticSource = diagnosticSource ?? throw new ArgumentNullException(nameof(diagnosticSource));
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
+                        Services = services ?? throw new ArgumentNullException(nameof(services));
             Logger = new DiagnosticLogger(diagnosticSource);
 
             _containerObservable = new GenericObservableObservable<IContainer>(Logger);
-            Services = services ?? new ServiceCollection();
-            _lifetimeScopeOnBuild = new GenericObservableObservable<ILifetimeScope>(Logger);
             _serviceProviderOnBuild = new GenericObservableObservable<IServiceProvider>(Logger);
         }
-
-        public IServiceCollection Services { get; }
 
         public IAutofacConventionContext ConfigureContainer(ContainerBuilderDelegate builder)
         {
@@ -89,9 +83,7 @@ namespace Rocket.Surgery.Extensions.Autofac
             var result = _containerBuilder.Build();
             var sp = new AutofacServiceProvider(result);
 
-            _lifetimeScopeOnBuild.Send(result);
             _serviceProviderOnBuild.Send(sp);
-
             _containerObservable.Send(result);
 
             return result;
@@ -126,11 +118,16 @@ namespace Rocket.Surgery.Extensions.Autofac
             return this;
         }
 
+        protected override IAutofacBuilder GetBuilder()
+        {
+            return this;
+        }
+
         public IConfiguration Configuration { get; }
         public IHostingEnvironment Environment { get; }
+        public IServiceCollection Services { get; }
 
-        public IObservable<ILifetimeScope> OnBuild => _lifetimeScopeOnBuild;
-        IObservable<IServiceProvider> IServiceConventionContext.OnBuild => _serviceProviderOnBuild;
+        public IObservable<IServiceProvider> OnBuild => _serviceProviderOnBuild;
         public IObservable<IContainer> OnContainerBuild => _containerObservable;
         public ILogger Logger { get; }
     }

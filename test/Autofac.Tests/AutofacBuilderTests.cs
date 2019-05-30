@@ -291,7 +291,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             A.CallTo(() => AutoFake.Resolve<IAssemblyCandidateFinder>().GetCandidateAssemblies(A<IEnumerable<string>>._))
                 .Returns(assemblyProvider.GetAssemblies());
 
-            var observer = A.Fake<IObserver<ILifetimeScope>>();
+            var observer = A.Fake<IObserver<IServiceProvider>>();
             var observerContainer = A.Fake<IObserver<IContainer>>();
             var observerApplication = A.Fake<IObserver<ILifetimeScope>>();
             var observerSystem = A.Fake<IObserver<ILifetimeScope>>();
@@ -300,7 +300,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
 
             var container = servicesBuilder.Build();
 
-            A.CallTo(() => observer.OnNext(container)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => observer.OnNext(A.Fake<IServiceProvider>())).MustHaveHappenedOnceExactly();
             A.CallTo(() => observerContainer.OnNext(container)).MustHaveHappenedOnceExactly();
         }
     }

@@ -13,7 +13,6 @@ namespace Rocket.Surgery.Extensions.Autofac
     /// </summary>
     /// TODO Edit XML Comment Template for IAutofacBuilder
     public interface IAutofacBuilder : IConventionBuilder<IAutofacBuilder, IAutofacConvention, AutofacConventionDelegate>
-    {
-        IObservable<IContainer> OnContainerBuild { get; }
+    {   
     }
 }
