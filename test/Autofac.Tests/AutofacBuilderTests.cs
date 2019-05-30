@@ -41,8 +41,6 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             servicesBuilder.AssemblyCandidateFinder.Should().NotBeNull();
             servicesBuilder.Services.Should().BeSameAs(services);
             servicesBuilder.Configuration.Should().NotBeNull();
-            servicesBuilder.Application.Should().NotBeNull();
-            servicesBuilder.System.Should().NotBeNull();
             servicesBuilder.Environment.Should().NotBeNull();
 
             Action a = () => { servicesBuilder.PrependConvention(A.Fake<IAutofacConvention>()); };
@@ -98,8 +96,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             {
                 context.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc>()));
                 context.Services.AddSingleton(A.Fake<IAbc2>());
-                context.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc3>()));
-                context.Application.ConfigureContainer(c => { });
+                context.ConfigureContainer(c => { });
             }
         }
 
@@ -108,7 +105,6 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             public void Register(IServiceConventionContext context)
             {
                 context.Services.AddSingleton(A.Fake<IOtherAbc3>());
-                context.System.Services.AddSingleton(A.Fake<IOtherAbc4>());
             }
         }
 
@@ -122,7 +118,6 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
 
             servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc>()));
             servicesBuilder.Services.AddSingleton(A.Fake<IAbc2>());
-            servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc3>()));
 
             var items = servicesBuilder.Build();
             items.ResolveOptional<IAbc>().Should().NotBeNull();
@@ -139,9 +134,8 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             AutoFake.Provide(new ContainerBuilder());
             var servicesBuilder = AutoFake.Resolve<AutofacBuilder>();
 
-            servicesBuilder.Application.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc>()));
-            servicesBuilder.Application.Services.AddSingleton(A.Fake<IAbc2>());
-            servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc3>()));
+            servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc>()));
+            servicesBuilder.Services.AddSingleton(A.Fake<IAbc2>());
             servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc4>()));
 
             var items = servicesBuilder.Build();
@@ -159,9 +153,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             AutoFake.Provide(new ContainerBuilder());
             var servicesBuilder = AutoFake.Resolve<AutofacBuilder>();
 
-            servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc>()));
-            servicesBuilder.System.Services.AddSingleton(A.Fake<IAbc2>());
-            servicesBuilder.Application.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc3>()));
+            servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc3>()));
             servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc4>()));
 
             var items = servicesBuilder.Build();
@@ -181,7 +173,6 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
 
             servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc>()));
             servicesBuilder.Services.AddSingleton(A.Fake<IAbc2>());
-            servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc3>()));
 
             var items = servicesBuilder.Build();
 
@@ -200,9 +191,8 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             AutoFake.Provide(new ContainerBuilder());
             var servicesBuilder = AutoFake.Resolve<AutofacBuilder>();
 
-            servicesBuilder.Application.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc>()));
-            servicesBuilder.Application.Services.AddSingleton(A.Fake<IAbc2>());
-            servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc3>()));
+            servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc>()));
+            servicesBuilder.Services.AddSingleton(A.Fake<IAbc2>());
             servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc4>()));
 
             var items = servicesBuilder.Build();
@@ -218,9 +208,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
         {
             var servicesBuilder = AutoFake.Resolve<AutofacBuilder>();
 
-            servicesBuilder.System.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc>()));
-            servicesBuilder.System.Services.AddSingleton(A.Fake<IAbc2>());
-            servicesBuilder.Application.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc3>()));
+            servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc3>()));
             servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc4>()));
 
             var items = servicesBuilder.Build();
@@ -286,14 +274,10 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var observerApplication = A.Fake<IObserver<IServiceProvider>>();
             var observerSystem = A.Fake<IObserver<IServiceProvider>>();
             ((IServiceConventionContext)servicesBuilder).OnBuild.Subscribe(observer);
-            ((IServiceConventionContext)servicesBuilder).Application.OnBuild.Subscribe(observerApplication);
-            ((IServiceConventionContext)servicesBuilder).OnBuild.Subscribe(observerSystem);
 
             var items = servicesBuilder.Build();
 
             A.CallTo(() => observer.OnNext(A<IServiceProvider>.Ignored)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => observerApplication.OnNext(A<IServiceProvider>.Ignored)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => observerSystem.OnNext(A<IServiceProvider>.Ignored)).MustHaveHappenedOnceExactly();
         }
 
         [Fact]
@@ -313,14 +297,10 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             var observerSystem = A.Fake<IObserver<ILifetimeScope>>();
             servicesBuilder.OnContainerBuild.Subscribe(observerContainer);
             servicesBuilder.OnBuild.Subscribe(observer);
-            servicesBuilder.Application.OnBuild.Subscribe(observerApplication);
-            servicesBuilder.System.OnBuild.Subscribe(observerSystem);
 
             var container = servicesBuilder.Build();
 
             A.CallTo(() => observer.OnNext(container)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => observerApplication.OnNext(container)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => observerSystem.OnNext(A<IContainer>._)).MustNotHaveHappened();
             A.CallTo(() => observerContainer.OnNext(container)).MustHaveHappenedOnceExactly();
         }
     }

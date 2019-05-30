@@ -24,7 +24,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
 
         class ChildAutofacBuilder : Autofac.ChildAutofacBuilder
         {
-            public ChildAutofacBuilder(AutofacBuilderBase parent) : base(parent)
+            public ChildAutofacBuilder(AutofacBuilder parent) : base(parent)
             {
             }
         }
@@ -40,8 +40,6 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
             servicesBuilder.AssemblyCandidateFinder.Should().NotBeNull();
             servicesBuilder.Services.Should().BeSameAs(services);
             servicesBuilder.Configuration.Should().NotBeNull();
-            servicesBuilder.Application.Should().NotBeNull();
-            servicesBuilder.System.Should().NotBeNull();
             servicesBuilder.Environment.Should().NotBeNull();
         }
 

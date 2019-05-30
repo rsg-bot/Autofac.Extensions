@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using Autofac;
 using Microsoft.Extensions.Logging;
 
 namespace Rocket.Surgery.Extensions.Autofac.Internals
 {
-    class ContainerObservable : IObservable<IContainer>
+    class GenericObservableObservable<T> : IObservable<T>
     {
         private readonly ILogger _logger;
+        private readonly List<IObserver<T>> _observers = new List<IObserver<T>>();
 
-        private readonly List<IObserver<IContainer>> _observers = new List<IObserver<IContainer>>();
-
-        public ContainerObservable(ILogger logger)
+        public GenericObservableObservable(ILogger logger)
         {
             _logger = logger;
         }
 
-        public IDisposable Subscribe(IObserver<IContainer> observer)
+        public IDisposable Subscribe(IObserver<T> observer)
         {
             _observers.Add(observer);
             return new Disposable(() =>
@@ -25,7 +23,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Internals
             });
         }
 
-        public void Send(IContainer value)
+        public void Send(T value)
         {
             foreach (var observer in _observers)
             {
