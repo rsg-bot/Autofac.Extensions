@@ -300,7 +300,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
 
             var container = servicesBuilder.Build();
 
-            A.CallTo(() => observer.OnNext(A.Fake<IServiceProvider>())).MustHaveHappenedOnceExactly();
+            A.CallTo(() => observer.OnNext(A<IServiceProvider>._)).MustHaveHappenedOnceExactly();
             A.CallTo(() => observerContainer.OnNext(container)).MustHaveHappenedOnceExactly();
         }
     }
