@@ -16,7 +16,7 @@ namespace Rocket.Surgery.Extensions.Autofac
         protected ChildAutofacBuilder(AutofacBuilder parent) : base(parent, ((IBuilder)parent).Properties) { }
 
         public IConfiguration Configuration => Parent.Configuration;
-        public IHostingEnvironment Environment => Parent.Environment;
+        public IHostEnvironment Environment => Parent.Environment;
         public IAssemblyProvider AssemblyProvider => Parent.AssemblyProvider;
         public IAssemblyCandidateFinder AssemblyCandidateFinder => Parent.AssemblyCandidateFinder;
 

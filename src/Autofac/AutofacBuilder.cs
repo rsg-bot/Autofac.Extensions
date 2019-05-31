@@ -41,7 +41,7 @@ namespace Rocket.Surgery.Extensions.Autofac
             IAssemblyCandidateFinder assemblyCandidateFinder,
             IServiceCollection services,
             IConfiguration configuration,
-            IHostingEnvironment environment,
+            IHostEnvironment environment,
             DiagnosticSource diagnosticSource,
             IDictionary<object, object> properties)
             : base(scanner, assemblyProvider, assemblyCandidateFinder, properties)
@@ -124,7 +124,7 @@ namespace Rocket.Surgery.Extensions.Autofac
         }
 
         public IConfiguration Configuration { get; }
-        public IHostingEnvironment Environment { get; }
+        public IHostEnvironment Environment { get; }
         public IServiceCollection Services { get; }
 
         public IObservable<IServiceProvider> OnBuild => _serviceProviderOnBuild;
