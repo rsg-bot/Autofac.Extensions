@@ -17,5 +17,12 @@ namespace Rocket.Surgery.Extensions.Autofac
         void ConfigureContainer(ContainerBuilderDelegate builder);
         IServiceCollection Services { get; }
         IObservable<IContainer> OnContainerBuild { get; }
+
+        /// <summary>
+        /// The environment that this convention is running
+        ///
+        /// Based on IHostEnvironment / IHostingEnvironment
+        /// </summary>
+        IRocketEnvironment Environment { get; }
     }
 }

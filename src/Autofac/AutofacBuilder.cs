@@ -44,8 +44,9 @@ namespace Rocket.Surgery.Extensions.Autofac
             ContainerBuilder containerBuilder,
             DiagnosticSource diagnosticSource,
             IDictionary<object, object> properties)
-            : base(environment, scanner, assemblyProvider, assemblyCandidateFinder, properties)
+            : base(scanner, assemblyProvider, assemblyCandidateFinder, properties)
         {
+            Environment = environment ?? throw new ArgumentNullException(nameof(environment));
             _containerBuilder = containerBuilder ?? throw new ArgumentNullException(nameof(containerBuilder));
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             Services = services ?? throw new ArgumentNullException(nameof(services));
@@ -91,6 +92,7 @@ namespace Rocket.Surgery.Extensions.Autofac
         public IConfiguration Configuration { get; }
 
         public IServiceCollection Services { get; }
+        public IRocketEnvironment Environment { get; }
 
         /// <inheritdoc />
         public IObservable<IServiceProvider> OnBuild => _serviceProviderOnBuild;
