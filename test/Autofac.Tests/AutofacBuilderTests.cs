@@ -80,7 +80,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
 
             servicesBuilder.PrependConvention(convention);
 
-            A.CallTo(() => AutoFake.Resolve<IConventionScanner>().PrependConvention(convention)).MustHaveHappened();
+            A.CallTo(() => AutoFake.Resolve<IConventionScanner>().PrependConvention(A<IEnumerable<IConvention>>._)).MustHaveHappened();
         }
 
         public interface IAbc { }

@@ -12,7 +12,6 @@ namespace Rocket.Surgery.Extensions.Autofac
     public interface IAutofacConventionContext : IConventionContext
     {
         IConfiguration Configuration { get; }
-        IHostEnvironment Environment { get; }
         IAssemblyProvider AssemblyProvider { get; }
         IAssemblyCandidateFinder AssemblyCandidateFinder { get; }
         void ConfigureContainer(ContainerBuilderDelegate builder);
