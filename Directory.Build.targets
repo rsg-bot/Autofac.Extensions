@@ -22,7 +22,7 @@
         <PackageReference Update="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
         <PackageReference Update="Rocket.Surgery.Conventions" Version="5.0.2" />
         <PackageReference Update="Rocket.Surgery.Conventions.Abstractions" Version="5.0.2" />
-        <PackageReference Update="Rocket.Surgery.Extensions.DependencyInjection.Abstractions" Version="5.0.2" />
+        <PackageReference Update="Rocket.Surgery.Extensions.DependencyInjection.Abstractions" Version="5.1.1" />
         <PackageReference Update="Scrutor" Version="3.0.2" />
     </ItemGroup>
     <ItemGroup>
