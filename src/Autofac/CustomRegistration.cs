@@ -7,6 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
+    /// <summary>
+    /// CustomRegistration.
+    /// </summary>
     public static class CustomRegistration
     {
         private static IRegistrationBuilder<object, TActivatorData, TRegistrationStyle> ConfigureLifecycle<TActivatorData, TRegistrationStyle>(this IRegistrationBuilder<object, TActivatorData, TRegistrationStyle> registrationBuilder, ServiceLifetime lifecycleKind, string tag)
@@ -26,6 +29,12 @@ namespace Rocket.Surgery.Extensions.Autofac
             return registrationBuilder;
         }
 
+        /// <summary>
+        /// Registers the specified builder.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="descriptors">The descriptors.</param>
+        /// <param name="tag">The tag.</param>
         public static void Register(ContainerBuilder builder, IEnumerable<ServiceDescriptor> descriptors, string tag)
         {
             foreach (var descriptor1 in descriptors)

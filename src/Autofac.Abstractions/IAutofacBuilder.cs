@@ -8,9 +8,10 @@ using Rocket.Surgery.Extensions.DependencyInjection;
 namespace Rocket.Surgery.Extensions.Autofac
 {
     /// <summary>
-    /// Class IAutofacBuilder.
+    /// IAutofacBuilder.
+    /// Implements the <see cref="Rocket.Surgery.Conventions.IConventionBuilder{Rocket.Surgery.Extensions.Autofac.IAutofacBuilder, Rocket.Surgery.Extensions.Autofac.IAutofacConvention, Rocket.Surgery.Extensions.Autofac.AutofacConventionDelegate}" />
     /// </summary>
-    /// TODO Edit XML Comment Template for IAutofacBuilder
+    /// <seealso cref="Rocket.Surgery.Conventions.IConventionBuilder{Rocket.Surgery.Extensions.Autofac.IAutofacBuilder, Rocket.Surgery.Extensions.Autofac.IAutofacConvention, Rocket.Surgery.Extensions.Autofac.AutofacConventionDelegate}" />
     public interface IAutofacBuilder : IConventionBuilder<IAutofacBuilder, IAutofacConvention, AutofacConventionDelegate>
     {
     }

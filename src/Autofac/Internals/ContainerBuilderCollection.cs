@@ -6,12 +6,18 @@ namespace Rocket.Surgery.Extensions.Autofac.Internals
 {
     /// <summary>
     /// A collection that houses container builder delegates for being applied later
+    /// Implements the <see cref="System.Collections.Generic.IEnumerable{Rocket.Surgery.Extensions.Autofac.ContainerBuilderDelegate}" />
     /// </summary>
+    /// <seealso cref="System.Collections.Generic.IEnumerable{Rocket.Surgery.Extensions.Autofac.ContainerBuilderDelegate}" />
     internal class ContainerBuilderCollection : IEnumerable<ContainerBuilderDelegate>
     {
         private readonly List<ContainerBuilderDelegate> _list = new List<ContainerBuilderDelegate>();
 
-        /// <inheritdoc cref="IEnumerable&lt;ContainerBuilderDelegate&gt;"/>
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>An enumerator that can be used to iterate through the collection.</returns>
+        /// <inheritdoc cref="IEnumerable&lt;ContainerBuilderDelegate&gt;" />
         public IEnumerator<ContainerBuilderDelegate> GetEnumerator()
         {
             return _list.GetEnumerator();
@@ -26,8 +32,8 @@ namespace Rocket.Surgery.Extensions.Autofac.Internals
         /// <summary>
         /// Add a delegate
         /// </summary>
-        /// <param name="delegate"></param>
-        /// <returns></returns>
+        /// <param name="delegate">The delegate.</param>
+        /// <returns>ContainerBuilderCollection.</returns>
         public ContainerBuilderCollection Add(ContainerBuilderDelegate @delegate)
         {
             _list.Add(@delegate);
@@ -37,7 +43,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Internals
         /// <summary>
         /// Apply the delegates to the builder
         /// </summary>
-        /// <param name="builder"></param>
+        /// <param name="builder">The builder.</param>
         public void Apply(ContainerBuilder builder)
         {
             foreach (var item in _list)

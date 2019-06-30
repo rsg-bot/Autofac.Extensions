@@ -15,6 +15,17 @@ using Rocket.Surgery.Extensions.DependencyInjection;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
+    /// <summary>
+    /// AutofacBuilder.
+    /// Implements the <see cref="Rocket.Surgery.Conventions.ConventionBuilder{Rocket.Surgery.Extensions.Autofac.IAutofacBuilder, Rocket.Surgery.Extensions.Autofac.IAutofacConvention, Rocket.Surgery.Extensions.Autofac.AutofacConventionDelegate}" />
+    /// Implements the <see cref="Rocket.Surgery.Extensions.Autofac.IAutofacBuilder" />
+    /// Implements the <see cref="Rocket.Surgery.Extensions.DependencyInjection.IServicesBuilder" />
+    /// Implements the <see cref="Rocket.Surgery.Extensions.Autofac.IAutofacConventionContext" />
+    /// </summary>
+    /// <seealso cref="Rocket.Surgery.Conventions.ConventionBuilder{Rocket.Surgery.Extensions.Autofac.IAutofacBuilder, Rocket.Surgery.Extensions.Autofac.IAutofacConvention, Rocket.Surgery.Extensions.Autofac.AutofacConventionDelegate}" />
+    /// <seealso cref="Rocket.Surgery.Extensions.Autofac.IAutofacBuilder" />
+    /// <seealso cref="Rocket.Surgery.Extensions.DependencyInjection.IServicesBuilder" />
+    /// <seealso cref="Rocket.Surgery.Extensions.Autofac.IAutofacConventionContext" />
     public class AutofacBuilder : ConventionBuilder<IAutofacBuilder, IAutofacConvention, AutofacConventionDelegate>, IAutofacBuilder, IServicesBuilder, IAutofacConventionContext
     {
         private readonly GenericObservableObservable<IContainer> _containerObservable;
@@ -25,15 +36,24 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// <summary>
         /// Initializes a new instance of the <see cref="AutofacBuilder" /> class.
         /// </summary>
-        /// <param name="containerBuilder"></param>
-        /// <param name="scanner"></param>
+        /// <param name="environment">The environment.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="scanner">The scanner.</param>
         /// <param name="assemblyProvider">The assembly provider.</param>
         /// <param name="assemblyCandidateFinder">The assembly candidate finder.</param>
         /// <param name="services">The services.</param>
-        /// <param name="configuration">The configuration.</param>
-        /// <param name="environment"></param>
+        /// <param name="containerBuilder">The container builder.</param>
         /// <param name="diagnosticSource">The diagnostic source</param>
         /// <param name="properties">The properties</param>
+        /// <exception cref="ArgumentNullException">
+        /// environment
+        /// or
+        /// containerBuilder
+        /// or
+        /// configuration
+        /// or
+        /// services
+        /// </exception>
         public AutofacBuilder(
             IRocketEnvironment environment,
             IConfiguration configuration,
@@ -56,6 +76,11 @@ namespace Rocket.Surgery.Extensions.Autofac
             _serviceProviderOnBuild = new GenericObservableObservable<IServiceProvider>(Logger);
         }
 
+        /// <summary>
+        /// Configures the container.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>IAutofacConventionContext.</returns>
         public IAutofacConventionContext ConfigureContainer(ContainerBuilderDelegate builder)
         {
             _collection.Add(builder);
@@ -67,6 +92,10 @@ namespace Rocket.Surgery.Extensions.Autofac
             _collection.Add(builder);
         }
 
+        /// <summary>
+        /// Builds this instance.
+        /// </summary>
+        /// <returns>IContainer.</returns>
         public IContainer Build()
         {
             new ConventionComposer(Scanner)
@@ -89,17 +118,42 @@ namespace Rocket.Surgery.Extensions.Autofac
             return result;
         }
 
+        /// <summary>
+        /// Gets the configuration.
+        /// </summary>
+        /// <value>The configuration.</value>
         public IConfiguration Configuration { get; }
 
+        /// <summary>
+        /// Gets the services.
+        /// </summary>
+        /// <value>The services.</value>
         public IServiceCollection Services { get; }
+        /// <summary>
+        /// The environment that this convention is running
+        /// Based on IHostEnvironment / IHostingEnvironment
+        /// </summary>
+        /// <value>The environment.</value>
         public IRocketEnvironment Environment { get; }
 
+        /// <summary>
+        /// Gets the on build.
+        /// </summary>
+        /// <value>The on build.</value>
         /// <inheritdoc />
         public IObservable<IServiceProvider> OnBuild => _serviceProviderOnBuild;
 
+        /// <summary>
+        /// Gets the on container build.
+        /// </summary>
+        /// <value>The on container build.</value>
         /// <inheritdoc />
         public IObservable<IContainer> OnContainerBuild => _containerObservable;
 
+        /// <summary>
+        /// A logger that is configured to work with each convention item
+        /// </summary>
+        /// <value>The logger.</value>
         /// <inheritdoc />
         public ILogger Logger { get; }
 
