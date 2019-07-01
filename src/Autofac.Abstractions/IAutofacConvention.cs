@@ -3,7 +3,7 @@
 namespace Rocket.Surgery.Extensions.Autofac
 {
     /// <summary>
-    /// Interface IAutofacConvention
+    ///  IAutofacConvention
     /// Implements the <see cref="Rocket.Surgery.Conventions.IConvention{Rocket.Surgery.Extensions.Autofac.IAutofacConventionContext}" />
     /// </summary>
     /// <seealso cref="Rocket.Surgery.Conventions.IConvention{Rocket.Surgery.Extensions.Autofac.IAutofacConventionContext}" />
