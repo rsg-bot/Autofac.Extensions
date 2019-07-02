@@ -12,7 +12,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Internals
         private readonly Action _action;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Disposable"/> class.
+        /// Initializes a new instance of the <see cref="Disposable" /> class.
         /// </summary>
         /// <param name="action">The action.</param>
         public Disposable(Action action)

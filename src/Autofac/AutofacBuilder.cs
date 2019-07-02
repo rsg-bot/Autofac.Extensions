@@ -45,15 +45,13 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// <param name="containerBuilder">The container builder.</param>
         /// <param name="diagnosticSource">The diagnostic source</param>
         /// <param name="properties">The properties</param>
-        /// <exception cref="ArgumentNullException">
-        /// environment
+        /// <exception cref="ArgumentNullException">environment
         /// or
         /// containerBuilder
         /// or
         /// configuration
         /// or
-        /// services
-        /// </exception>
+        /// services</exception>
         public AutofacBuilder(
             IRocketEnvironment environment,
             IConfiguration configuration,
@@ -169,6 +167,12 @@ namespace Rocket.Surgery.Extensions.Autofac
             return this;
         }
 
+        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.AppendConvention<T>()
+        {
+            Scanner.AppendConvention<T>();
+            return this;
+        }
+
         IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.PrependConvention(params IServiceConvention[] conventions)
         {
             Scanner.PrependConvention(conventions);
@@ -178,6 +182,12 @@ namespace Rocket.Surgery.Extensions.Autofac
         IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.PrependConvention(IEnumerable<IServiceConvention> conventions)
         {
             Scanner.PrependConvention(conventions);
+            return this;
+        }
+
+        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.PrependConvention<T>()
+        {
+            Scanner.PrependConvention<T>();
             return this;
         }
 

@@ -16,7 +16,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Internals
         private readonly List<IObserver<T>> _observers = new List<IObserver<T>>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericObservableObservable{T}"/> class.
+        /// Initializes a new instance of the <see cref="GenericObservableObservable{T}" /> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         public GenericObservableObservable(ILogger logger)

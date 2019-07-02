@@ -10,7 +10,7 @@ using Rocket.Surgery.Extensions.DependencyInjection;
 namespace Rocket.Surgery.Extensions.Autofac
 {
     /// <summary>
-    /// Interface IAutofacConventionContext
+    /// IAutofacConventionContext
     /// Implements the <see cref="Rocket.Surgery.Conventions.IConventionContext" />
     /// </summary>
     /// <seealso cref="Rocket.Surgery.Conventions.IConventionContext" />
