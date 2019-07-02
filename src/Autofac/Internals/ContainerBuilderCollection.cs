@@ -6,9 +6,9 @@ namespace Rocket.Surgery.Extensions.Autofac.Internals
 {
     /// <summary>
     /// A collection that houses container builder delegates for being applied later
-    /// Implements the <see cref="System.Collections.Generic.IEnumerable{Rocket.Surgery.Extensions.Autofac.ContainerBuilderDelegate}" />
+    /// Implements the <see cref="IEnumerable{ContainerBuilderDelegate}" />
     /// </summary>
-    /// <seealso cref="System.Collections.Generic.IEnumerable{Rocket.Surgery.Extensions.Autofac.ContainerBuilderDelegate}" />
+    /// <seealso cref="IEnumerable{ContainerBuilderDelegate}" />
     internal class ContainerBuilderCollection : IEnumerable<ContainerBuilderDelegate>
     {
         private readonly List<ContainerBuilderDelegate> _list = new List<ContainerBuilderDelegate>();
@@ -17,7 +17,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Internals
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
-        /// <inheritdoc cref="IEnumerable&lt;ContainerBuilderDelegate&gt;" />
+        /// <inheritdoc cref="IEnumerable{ContainerBuilderDelegate}" />
         public IEnumerator<ContainerBuilderDelegate> GetEnumerator()
         {
             return _list.GetEnumerator();

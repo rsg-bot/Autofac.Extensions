@@ -4,9 +4,9 @@ namespace Rocket.Surgery.Extensions.Autofac
 {
     /// <summary>
     /// IAutofacConvention
-    /// Implements the <see cref="Rocket.Surgery.Conventions.IConvention{Rocket.Surgery.Extensions.Autofac.IAutofacConventionContext}" />
+    /// Implements the <see cref="IConvention{IAutofacConventionContext}" />
     /// </summary>
-    /// <seealso cref="Rocket.Surgery.Conventions.IConvention{Rocket.Surgery.Extensions.Autofac.IAutofacConventionContext}" />
+    /// <seealso cref="IConvention{IAutofacConventionContext}" />
     public interface IAutofacConvention : IConvention<IAutofacConventionContext>
     {
     }

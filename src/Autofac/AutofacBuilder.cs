@@ -17,15 +17,15 @@ namespace Rocket.Surgery.Extensions.Autofac
 {
     /// <summary>
     /// AutofacBuilder.
-    /// Implements the <see cref="Rocket.Surgery.Conventions.ConventionBuilder{Rocket.Surgery.Extensions.Autofac.IAutofacBuilder, Rocket.Surgery.Extensions.Autofac.IAutofacConvention, Rocket.Surgery.Extensions.Autofac.AutofacConventionDelegate}" />
-    /// Implements the <see cref="Rocket.Surgery.Extensions.Autofac.IAutofacBuilder" />
-    /// Implements the <see cref="Rocket.Surgery.Extensions.DependencyInjection.IServicesBuilder" />
-    /// Implements the <see cref="Rocket.Surgery.Extensions.Autofac.IAutofacConventionContext" />
+    /// Implements the <see cref="ConventionBuilder{IAutofacBuilder, IAutofacConvention, AutofacConventionDelegate}" />
+    /// Implements the <see cref="IAutofacBuilder" />
+    /// Implements the <see cref="IServicesBuilder" />
+    /// Implements the <see cref="IAutofacConventionContext" />
     /// </summary>
-    /// <seealso cref="Rocket.Surgery.Conventions.ConventionBuilder{Rocket.Surgery.Extensions.Autofac.IAutofacBuilder, Rocket.Surgery.Extensions.Autofac.IAutofacConvention, Rocket.Surgery.Extensions.Autofac.AutofacConventionDelegate}" />
-    /// <seealso cref="Rocket.Surgery.Extensions.Autofac.IAutofacBuilder" />
-    /// <seealso cref="Rocket.Surgery.Extensions.DependencyInjection.IServicesBuilder" />
-    /// <seealso cref="Rocket.Surgery.Extensions.Autofac.IAutofacConventionContext" />
+    /// <seealso cref="ConventionBuilder{IAutofacBuilder, IAutofacConvention, AutofacConventionDelegate}" />
+    /// <seealso cref="IAutofacBuilder" />
+    /// <seealso cref="IServicesBuilder" />
+    /// <seealso cref="IAutofacConventionContext" />
     public class AutofacBuilder : ConventionBuilder<IAutofacBuilder, IAutofacConvention, AutofacConventionDelegate>, IAutofacBuilder, IServicesBuilder, IAutofacConventionContext
     {
         private readonly GenericObservableObservable<IContainer> _containerObservable;

@@ -11,9 +11,9 @@ namespace Rocket.Surgery.Extensions.Autofac
 {
     /// <summary>
     /// IAutofacConventionContext
-    /// Implements the <see cref="Rocket.Surgery.Conventions.IConventionContext" />
+    /// Implements the <see cref="IConventionContext" />
     /// </summary>
-    /// <seealso cref="Rocket.Surgery.Conventions.IConventionContext" />
+    /// <seealso cref="IConventionContext" />
     public interface IAutofacConventionContext : IConventionContext
     {
         /// <summary>

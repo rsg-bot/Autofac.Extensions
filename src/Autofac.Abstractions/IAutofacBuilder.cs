@@ -9,9 +9,9 @@ namespace Rocket.Surgery.Extensions.Autofac
 {
     /// <summary>
     /// IAutofacBuilder.
-    /// Implements the <see cref="Rocket.Surgery.Conventions.IConventionBuilder{Rocket.Surgery.Extensions.Autofac.IAutofacBuilder, Rocket.Surgery.Extensions.Autofac.IAutofacConvention, Rocket.Surgery.Extensions.Autofac.AutofacConventionDelegate}" />
+    /// Implements the <see cref="IConventionBuilder{IAutofacBuilder, IAutofacConvention, AutofacConventionDelegate}" />
     /// </summary>
-    /// <seealso cref="Rocket.Surgery.Conventions.IConventionBuilder{Rocket.Surgery.Extensions.Autofac.IAutofacBuilder, Rocket.Surgery.Extensions.Autofac.IAutofacConvention, Rocket.Surgery.Extensions.Autofac.AutofacConventionDelegate}" />
+    /// <seealso cref="IConventionBuilder{IAutofacBuilder, IAutofacConvention, AutofacConventionDelegate}" />
     public interface IAutofacBuilder : IConventionBuilder<IAutofacBuilder, IAutofacConvention, AutofacConventionDelegate>
     {
     }
