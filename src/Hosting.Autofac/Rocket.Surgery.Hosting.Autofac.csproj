@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Autofac\Rocket.Surgery.Extensions.Autofac.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Rocket.Surgery.Hosting" />
+    </ItemGroup>
+</Project>

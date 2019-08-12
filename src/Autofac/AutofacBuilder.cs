@@ -60,7 +60,7 @@ namespace Rocket.Surgery.Extensions.Autofac
             IAssemblyCandidateFinder assemblyCandidateFinder,
             IServiceCollection services,
             ContainerBuilder containerBuilder,
-            DiagnosticSource diagnosticSource,
+            ILogger diagnosticSource,
             IDictionary<object, object> properties)
             : base(scanner, assemblyProvider, assemblyCandidateFinder, properties)
         {
@@ -68,7 +68,7 @@ namespace Rocket.Surgery.Extensions.Autofac
             _containerBuilder = containerBuilder ?? throw new ArgumentNullException(nameof(containerBuilder));
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             Services = services ?? throw new ArgumentNullException(nameof(services));
-            Logger = new DiagnosticLogger(diagnosticSource);
+            Logger = diagnosticSource ?? throw new ArgumentNullException(nameof(diagnosticSource));
 
             _containerObservable = new GenericObservableObservable<IContainer>(Logger);
             _serviceProviderOnBuild = new GenericObservableObservable<IServiceProvider>(Logger);
@@ -127,6 +127,7 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// </summary>
         /// <value>The services.</value>
         public IServiceCollection Services { get; }
+
         /// <summary>
         /// The environment that this convention is running
         /// Based on IHostEnvironment / IHostingEnvironment

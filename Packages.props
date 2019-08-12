@@ -33,9 +33,10 @@
   <ItemGroup>
     <PackageReference Update="Autofac" Version="4.9.3" />
     <PackageReference Update="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
-    <PackageReference Update="Rocket.Surgery.Conventions" Version="6.3.1" />
-    <PackageReference Update="Rocket.Surgery.Conventions.Abstractions" Version="6.3.1" />
-    <PackageReference Update="Rocket.Surgery.Extensions.DependencyInjection.Abstractions" Version="6.0.5" />
+    <PackageReference Update="Rocket.Surgery.Conventions" Version="7.0.0-beta.34" />
+    <PackageReference Update="Rocket.Surgery.Conventions.Abstractions" Version="7.0.0-beta.34" />
+    <PackageReference Update="Rocket.Surgery.Hosting" Version="7.0.0-beta.34" />
+    <PackageReference Update="Rocket.Surgery.Extensions.DependencyInjection.Abstractions" Version="7.0.0-beta.34" />
     <PackageReference Update="Scrutor" Version="3.1.0" />
   </ItemGroup>
   <ItemGroup>
