@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Autofac;
 using FakeItEasy;
 using FluentAssertions;
@@ -12,8 +13,10 @@ using Rocket.Surgery.Conventions;
 using Rocket.Surgery.Conventions.Reflection;
 using Rocket.Surgery.Conventions.Scanners;
 using Rocket.Surgery.Extensions.Autofac.Tests;
+using Rocket.Surgery.Extensions.CommandLine;
 using Rocket.Surgery.Extensions.DependencyInjection;
 using Rocket.Surgery.Extensions.Testing;
+using Rocket.Surgery.Hosting;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -302,6 +305,26 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
 
             A.CallTo(() => observer.OnNext(A<IServiceProvider>._)).MustHaveHappenedOnceExactly();
             A.CallTo(() => observerContainer.OnNext(container)).MustHaveHappenedOnceExactly();
+        }
+
+        [Fact]
+        public async Task Should_Integrate_With_Autofac()
+        {
+            var builder = Host.CreateDefaultBuilder(Array.Empty<string>())
+                .ConfigureRocketSurgery(rb => rb
+                .UseAutofac()
+                .UseScanner(new BasicConventionScanner(A.Fake<IServiceProviderDictionary>()))
+                .UseAssemblyCandidateFinder(new DefaultAssemblyCandidateFinder(new[] { typeof(AutofacBuilderTests).Assembly }))
+                .UseAssemblyProvider(new DefaultAssemblyProvider(new[] { typeof(AutofacBuilderTests).Assembly }))
+                .AppendDelegate(new CommandLineConventionDelegate(c => c.OnRun(state => 1337)), new CommandLineConventionDelegate(c => c.OnRun(state => 1337))));
+
+            using (var host = builder.Build())
+            {
+                await host.StartAsync();
+                var container = host.Services.GetRequiredService<ILifetimeScope>();
+                container.Should().NotBeNull();
+                await host.StopAsync();
+            }
         }
     }
 }
