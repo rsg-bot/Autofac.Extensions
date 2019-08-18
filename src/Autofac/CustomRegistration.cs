@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Autofac;
@@ -40,7 +40,7 @@ namespace Rocket.Surgery.Extensions.Autofac
             foreach (var descriptor1 in descriptors)
             {
                 var descriptor = descriptor1;
-                if ((object)descriptor.ImplementationType != null)
+                if (descriptor.ImplementationType != null)
                 {
                     if (descriptor.ServiceType.GetTypeInfo().IsGenericTypeDefinition)
                         builder.RegisterGeneric(descriptor.ImplementationType).As(descriptor.ServiceType).ConfigureLifecycle(descriptor.Lifetime, tag);

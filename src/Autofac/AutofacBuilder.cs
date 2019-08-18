@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Autofac;
@@ -61,7 +61,7 @@ namespace Rocket.Surgery.Extensions.Autofac
             IServiceCollection services,
             ContainerBuilder containerBuilder,
             ILogger diagnosticSource,
-            IDictionary<object, object> properties)
+            IDictionary<object, object?> properties)
             : base(scanner, assemblyProvider, assemblyCandidateFinder, properties)
         {
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
@@ -96,8 +96,8 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// <returns>IContainer.</returns>
         public IContainer Build()
         {
-            new ConventionComposer(Scanner)
-                .Register(
+            Composer.Register(
+                Scanner,
                 this,
                 typeof(IServiceConvention),
                 typeof(IAutofacConvention),

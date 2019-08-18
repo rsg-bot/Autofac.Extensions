@@ -1,4 +1,4 @@
-﻿using Autofac;
+using Autofac;
 using Microsoft.Extensions.Hosting;
 using Rocket.Surgery.Extensions.Autofac;
 using System;
@@ -24,7 +24,7 @@ namespace Microsoft.Extensions.Hosting
         /// <param name="builder">The builder.</param>
         /// <param name="containerBuilder">The container builder.</param>
         /// <returns>IRocketHostBuilder.</returns>
-        public static IRocketHostBuilder UseAutofac(this IRocketHostBuilder builder, ContainerBuilder containerBuilder = null)
+        public static IRocketHostBuilder UseAutofac(this IRocketHostBuilder builder, ContainerBuilder? containerBuilder = null)
         {
             builder.Builder.ConfigureServices((context, services) =>
             {
