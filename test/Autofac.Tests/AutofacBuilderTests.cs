@@ -25,7 +25,7 @@ using Xunit.Abstractions;
 
 namespace Rocket.Surgery.Extensions.Autofac.Tests
 {
-    public class AutofacBuilderTests : AutoTestBase
+    public class AutofacBuilderTests : AutoFakeTest
     {
         public AutofacBuilderTests(ITestOutputHelper outputHelper) : base(outputHelper)
         {
