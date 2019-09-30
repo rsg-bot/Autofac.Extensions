@@ -7,12 +7,8 @@
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <PackageIcon>images/packageicon.png</PackageIcon>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
-        <!--
-            in package
-            Title
-            Description
-            Tags
-        -->
+        <PackageTags>autofac;rocket surgery;rocket surgeons;rsg;rocket surgeons guild</PackageTags>
+        <PackageTags Condition="$(MSBuildProjectName.Contains('Abstractions'))">$(PackageTags);abstractions</PackageTags>
         <LangVersion>8.0</LangVersion>
         <Nullable>enable</Nullable>
     </PropertyGroup>
