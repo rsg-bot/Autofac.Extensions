@@ -30,7 +30,7 @@
     <PackageReference Update="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Update="Rocket.Surgery.Conventions" Version="9.0.5" />
     <PackageReference Update="Rocket.Surgery.Conventions.Abstractions" Version="9.0.6" />
-    <PackageReference Update="Rocket.Surgery.Hosting" Version="9.0.5" />
+    <PackageReference Update="Rocket.Surgery.Hosting" Version="9.0.6" />
     <PackageReference Update="Rocket.Surgery.Extensions.DependencyInjection.Abstractions" Version="9.0.5" />
   </ItemGroup>
   <ItemGroup>
