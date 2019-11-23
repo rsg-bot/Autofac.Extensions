@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Rocket.Surgery.Conventions;
 using Rocket.Surgery.Conventions.Reflection;
@@ -17,7 +15,7 @@ namespace Rocket.Surgery.Extensions.Autofac
 {
     /// <summary>
     /// AutofacBuilder.
-    /// Implements the <see cref="ConventionBuilder{IAutofacBuilder, IAutofacConvention, AutofacConventionDelegate}" />
+    /// Implements the <see cref="ConventionBuilder{TBuilder,TConvention,TDelegate}" />
     /// Implements the <see cref="IAutofacBuilder" />
     /// Implements the <see cref="IServicesBuilder" />
     /// Implements the <see cref="IAutofacConventionContext" />
@@ -26,7 +24,10 @@ namespace Rocket.Surgery.Extensions.Autofac
     /// <seealso cref="IAutofacBuilder" />
     /// <seealso cref="IServicesBuilder" />
     /// <seealso cref="IAutofacConventionContext" />
-    public class AutofacBuilder : ConventionBuilder<IAutofacBuilder, IAutofacConvention, AutofacConventionDelegate>, IAutofacBuilder, IServicesBuilder, IAutofacConventionContext
+    public class AutofacBuilder : ConventionBuilder<IAutofacBuilder, IAutofacConvention, AutofacConventionDelegate>,
+                                  IAutofacBuilder,
+                                  IServicesBuilder,
+                                  IAutofacConventionContext
     {
         private readonly GenericObservableObservable<IContainer> _containerObservable;
         private readonly GenericObservableObservable<IServiceProvider> _serviceProviderOnBuild;
@@ -45,13 +46,15 @@ namespace Rocket.Surgery.Extensions.Autofac
         /// <param name="containerBuilder">The container builder.</param>
         /// <param name="diagnosticSource">The diagnostic source</param>
         /// <param name="properties">The properties</param>
-        /// <exception cref="ArgumentNullException">environment
+        /// <exception cref="ArgumentNullException">
+        /// environment
         /// or
         /// containerBuilder
         /// or
         /// configuration
         /// or
-        /// services</exception>
+        /// services
+        /// </exception>
         public AutofacBuilder(
             IRocketEnvironment environment,
             IConfiguration configuration,
@@ -61,7 +64,8 @@ namespace Rocket.Surgery.Extensions.Autofac
             IServiceCollection services,
             ContainerBuilder containerBuilder,
             ILogger diagnosticSource,
-            IDictionary<object, object?> properties)
+            IDictionary<object, object?> properties
+        )
             : base(scanner, assemblyProvider, assemblyCandidateFinder, properties)
         {
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
@@ -85,11 +89,6 @@ namespace Rocket.Surgery.Extensions.Autofac
             return this;
         }
 
-        void IAutofacConventionContext.ConfigureContainer(ContainerBuilderDelegate builder)
-        {
-            _collection.Add(builder);
-        }
-
         /// <summary>
         /// Builds this instance.
         /// </summary>
@@ -102,7 +101,8 @@ namespace Rocket.Surgery.Extensions.Autofac
                 typeof(IServiceConvention),
                 typeof(IAutofacConvention),
                 typeof(ServiceConventionDelegate),
-                typeof(AutofacConventionDelegate));
+                typeof(AutofacConventionDelegate)
+            );
 
             _collection.Apply(_containerBuilder);
             _containerBuilder.Populate(Services);
@@ -115,6 +115,15 @@ namespace Rocket.Surgery.Extensions.Autofac
 
             return result;
         }
+
+        void IAutofacConventionContext.ConfigureContainer(ContainerBuilderDelegate builder) => _collection.Add(builder);
+
+        /// <summary>
+        /// Gets the on container build.
+        /// </summary>
+        /// <value>The on container build.</value>
+        /// <inheritdoc />
+        public IObservable<IContainer> OnContainerBuild => _containerObservable;
 
         /// <summary>
         /// Gets the configuration.
@@ -143,82 +152,82 @@ namespace Rocket.Surgery.Extensions.Autofac
         public IObservable<IServiceProvider> OnBuild => _serviceProviderOnBuild;
 
         /// <summary>
-        /// Gets the on container build.
-        /// </summary>
-        /// <value>The on container build.</value>
-        /// <inheritdoc />
-        public IObservable<IContainer> OnContainerBuild => _containerObservable;
-
-        /// <summary>
         /// A logger that is configured to work with each convention item
         /// </summary>
         /// <value>The logger.</value>
         /// <inheritdoc />
         public ILogger Logger { get; }
 
-        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.AppendConvention(params IServiceConvention[] conventions)
+        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.
+            AppendConvention(params IServiceConvention[] conventions)
         {
             Scanner.AppendConvention(conventions);
             return this;
         }
 
-        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.AppendConvention(IEnumerable<IServiceConvention> conventions)
+        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.
+            AppendConvention(IEnumerable<IServiceConvention> conventions)
         {
             Scanner.AppendConvention(conventions);
             return this;
         }
 
-        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.AppendConvention<T>()
+        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.
+            AppendConvention<T>()
         {
             Scanner.AppendConvention<T>();
             return this;
         }
 
-        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.PrependConvention(params IServiceConvention[] conventions)
+        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.
+            PrependConvention(params IServiceConvention[] conventions)
         {
             Scanner.PrependConvention(conventions);
             return this;
         }
 
-        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.PrependConvention(IEnumerable<IServiceConvention> conventions)
+        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.
+            PrependConvention(IEnumerable<IServiceConvention> conventions)
         {
             Scanner.PrependConvention(conventions);
             return this;
         }
 
-        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.PrependConvention<T>()
+        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.
+            PrependConvention<T>()
         {
             Scanner.PrependConvention<T>();
             return this;
         }
 
-        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.PrependDelegate(params ServiceConventionDelegate[] delegates)
+        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.
+            PrependDelegate(params ServiceConventionDelegate[] delegates)
         {
             Scanner.PrependDelegate(delegates);
             return this;
         }
 
-        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.PrependDelegate(IEnumerable<ServiceConventionDelegate> delegates)
+        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.
+            PrependDelegate(IEnumerable<ServiceConventionDelegate> delegates)
         {
             Scanner.PrependDelegate(delegates);
             return this;
         }
 
-        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.AppendDelegate(params ServiceConventionDelegate[] delegates)
+        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.
+            AppendDelegate(params ServiceConventionDelegate[] delegates)
         {
             Scanner.AppendDelegate(delegates);
             return this;
         }
 
-        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.AppendDelegate(IEnumerable<ServiceConventionDelegate> delegates)
+        IServicesBuilder IConventionContainer<IServicesBuilder, IServiceConvention, ServiceConventionDelegate>.
+            AppendDelegate(IEnumerable<ServiceConventionDelegate> delegates)
         {
             Scanner.AppendDelegate(delegates);
             return this;
         }
 
-        IServiceProvider IServicesBuilder.Build()
-        {
-            return new AutofacServiceProvider(Build());
-        }
+        IServiceProvider IServicesBuilder.Build() => new AutofacServiceProvider(Build());
     }
 }

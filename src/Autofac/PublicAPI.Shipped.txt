@@ -1,0 +1,12 @@
+Rocket.Surgery.Extensions.Autofac.AutofacBuilder
+Rocket.Surgery.Extensions.Autofac.AutofacBuilder.AutofacBuilder(Rocket.Surgery.Conventions.IRocketEnvironment environment, Microsoft.Extensions.Configuration.IConfiguration configuration, Rocket.Surgery.Conventions.Scanners.IConventionScanner scanner, Rocket.Surgery.Conventions.Reflection.IAssemblyProvider assemblyProvider, Rocket.Surgery.Conventions.Reflection.IAssemblyCandidateFinder assemblyCandidateFinder, Microsoft.Extensions.DependencyInjection.IServiceCollection services, Autofac.ContainerBuilder containerBuilder, Microsoft.Extensions.Logging.ILogger diagnosticSource, System.Collections.Generic.IDictionary<object, object> properties) -> void
+Rocket.Surgery.Extensions.Autofac.AutofacBuilder.Build() -> Autofac.IContainer
+Rocket.Surgery.Extensions.Autofac.AutofacBuilder.Configuration.get -> Microsoft.Extensions.Configuration.IConfiguration
+Rocket.Surgery.Extensions.Autofac.AutofacBuilder.ConfigureContainer(Rocket.Surgery.Extensions.Autofac.ContainerBuilderDelegate builder) -> Rocket.Surgery.Extensions.Autofac.IAutofacConventionContext
+Rocket.Surgery.Extensions.Autofac.AutofacBuilder.Environment.get -> Rocket.Surgery.Conventions.IRocketEnvironment
+Rocket.Surgery.Extensions.Autofac.AutofacBuilder.Logger.get -> Microsoft.Extensions.Logging.ILogger
+Rocket.Surgery.Extensions.Autofac.AutofacBuilder.OnBuild.get -> System.IObservable<System.IServiceProvider>
+Rocket.Surgery.Extensions.Autofac.AutofacBuilder.OnContainerBuild.get -> System.IObservable<Autofac.IContainer>
+Rocket.Surgery.Extensions.Autofac.AutofacBuilder.Services.get -> Microsoft.Extensions.DependencyInjection.IServiceCollection
+Rocket.Surgery.Extensions.Autofac.CustomRegistration
+static Rocket.Surgery.Extensions.Autofac.CustomRegistration.Register(Autofac.ContainerBuilder builder, System.Collections.Generic.IEnumerable<Microsoft.Extensions.DependencyInjection.ServiceDescriptor> descriptors, string tag) -> void

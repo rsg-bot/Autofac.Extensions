@@ -7,7 +7,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Internals
     /// Implements the <see cref="System.IDisposable" />
     /// </summary>
     /// <seealso cref="System.IDisposable" />
-    class Disposable : IDisposable
+    internal class Disposable : IDisposable
     {
         private readonly Action _action;
 
@@ -15,16 +15,11 @@ namespace Rocket.Surgery.Extensions.Autofac.Internals
         /// Initializes a new instance of the <see cref="Disposable" /> class.
         /// </summary>
         /// <param name="action">The action.</param>
-        public Disposable(Action action)
-        {
-            _action = action;
-        }
+        public Disposable(Action action) => _action = action;
+
         /// <summary>
         /// Disposes this instance.
         /// </summary>
-        public void Dispose()
-        {
-            _action();
-        }
+        public void Dispose() => _action();
     }
 }

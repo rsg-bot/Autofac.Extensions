@@ -10,7 +10,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Internals
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="System.IObservable{T}" />
-    class GenericObservableObservable<T> : IObservable<T>
+    internal class GenericObservableObservable<T> : IObservable<T>
     {
         private readonly ILogger _logger;
         private readonly List<IObserver<T>> _observers = new List<IObserver<T>>();
@@ -19,24 +19,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Internals
         /// Initializes a new instance of the <see cref="GenericObservableObservable{T}" /> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        public GenericObservableObservable(ILogger logger)
-        {
-            _logger = logger;
-        }
-
-        /// <summary>
-        /// Notifies the provider that an observer is to receive notifications.
-        /// </summary>
-        /// <param name="observer">The object that is to receive notifications.</param>
-        /// <returns>A reference to an interface that allows observers to stop receiving notifications before the provider has finished sending them.</returns>
-        public IDisposable Subscribe(IObserver<T> observer)
-        {
-            _observers.Add(observer);
-            return new Disposable(() =>
-            {
-                _observers.RemoveAll(x => x == observer);
-            });
-        }
+        public GenericObservableObservable(ILogger logger) => _logger = logger;
 
         /// <summary>
         /// Sends the specified value.
@@ -56,6 +39,20 @@ namespace Rocket.Surgery.Extensions.Autofac.Internals
                     _logger.LogError(0, e, "Failed to execute observer");
                 }
             }
+        }
+
+        /// <summary>
+        /// Notifies the provider that an observer is to receive notifications.
+        /// </summary>
+        /// <param name="observer">The object that is to receive notifications.</param>
+        /// <returns>
+        /// A reference to an interface that allows observers to stop receiving notifications before the provider has
+        /// finished sending them.
+        /// </returns>
+        public IDisposable Subscribe(IObserver<T> observer)
+        {
+            _observers.Add(observer);
+            return new Disposable(() => { _observers.RemoveAll(x => x == observer); });
         }
     }
 }

@@ -1,14 +1,12 @@
-using Autofac;
-using Microsoft.Extensions.Hosting;
-using Rocket.Surgery.Extensions.Autofac;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Rocket.Surgery.Conventions;
-using Rocket.Surgery.Hosting;
-using Rocket.Surgery.Conventions.Scanners;
-using Rocket.Surgery.Conventions.Reflection;
+using Autofac;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
+using Rocket.Surgery.Conventions;
+using Rocket.Surgery.Conventions.Reflection;
+using Rocket.Surgery.Conventions.Scanners;
+using Rocket.Surgery.Extensions.Autofac;
+using Rocket.Surgery.Hosting;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.Hosting
@@ -16,6 +14,7 @@ namespace Microsoft.Extensions.Hosting
     /// <summary>
     /// Class AutofacRocketHostExtensions.
     /// </summary>
+    [PublicAPI]
     public static class AutofacRocketHostExtensions
     {
         /// <summary>
@@ -24,26 +23,37 @@ namespace Microsoft.Extensions.Hosting
         /// <param name="builder">The builder.</param>
         /// <param name="containerBuilder">The container builder.</param>
         /// <returns>IRocketHostBuilder.</returns>
-        public static IRocketHostBuilder UseAutofac(this IRocketHostBuilder builder, ContainerBuilder? containerBuilder = null)
+        public static IRocketHostBuilder UseAutofac(
+            [NotNull] this IRocketHostBuilder builder,
+            ContainerBuilder? containerBuilder = null
+        )
         {
-            builder.Builder.ConfigureServices((context, services) =>
+            if (builder == null)
             {
-                builder.Builder.UseServiceProviderFactory(
-                    new ServicesBuilderServiceProviderFactory(collection =>
-                        new AutofacBuilder(
-                            context.HostingEnvironment.Convert(),
-                            context.Configuration,
-                            builder.Get<IConventionScanner>(),
-                            builder.Get<IAssemblyProvider>(),
-                            builder.Get<IAssemblyCandidateFinder>(),
-                            collection,
-                            containerBuilder ?? new ContainerBuilder(),
-                            builder.Get<ILogger>(),
-                            builder.ServiceProperties
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            builder.Builder.ConfigureServices(
+                (context, services) =>
+                {
+                    builder.Builder.UseServiceProviderFactory(
+                        new ServicesBuilderServiceProviderFactory(
+                            collection =>
+                                new AutofacBuilder(
+                                    context.HostingEnvironment.Convert(),
+                                    context.Configuration,
+                                    builder.Get<IConventionScanner>(),
+                                    builder.Get<IAssemblyProvider>(),
+                                    builder.Get<IAssemblyCandidateFinder>(),
+                                    collection,
+                                    containerBuilder ?? new ContainerBuilder(),
+                                    builder.Get<ILogger>(),
+                                    builder.ServiceProperties
+                                )
                         )
-                    )
-                );
-            });
+                    );
+                }
+            );
             return builder;
         }
     }

@@ -1,13 +1,13 @@
-﻿using Rocket.Surgery.Conventions;
+using JetBrains.Annotations;
+using Rocket.Surgery.Conventions;
 
 namespace Rocket.Surgery.Extensions.Autofac
 {
     /// <summary>
     /// IAutofacConvention
-    /// Implements the <see cref="IConvention{IAutofacConventionContext}" />
+    /// Implements the <see cref="IConvention{TContext}" />
     /// </summary>
     /// <seealso cref="IConvention{IAutofacConventionContext}" />
-    public interface IAutofacConvention : IConvention<IAutofacConventionContext>
-    {
-    }
+    [PublicAPI]
+    public interface IAutofacConvention : IConvention<IAutofacConventionContext> { }
 }
