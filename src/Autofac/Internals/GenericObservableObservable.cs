@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 
@@ -34,10 +34,12 @@ namespace Rocket.Surgery.Extensions.Autofac.Internals
                     observer.OnNext(value);
                     observer.OnCompleted();
                 }
+#pragma warning disable CA1031 // Do not catch general exception types
                 catch (Exception e)
                 {
                     _logger.LogError(0, e, "Failed to execute observer");
                 }
+#pragma warning restore CA1031 // Do not catch general exception types
             }
         }
 

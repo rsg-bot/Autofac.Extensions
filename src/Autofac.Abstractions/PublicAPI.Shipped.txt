@@ -1,0 +1,12 @@
+Rocket.Surgery.Extensions.Autofac.AutofacConventionDelegate
+Rocket.Surgery.Extensions.Autofac.ContainerBuilderDelegate
+Rocket.Surgery.Extensions.Autofac.IAutofacBuilder
+Rocket.Surgery.Extensions.Autofac.IAutofacConvention
+Rocket.Surgery.Extensions.Autofac.IAutofacConventionContext
+Rocket.Surgery.Extensions.Autofac.IAutofacConventionContext.AssemblyCandidateFinder.get -> Rocket.Surgery.Conventions.Reflection.IAssemblyCandidateFinder
+Rocket.Surgery.Extensions.Autofac.IAutofacConventionContext.AssemblyProvider.get -> Rocket.Surgery.Conventions.Reflection.IAssemblyProvider
+Rocket.Surgery.Extensions.Autofac.IAutofacConventionContext.Configuration.get -> Microsoft.Extensions.Configuration.IConfiguration
+Rocket.Surgery.Extensions.Autofac.IAutofacConventionContext.ConfigureContainer(Rocket.Surgery.Extensions.Autofac.ContainerBuilderDelegate builder) -> void
+Rocket.Surgery.Extensions.Autofac.IAutofacConventionContext.Environment.get -> Rocket.Surgery.Conventions.IRocketEnvironment
+Rocket.Surgery.Extensions.Autofac.IAutofacConventionContext.OnContainerBuild.get -> System.IObservable<Autofac.IContainer>
+Rocket.Surgery.Extensions.Autofac.IAutofacConventionContext.Services.get -> Microsoft.Extensions.DependencyInjection.IServiceCollection

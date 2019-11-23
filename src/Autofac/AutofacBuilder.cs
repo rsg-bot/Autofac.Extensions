@@ -108,7 +108,9 @@ namespace Rocket.Surgery.Extensions.Autofac
             _containerBuilder.Populate(Services);
 
             var result = _containerBuilder.Build();
+#pragma warning disable CA2000 // Dispose objects before losing scope
             var sp = new AutofacServiceProvider(result);
+#pragma warning restore CA2000 // Dispose objects before losing scope
 
             _serviceProviderOnBuild.Send(sp);
             _containerObservable.Send(result);

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Autofac;
 using FakeItEasy;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Rocket.Surgery.Conventions;
@@ -329,8 +330,13 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
 
         public class AbcConvention : IAutofacConvention
         {
-            public void Register(IAutofacConventionContext context)
+            public void Register([NotNull] IAutofacConventionContext context)
             {
+                if (context == null)
+                {
+                    throw new ArgumentNullException(nameof(context));
+                }
+
                 context.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc>()));
                 context.Services.AddSingleton(A.Fake<IAbc2>());
                 context.ConfigureContainer(c => { });
@@ -339,8 +345,15 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
 
         public class OtherConvention : IServiceConvention
         {
-            public void Register(IServiceConventionContext context)
-                => context.Services.AddSingleton(A.Fake<IOtherAbc3>());
+            public void Register([NotNull] IServiceConventionContext context)
+            {
+                if (context == null)
+                {
+                    throw new ArgumentNullException(nameof(context));
+                }
+
+                context.Services.AddSingleton(A.Fake<IOtherAbc3>());
+            }
         }
     }
 }
