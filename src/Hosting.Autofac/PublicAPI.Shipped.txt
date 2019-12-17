@@ -1,2 +1,0 @@
-Microsoft.Extensions.Hosting.AutofacRocketHostExtensions
-static Microsoft.Extensions.Hosting.AutofacRocketHostExtensions.UseAutofac(this Rocket.Surgery.Hosting.IRocketHostBuilder builder, Autofac.ContainerBuilder containerBuilder = null) -> Rocket.Surgery.Hosting.IRocketHostBuilder
