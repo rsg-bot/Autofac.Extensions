@@ -34,7 +34,7 @@
     <PackageReference Update="Rocket.Surgery.Conventions" Version="9.0.7" />
     <PackageReference Update="Rocket.Surgery.Conventions.Abstractions" Version="9.1.0" />
     <PackageReference Update="Rocket.Surgery.Hosting" Version="9.1.0" />
-    <PackageReference Update="Rocket.Surgery.Extensions.DependencyInjection.Abstractions" Version="9.0.7" />
+    <PackageReference Update="Rocket.Surgery.Extensions.DependencyInjection.Abstractions" Version="9.1.0" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Update="Rocket.Surgery.Extensions.Testing.FakeItEasy" Version="3.3.0" />
