@@ -31,10 +31,10 @@
   <ItemGroup>
     <PackageReference Update="Autofac" Version="4.9.4" />
     <PackageReference Update="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Update="Rocket.Surgery.Conventions" Version="9.1.0" />
-    <PackageReference Update="Rocket.Surgery.Conventions.Abstractions" Version="9.1.0" />
-    <PackageReference Update="Rocket.Surgery.Hosting" Version="9.1.0" />
-    <PackageReference Update="Rocket.Surgery.Extensions.DependencyInjection.Abstractions" Version="9.1.0" />
+    <PackageReference Update="Rocket.Surgery.Conventions" Version="9.1.1" />
+    <PackageReference Update="Rocket.Surgery.Conventions.Abstractions" Version="9.1.1" />
+    <PackageReference Update="Rocket.Surgery.Hosting" Version="9.1.1" />
+    <PackageReference Update="Rocket.Surgery.Extensions.DependencyInjection.Abstractions" Version="9.1.1" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Update="Rocket.Surgery.Extensions.Testing.FakeItEasy" Version="3.4.0" />
