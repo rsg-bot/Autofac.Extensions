@@ -1,6 +1,7 @@
 # Rocket Surgeons - Autofac
 
 # Status
+
 <!-- badges -->
 [![github-release-badge]][github-release]
 [![github-license-badge]][github-license]
@@ -15,14 +16,15 @@
 <!-- history badges -->
 
 <!-- nuget packages -->
-| Package | NuGet | MyGet |
-| ------- | ----- | ----- |
-| Rocket.Surgery.Extensions.Autofac | [![nuget-version-zit1pugb/q8q-badge]![nuget-downloads-zit1pugb/q8q-badge]][nuget-zit1pugb/q8q] | [![myget-version-zit1pugb/q8q-badge]![myget-downloads-zit1pugb/q8q-badge]][myget-zit1pugb/q8q] |
-| Rocket.Surgery.Extensions.Autofac.Abstractions | [![nuget-version-hveigi+jpfmq-badge]![nuget-downloads-hveigi+jpfmq-badge]][nuget-hveigi+jpfmq] | [![myget-version-hveigi+jpfmq-badge]![myget-downloads-hveigi+jpfmq-badge]][myget-hveigi+jpfmq] |
-| Rocket.Surgery.Hosting.Autofac | [![nuget-version-1dytjtzkv8qq-badge]![nuget-downloads-1dytjtzkv8qq-badge]][nuget-1dytjtzkv8qq] | [![myget-version-1dytjtzkv8qq-badge]![myget-downloads-1dytjtzkv8qq-badge]][myget-1dytjtzkv8qq] |
+| Package | NuGet |
+| ------- | ----- |
+| Rocket.Surgery.Extensions.Autofac | [![nuget-version-zit1pugb/q8q-badge]![nuget-downloads-zit1pugb/q8q-badge]][nuget-zit1pugb/q8q] |
+| Rocket.Surgery.Extensions.Autofac.Abstractions | [![nuget-version-hveigi+jpfmq-badge]![nuget-downloads-hveigi+jpfmq-badge]][nuget-hveigi+jpfmq] |
+| Rocket.Surgery.Hosting.Autofac | [![nuget-version-1dytjtzkv8qq-badge]![nuget-downloads-1dytjtzkv8qq-badge]][nuget-1dytjtzkv8qq] |
 <!-- nuget packages -->
 
 # Whats next?
+
 TBD
 
 <!-- generated references -->
@@ -43,21 +45,12 @@ TBD
 [nuget-zit1pugb/q8q]: https://www.nuget.org/packages/Rocket.Surgery.Extensions.Autofac/
 [nuget-version-zit1pugb/q8q-badge]: https://img.shields.io/nuget/v/Rocket.Surgery.Extensions.Autofac.svg?color=004880&logo=nuget&style=flat-square "NuGet Version"
 [nuget-downloads-zit1pugb/q8q-badge]: https://img.shields.io/nuget/dt/Rocket.Surgery.Extensions.Autofac.svg?color=004880&logo=nuget&style=flat-square "NuGet Downloads"
-[myget-zit1pugb/q8q]: https://www.myget.org/feed/rocket-surgeons-guild/package/nuget/Rocket.Surgery.Extensions.Autofac
-[myget-version-zit1pugb/q8q-badge]: https://img.shields.io/myget/rocket-surgeons-guild/vpre/Rocket.Surgery.Extensions.Autofac.svg?label=myget&color=004880&logo=nuget&style=flat-square "MyGet Pre-Release Version"
-[myget-downloads-zit1pugb/q8q-badge]: https://img.shields.io/myget/rocket-surgeons-guild/dt/Rocket.Surgery.Extensions.Autofac.svg?color=004880&logo=nuget&style=flat-square "MyGet Downloads"
 [nuget-hveigi+jpfmq]: https://www.nuget.org/packages/Rocket.Surgery.Extensions.Autofac.Abstractions/
 [nuget-version-hveigi+jpfmq-badge]: https://img.shields.io/nuget/v/Rocket.Surgery.Extensions.Autofac.Abstractions.svg?color=004880&logo=nuget&style=flat-square "NuGet Version"
 [nuget-downloads-hveigi+jpfmq-badge]: https://img.shields.io/nuget/dt/Rocket.Surgery.Extensions.Autofac.Abstractions.svg?color=004880&logo=nuget&style=flat-square "NuGet Downloads"
-[myget-hveigi+jpfmq]: https://www.myget.org/feed/rocket-surgeons-guild/package/nuget/Rocket.Surgery.Extensions.Autofac.Abstractions
-[myget-version-hveigi+jpfmq-badge]: https://img.shields.io/myget/rocket-surgeons-guild/vpre/Rocket.Surgery.Extensions.Autofac.Abstractions.svg?label=myget&color=004880&logo=nuget&style=flat-square "MyGet Pre-Release Version"
-[myget-downloads-hveigi+jpfmq-badge]: https://img.shields.io/myget/rocket-surgeons-guild/dt/Rocket.Surgery.Extensions.Autofac.Abstractions.svg?color=004880&logo=nuget&style=flat-square "MyGet Downloads"
 [nuget-1dytjtzkv8qq]: https://www.nuget.org/packages/Rocket.Surgery.Hosting.Autofac/
 [nuget-version-1dytjtzkv8qq-badge]: https://img.shields.io/nuget/v/Rocket.Surgery.Hosting.Autofac.svg?color=004880&logo=nuget&style=flat-square "NuGet Version"
 [nuget-downloads-1dytjtzkv8qq-badge]: https://img.shields.io/nuget/dt/Rocket.Surgery.Hosting.Autofac.svg?color=004880&logo=nuget&style=flat-square "NuGet Downloads"
-[myget-1dytjtzkv8qq]: https://www.myget.org/feed/rocket-surgeons-guild/package/nuget/Rocket.Surgery.Hosting.Autofac
-[myget-version-1dytjtzkv8qq-badge]: https://img.shields.io/myget/rocket-surgeons-guild/vpre/Rocket.Surgery.Hosting.Autofac.svg?label=myget&color=004880&logo=nuget&style=flat-square "MyGet Pre-Release Version"
-[myget-downloads-1dytjtzkv8qq-badge]: https://img.shields.io/myget/rocket-surgeons-guild/dt/Rocket.Surgery.Hosting.Autofac.svg?color=004880&logo=nuget&style=flat-square "MyGet Downloads"
 <!-- generated references -->
 
 <!-- nuke-data
@@ -71,6 +64,4 @@ azurepipelines:
 appveyor:
   account: RocketSurgeonsGuild
   build: autofac-extensions
-myget:
-  account: rocket-surgeons-guild
 -->
