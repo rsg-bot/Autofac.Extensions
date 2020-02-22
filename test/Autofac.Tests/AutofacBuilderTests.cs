@@ -220,7 +220,7 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
         public void ConstructTheContainerAndRegisterWithSystem_UsingConvention_IncludingOtherBits()
         {
             var assemblyProvider = AutoFake.Provide<IAssemblyProvider>(new TestAssemblyProvider());
-            AutoFake.Provide<IConventionScanner>(AutoFake.Resolve<AggregateConventionScanner>());
+            AutoFake.Provide<IConventionScanner>(new BasicConventionScanner(ServiceProvider));
             AutoFake.Provide<IServiceCollection>(new ServiceCollection());
             AutoFake.Provide(new ContainerBuilder());
             var servicesBuilder = AutoFake.Resolve<AutofacBuilder>();
