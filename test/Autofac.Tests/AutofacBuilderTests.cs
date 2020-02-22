@@ -18,9 +18,8 @@ using Rocket.Surgery.Extensions.Testing;
 using Rocket.Surgery.Hosting;
 using Xunit;
 using Xunit.Abstractions;
-#pragma warning disable CA1040 // Avoid empty interfaces
-#pragma warning disable CA1034
-#pragma warning disable CA2000
+
+#pragma warning disable CA1040, CA1034, CA2000, IDE0058, RCS1021
 
 [assembly: Convention(typeof(AutofacBuilderTests.AbcConvention))]
 [assembly: Convention(typeof(AutofacBuilderTests.OtherConvention))]
@@ -199,15 +198,14 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
         public void ConstructTheContainerAndRegisterWithSystem_UsingConvention()
         {
             var assemblyProvider = AutoFake.Provide<IAssemblyProvider>(new TestAssemblyProvider());
-            AutoFake.Provide<IConventionScanner>(AutoFake.Resolve<AggregateConventionScanner>());
+            var assemblyCandidateFinder = AutoFake.Provide(A.Fake<IAssemblyCandidateFinder>());
+            AutoFake.Provide<IServiceProvider>(new ServiceProviderDictionary());
+            A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<IEnumerable<string>>._))
+               .Returns(assemblyProvider.GetAssemblies());
             AutoFake.Provide<IServiceCollection>(new ServiceCollection());
             AutoFake.Provide(new ContainerBuilder());
+            AutoFake.Provide<IConventionScanner>(AutoFake.Resolve<AggregateConventionScanner>());
             var servicesBuilder = AutoFake.Resolve<AutofacBuilder>();
-
-            A.CallTo(
-                    () => AutoFake.Resolve<IAssemblyCandidateFinder>().GetCandidateAssemblies(A<IEnumerable<string>>._)
-                )
-               .Returns(assemblyProvider.GetAssemblies());
 
             var items = servicesBuilder.Build();
             items.ResolveOptional<IAbc>().Should().NotBeNull();
@@ -220,15 +218,14 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
         public void ConstructTheContainerAndRegisterWithSystem_UsingConvention_IncludingOtherBits()
         {
             var assemblyProvider = AutoFake.Provide<IAssemblyProvider>(new TestAssemblyProvider());
-            AutoFake.Provide<IConventionScanner>(new BasicConventionScanner(ServiceProvider));
+            var assemblyCandidateFinder = AutoFake.Provide(A.Fake<IAssemblyCandidateFinder>());
+            AutoFake.Provide<IServiceProvider>(new ServiceProviderDictionary());
+            A.CallTo(() => assemblyCandidateFinder.GetCandidateAssemblies(A<IEnumerable<string>>._))
+               .Returns(assemblyProvider.GetAssemblies());
             AutoFake.Provide<IServiceCollection>(new ServiceCollection());
             AutoFake.Provide(new ContainerBuilder());
+            AutoFake.Provide<IConventionScanner>(AutoFake.Resolve<AggregateConventionScanner>());
             var servicesBuilder = AutoFake.Resolve<AutofacBuilder>();
-
-            A.CallTo(
-                    () => AutoFake.Resolve<IAssemblyCandidateFinder>().GetCandidateAssemblies(A<IEnumerable<string>>._)
-                )
-               .Returns(assemblyProvider.GetAssemblies());
 
             var items = servicesBuilder.Build();
             items.ResolveOptional<IAbc>().Should().NotBeNull();
