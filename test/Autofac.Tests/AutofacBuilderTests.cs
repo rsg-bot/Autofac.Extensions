@@ -181,6 +181,9 @@ namespace Rocket.Surgery.Extensions.Autofac.Tests
         [Fact]
         public void ConstructTheContainerAndRegisterWithSystem_ServiceProvider()
         {
+            AutoFake.Provide<IAssemblyProvider>(new TestAssemblyProvider());
+            AutoFake.Provide<IServiceCollection>(new ServiceCollection());
+            AutoFake.Provide(new ContainerBuilder());
             var servicesBuilder = AutoFake.Resolve<AutofacBuilder>();
 
             servicesBuilder.ConfigureContainer(c => c.RegisterInstance(A.Fake<IAbc3>()));
