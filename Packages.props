@@ -27,7 +27,7 @@
     <PackageReference Update="System.Diagnostics.DiagnosticSource" Version="4.7.1" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Update="Autofac" Version="5.1.2" />
+    <PackageReference Update="Autofac" Version="5.2.0" />
     <PackageReference Update="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Update="Rocket.Surgery.Conventions" Version="9.1.1" />
     <PackageReference Update="Rocket.Surgery.Conventions.Abstractions" Version="9.1.1" />
