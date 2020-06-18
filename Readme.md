@@ -9,10 +9,10 @@
 <!-- badges -->
 
 <!-- history badges -->
-| Azure Pipelines | AppVeyor |
-| --------------- | -------- |
-| [![azurepipelines-badge]][azurepipelines] | [![appveyor-badge]][appveyor] |
-| [![azurepipelines-history-badge]][azurepipelines-history] | [![appveyor-history-badge]][appveyor-history] |
+| Azure Pipelines | GitHub Actions |
+| --------------- | -------------- |
+| [![azurepipelines-badge]][azurepipelines] | [![github-badge]][github] |
+| [![azurepipelines-history-badge]][azurepipelines-history] | [![github-history-badge]][github] |
 <!-- history badges -->
 
 <!-- nuget packages -->
@@ -38,10 +38,9 @@ TBD
 [azurepipelines-badge]: https://img.shields.io/azure-devops/build/rocketsurgeonsguild/Libraries/13.svg?color=98C6FF&label=azure%20pipelines&logo=azuredevops&logoColor=98C6FF&style=flat "Azure Pipelines Status"
 [azurepipelines-history]: https://rocketsurgeonsguild.visualstudio.com/Libraries/_build?definitionId=13&branchName=master
 [azurepipelines-history-badge]: https://buildstats.info/azurepipelines/chart/rocketsurgeonsguild/Libraries/13?includeBuildsFromPullRequest=false "Azure Pipelines History"
-[appveyor]: https://ci.appveyor.com/project/RocketSurgeonsGuild/autofac-extensions
-[appveyor-badge]: https://img.shields.io/appveyor/ci/RocketSurgeonsGuild/autofac-extensions.svg?color=00b3e0&label=appveyor&logo=appveyor&logoColor=00b3e0&style=flat "AppVeyor Status"
-[appveyor-history]: https://ci.appveyor.com/project/RocketSurgeonsGuild/autofac-extensions/history
-[appveyor-history-badge]: https://buildstats.info/appveyor/chart/RocketSurgeonsGuild/autofac-extensions?includeBuildsFromPullRequest=false "AppVeyor History"
+[github]: https://github.com/RocketSurgeonsGuild/Autofac.Extensions/actions?query=workflow%3Aci
+[github-badge]: https://img.shields.io/github/workflow/status/RocketSurgeonsGuild/Autofac.Extensions/ci.svg?label=github&logo=github&color=b845fc&logoColor=b845fc&style=flat "GitHub Actions Status"
+[github-history-badge]: https://buildstats.info/github/chart/RocketSurgeonsGuild/Autofac.Extensions?includeBuildsFromPullRequest=false "GitHub Actions History"
 [nuget-zit1pugb/q8q]: https://www.nuget.org/packages/Rocket.Surgery.Extensions.Autofac/
 [nuget-version-zit1pugb/q8q-badge]: https://img.shields.io/nuget/v/Rocket.Surgery.Extensions.Autofac.svg?color=004880&logo=nuget&style=flat-square "NuGet Version"
 [nuget-downloads-zit1pugb/q8q-badge]: https://img.shields.io/nuget/dt/Rocket.Surgery.Extensions.Autofac.svg?color=004880&logo=nuget&style=flat-square "NuGet Downloads"
@@ -61,7 +60,4 @@ azurepipelines:
   account: rocketsurgeonsguild
   teamproject: Libraries
   builddefinition: 13
-appveyor:
-  account: RocketSurgeonsGuild
-  build: autofac-extensions
 -->
